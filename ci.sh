@@ -44,13 +44,13 @@
 # 0 = Circle-CI || 1 = Drone-CI
 #
 KERNEL_NAME_RELEASE="1"
-KERNEL_TYPE="1"
-KERNEL_BRANCH_RELEASE="1"
-KERNEL_ANDROID_VERSION="1"
+KERNEL_TYPE="2"
+KERNEL_BRANCH_RELEASE="0"
+KERNEL_ANDROID_VERSION="2"
 KERNEL_CODENAME="0"
-KERNEL_EXTEND="2"
+KERNEL_EXTEND="0"
 KERNEL_COMPILER="0"
-KERNEL_CI="1"
+KERNEL_CI="0"
 
 # Compiling For Mido // If mido was selected
 if [ "$KERNEL_CODENAME" == "0" ];
@@ -211,7 +211,7 @@ elif [ "$KERNEL_TYPE" == "1" ];
 elif [ "$KERNEL_TYPE" == "2" ];
 	then
 		# Kernel extend aliases
-		KERNEL_REV="r15"
+		KERNEL_REV="r16"
 		KERNEL_NAME="Clarity"
 		COMMIT="a1c8138bb049459b4ce33f5e9fbae1559af59e2d"
 fi
