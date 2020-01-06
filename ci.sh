@@ -457,7 +457,7 @@ function compile() {
         		DIFF=$(($END - $START))
 			bot_build_success
 			sendStick "${TELEGRAM_SUCCESS}"
-			if [ "$KERNEL_CI" == 0" ];
+			if [ "$KERNEL_CI" == "0" ];
 				then
 					cd ${KERNEL}
 			elif [ "$KERNEL_CI" == "1" ];
