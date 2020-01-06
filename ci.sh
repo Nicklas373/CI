@@ -107,7 +107,7 @@ elif [ "$KERNEL_CODENAME" == "1" ];
 		fi
 
 		# Cloning AnyKernel Repository
-		git clone https://github.com/Nicklas373/AnyKernel3 -b lavender
+		git clone --depth=1 -b lavender https://github.com/Nicklas373/AnyKernel3
 
 		# Create Temporary Folder
 		mkdir TEMP
@@ -457,6 +457,13 @@ function compile() {
         		DIFF=$(($END - $START))
 			bot_build_success
 			sendStick "${TELEGRAM_SUCCESS}"
+			if [ "$KERNEL_CI" == 0" ];
+				then
+					cd ${KERNEL}
+			elif [ "$KERNEL_CI" == "1" ];
+				then
+					echo ""
+			fi
         		cp ${IMAGE} AnyKernel3/kernel
 			cp ${DTB}/*.dtb AnyKernel3/dtbs
 			anykernel
@@ -466,14 +473,7 @@ function compile() {
 
 # AnyKernel
 function anykernel() {
-	if [ "$KERNEL_CI" == "0" ];
-		then
-			cd ..
-			cd AnyKernel3
-	elif [ "$KERNEL_CI" == "1" ];
-		then
-			cd AnyKernel3
-	fi
+	cd AnyKernel3
 	make -j4
         mv Clarity-Kernel-${KERNEL_CODE}-signed.zip  ${KERNEL_TEMP}/${KERNEL_NAME}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip
 }
