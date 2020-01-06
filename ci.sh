@@ -50,7 +50,7 @@ KERNEL_ANDROID_VERSION="2"
 KERNEL_CODENAME="1"
 KERNEL_EXTEND="1"
 KERNEL_COMPILER="0"
-KERNEL_CI="1"
+KERNEL_CI="0"
 
 # Compiling For Mido // If mido was selected
 if [ "$KERNEL_CODENAME" == "0" ];
