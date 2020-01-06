@@ -62,7 +62,7 @@ if [ "$KERNEL_CODENAME" == "0" ];
 			then
 				# Clone kernel & other repositories earlier
 				git clone --depth=1 -b pie https://github.com/Nicklas373/kernel_xiaomi_msm8953-3.18-2 kernel
-				git clone --depth=1 -b mido-10 https://github.com/Nicklas373/AnyKernel3
+				git clone --depth=1 -b caf/mido https://github.com/Nicklas373/AnyKernel3
 
 				# Define Kernel Scheduler
 				KERNEL_SCHED="HMP"
