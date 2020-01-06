@@ -466,7 +466,14 @@ function compile() {
 
 # AnyKernel
 function anykernel() {
-	cd AnyKernel3
+	if [ "$KERNEL_CI" == "0" ];
+		then
+			cd ..
+			cd AnyKernel3
+	elif [ "$KERNEL_CI" == "1" ];
+		then
+			cd AnyKernel3
+	fi
 	make -j4
         mv Clarity-Kernel-${KERNEL_CODE}-signed.zip  ${KERNEL_TEMP}/${KERNEL_NAME}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip
 }
