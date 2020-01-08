@@ -103,7 +103,7 @@ elif [ "$KERNEL_CODENAME" == "1" ];
 		# Cloning Kernel Repository // If compiled by Drone CI
 		if [ "$KERNEL_CI" == "1" ];
 			then
-				git clone --depth=1 -b dev/kasumi https://github.com/Nicklas373/kernel_xiaomi_lavender kernel
+				git clone --depth=1 -b kasumi https://Nicklas373:$git_token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
 		fi
 
 		# Cloning AnyKernel Repository
@@ -114,7 +114,7 @@ elif [ "$KERNEL_CODENAME" == "1" ];
 
 		# Define Kernel Scheduler
 		KERNEL_SCHED="EAS"
-		KERNEL_BRANCH="dev/ion"
+		KERNEL_BRANCH="Kasumi"
 fi
 if [ "$KERNEL_COMPILER" == "0" ];
 	then
