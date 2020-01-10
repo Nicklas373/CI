@@ -123,7 +123,7 @@ if [ "$KERNEL_COMPILER" == "0" ];
 elif [ "$KERNEL_COMPILER" == "1" ];
 	then
 		# Cloning Toolchains Repository
-		git clone --depth=1 https://github.com/Haseo97/Clang-10.0.0 -b clang-10.0.0 clang
+		git clone --depth=1 https://github.com/Haseo97/Clang-10.0.0 -b clang-10.0.0 clang-2
 
 elif [ "$KERNEL_COMPILER" == "2" ];
 	then
@@ -144,9 +144,9 @@ if [ "$KERNEL_COMPILER" == "0" ];
 		export LD_LIBRARY_PATH="/root/clang/bin/../lib:$PATH"
 elif [ "$KERNEL_COMPILER" == "1" ];
 	then
-		export CLANG_PATH=$(pwd)/clang/bin
-		export PATH=${CLANG_PATH}:${PATH}
-		export LD_LIBRARY_PATH="$(pwd)/clang/bin/../lib:$PATH"
+		export CLANG_PATH=$(pwd)/clang-2/bin
+                export PATH=${CLANG_PATH}:${PATH}
+		export LD_LIBRARY_PATH="$(pwd)/clang-2/bin/../lib:$PATH"
 elif [ "$KERNEL_COMPILER" == "2" ];
 	then
 		export CLANG_PATH=/root/aosp-clang/bin
@@ -367,7 +367,7 @@ function compile() {
 								CROSS_COMPILE_ARM32=arm-linux-gnueabi-
 		elif [ "$KERNEL_COMPILER" == "1" ];
 			then
-				PATH="$(pwd)/clang/bin/:${PATH}" \
+				PATH="$(pwd)/clang-2/bin/:${PATH}" \
 				make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
 								CC=clang \
                                                                 CLANG_TRIPLE=aarch64-linux-gnu- \
@@ -424,7 +424,7 @@ function compile() {
 											CROSS_COMPILE_ARM32=arm-linux-gnueabi-
 			elif [ "$KERNEL_COMPILER" == "1" ];
 				then
-					PATH="$(pwd)/clang/bin/:${PATH}" \
+					PATH="$(pwd)/clang-2/bin/:${PATH}" \
 					make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
 											CC=clang \
 											CLANG_TRIPLE=aarch64-linux-gnu- \
@@ -432,7 +432,7 @@ function compile() {
 											CROSS_COMPILE_ARM32=arm-linux-gnueabi-
 			elif [ "$KERNEL_COMPILER" == "2" ];
 				then
-					PATH="PATH=/root/aosp-clang/bin/:/root/gcc-4.9/arm64/bin/:/root/gcc-4.9/arm/bin/:${PATH}" \
+					PATH="/root/aosp-clang/bin/:/root/gcc-4.9/arm64/bin/:/root/gcc-4.9/arm/bin/:${PATH}" \
 					make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
 											CC=clang \
 											CLANG_TRIPLE=aarch64-linux-gnu- \
