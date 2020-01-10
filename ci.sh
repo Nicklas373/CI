@@ -149,13 +149,13 @@ elif [ "$KERNEL_COMPILER" == "1" ];
 		export LD_LIBRARY_PATH="$(pwd)/clang/bin/../lib:$PATH"
 elif [ "$KERNEL_COMPILER" == "2" ];
 	then
-		export CLANG_PATH="/root/aosp-clang/bin"
+		export CLANG_PATH=/root/aosp-clang/bin
                 export PATH=${CLANG_PATH}:${PATH}
 		export LD_LIBRARY_PATH="/root/clang/bin/../lib:$PATH"
                 export CLANG_TRIPLE=aarch64-linux-gnu-
                 export CLANG_TRIPLE_ARM32=arm-linux-gnueabi-
-                export CROSS_COMPILE="/root/gcc-49/arm64/bin/aarch64-linux-gnu-"
-		export CROSS_COMPILE_ARM32="/root/gcc-49/arm/bin/arm-linux-gnueabi-"
+                export CROSS_COMPILE=/root/gcc-49/arm64/bin/aarch64-linux-gnu-
+		export CROSS_COMPILE_ARM32=/root/gcc-49/arm/bin/arm-linux-gnueabi-
 fi
 export KBUILD_BUILD_USER=Kasumi
 export KBUILD_BUILD_HOST=${KERNEL_BOT}
