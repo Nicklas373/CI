@@ -38,7 +38,7 @@
 # 0 = Dev-Mido || 1 = Dev-Lave || 2 = Null
 #
 # Kernel Compiler
-# 0 = Clang 10.0.0 (Nusantara Clang) || 1 = Clang 10.0.0 (Pendulum Clang) || 2 = Clang 10.0.3 + (GCC 10.0-0155-221219 Non-elf 32/64)
+# 0 = Clang 10.0.0 (Nusantara Clang) || 1 = Clang 10.0.0 (Pendulum Clang) || 2 = Clang 10.0.3 + (GCC 4.9 Non-elf 32/64)
 #
 # CI Init
 # 0 = Circle-CI || 1 = Drone-CI
@@ -49,7 +49,7 @@ KERNEL_BRANCH_RELEASE="0"
 KERNEL_ANDROID_VERSION="2"
 KERNEL_CODENAME="0"
 KERNEL_EXTEND="0"
-KERNEL_COMPILER="0"
+KERNEL_COMPILER="2"
 KERNEL_CI="0"
 
 # Compiling For Mido // If mido was selected
@@ -128,9 +128,7 @@ elif [ "$KERNEL_COMPILER" == "1" ];
 elif [ "$KERNEL_COMPILER" == "2" ];
 	then
 		# Cloning Toolchains Repository
-		git clone https://github.com/NusantaraDevs/clang -b ndk-clang-10 clang
-		git clone https://github.com/najahiiii/priv-toolchains -b non-elf/gcc-10.0.0/arm gcc_arm32
-		git clone https://github.com/najahiiii/priv-toolchains -b non-elf/gcc-10.0.0/arm64 gcc
+		 echo "Using latest aosp clang from najahii oven"
 fi
 # Kernel Enviroment
 export ARCH=arm64
@@ -151,13 +149,13 @@ elif [ "$KERNEL_COMPILER" == "1" ];
 		export LD_LIBRARY_PATH="$(pwd)/clang/bin/../lib:$PATH"
 elif [ "$KERNEL_COMPILER" == "2" ];
 	then
-		export CLANG_PATH=$(pwd)/clang/bin
+		export CLANG_PATH="/root/aosp-clang/bin"
                 export PATH=${CLANG_PATH}:${PATH}
-		export LD_LIBRARY_PATH="$(pwd)/clang/bin/../lib:$PATH"
+		export LD_LIBRARY_PATH="/root/clang/bin/../lib:$PATH"
                 export CLANG_TRIPLE=aarch64-linux-gnu-
                 export CLANG_TRIPLE_ARM32=arm-linux-gnueabi-
-                export CROSS_COMPILE=$(pwd)/gcc/bin/aarch64-linux-gnu-
-		export CROSS_COMPILE_ARM32=$(pwd)/gcc_arm32/bin/arm-linux-gnueabi-
+                export CROSS_COMPILE="/root/gcc-49/arm64/bin/aarch64-linux-gnu-"
+		export CROSS_COMPILE_ARM32="/root/gcc-49/arm/bin/arm-linux-gnueabi-"
 fi
 export KBUILD_BUILD_USER=Kasumi
 export KBUILD_BUILD_HOST=${KERNEL_BOT}
@@ -379,7 +377,7 @@ function compile() {
 								CROSS_COMPILE_ARM32=arm-linux-gnueabi-
 		elif [ "$KERNEL_COMPILER" == "2" ];
 			then
-				PATH="$(pwd)/clang/bin/:${PATH}" \
+				PATH="/root/aosp-clang/bin:/root/gcc-49/arm64/bin:/root/gcc-49/arm/bin:${PATH}" \
 				make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
 								CC=clang \
 								CLANG_TRIPLE=${CLANG_TRIPLE} \
