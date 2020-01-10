@@ -128,9 +128,7 @@ elif [ "$KERNEL_COMPILER" == "1" ];
 elif [ "$KERNEL_COMPILER" == "2" ];
 	then
 		# Cloning Toolchains Repository
-		git clone --depth=1 https://github.com/NusantaraDevs/clang.git -b ndk-clang-10 clang
-		git clone --depth=1 https://github.com/KudProject/arm-linux-androideabi-4.9 gcc_32
-		git clone --depth=1 https://github.com/KudProject/aarch64-linux-android-4.9 gcc
+		echo "Using latest aosp clang from najahii oven"
 fi
 # Kernel Enviroment
 export ARCH=arm64
@@ -151,13 +149,11 @@ elif [ "$KERNEL_COMPILER" == "1" ];
 		export LD_LIBRARY_PATH="$(pwd)/clang/bin/../lib:$PATH"
 elif [ "$KERNEL_COMPILER" == "2" ];
 	then
-		export CLANG_PATH=$(pwd)/clang/bin
+		export CLANG_PATH=/root/aosp-clang/bin
                 export PATH=${CLANG_PATH}:${PATH}
-		export LD_LIBRARY_PATH="/root/clang/bin/../lib:$PATH"
-                export CLANG_TRIPLE=aarch64-linux-android-
-                export CLANG_TRIPLE_ARM32=arm-linux-androideabi-
-                export CROSS_COMPILE=$(pwd)/gcc/bin/aarch64-linux-android-
-		export CROSS_COMPILE_ARM32=$(pwd)/gcc_32/bin/arm-linux-androideabi-
+		export LD_LIBRARY_PATH="/root/aosp-clang/bin/../lib:$PATH"
+		export CROSS_COMPILE=/root/gcc-4.9/arm64/bin/aarch64-linux-android-
+		export CROSS_COMPILE_ARM32=/root/gcc-4.9/arm/bin/arm-linux-androideabi-
 fi
 export KBUILD_BUILD_USER=Kasumi
 export KBUILD_BUILD_HOST=${KERNEL_BOT}
@@ -379,10 +375,10 @@ function compile() {
 								CROSS_COMPILE_ARM32=arm-linux-gnueabi-
 		elif [ "$KERNEL_COMPILER" == "2" ];
 			then
-				PATH="$(pwd)/clang/bin/:${PATH}" \
+				PATH="/root/aosp-clang/bin/:/root/gcc-4.9/arm64/bin/:/root/gcc-4.9/arm/bin/:${PATH}" \
 				make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
 								CC=clang \
-								CLANG_TRIPLE=${CLANG_TRIPLE} \
+								CLANG_TRIPLE=aarch64-linux-gnu- \
 								CROSS_COMPILE=${CROSS_COMPILE} \
 								CROSS_COMPILE_ARM32=${CROSS_COMPILE_ARM32}
 		fi
@@ -436,10 +432,10 @@ function compile() {
 											CROSS_COMPILE_ARM32=arm-linux-gnueabi-
 			elif [ "$KERNEL_COMPILER" == "2" ];
 				then
-					PATH="$(pwd)/clang/bin/:${PATH}" \
+					PATH="PATH=/root/aosp-clang/bin/:/root/gcc-4.9/arm64/bin/:/root/gcc-4.9/arm/bin/:${PATH}" \
 					make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
 											CC=clang \
-											CLANG_TRIPLE=${CLANG_TRIPLE} \
+											CLANG_TRIPLE=aarch64-linux-gnu- \
 											CROSS_COMPILE=${CROSS_COMPILE} \
 											CROSS_COMPILE_ARM32=${CROSS_COMPILE_ARM32}
 			fi
