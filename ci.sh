@@ -49,7 +49,7 @@ KERNEL_BRANCH_RELEASE="0"
 KERNEL_ANDROID_VERSION="2"
 KERNEL_CODENAME="1"
 KERNEL_EXTEND="1"
-KERNEL_COMPILER="1"
+KERNEL_COMPILER="2"
 KERNEL_CI="0"
 
 # Compiling For Mido // If mido was selected
@@ -154,10 +154,10 @@ elif [ "$KERNEL_COMPILER" == "2" ];
 		export CLANG_PATH=$(pwd)/clang/bin
                 export PATH=${CLANG_PATH}:${PATH}
 		export LD_LIBRARY_PATH="/root/clang/bin/../lib:$PATH"
-                export CLANG_TRIPLE=aarch64-linux-gnu-
-                export CLANG_TRIPLE_ARM32=arm-linux-gnueabi-
-                export CROSS_COMPILE=$(pwd)/gcc/bin/aarch64-linux-gnu-
-		export CROSS_COMPILE_ARM32=$(pwd)/gcc_32/bin/arm-linux-gnueabi-
+                export CLANG_TRIPLE=aarch64-linux-android-
+                export CLANG_TRIPLE_ARM32=arm-linux-androideabi-
+                export CROSS_COMPILE=$(pwd)/gcc/bin/aarch64-linux-android-
+		export CROSS_COMPILE_ARM32=$(pwd)/gcc_32/bin/arm-linux-androideabi-
 fi
 export KBUILD_BUILD_USER=Kasumi
 export KBUILD_BUILD_HOST=${KERNEL_BOT}
