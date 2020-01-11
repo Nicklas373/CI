@@ -38,7 +38,7 @@
 # 0 = Dev-Mido || 1 = Dev-Lave || 2 = Null
 #
 # Kernel Compiler
-# 0 = Clang 10.0.0 (Nusantara Clang) || 1 = Clang 10.0.0 (Pendulum Clang) || 2 = Clang 10.0.3 + (GCC 4.9 Non-elf 32/64)
+# 0 = Clang 10.0.0 (Nusantara Clang) || 1 = Clang 10.0.0 (Pendulum Clang) || 2 = Clang 10.0.3 + (GCC 4.9 Non-elf 32/64) || 3 = Proton clang 10 prebuilt 20200104
 #
 # CI Init
 # 0 = Circle-CI || 1 = Drone-CI
@@ -49,7 +49,7 @@ KERNEL_BRANCH_RELEASE="0"
 KERNEL_ANDROID_VERSION="2"
 KERNEL_CODENAME="0"
 KERNEL_EXTEND="0"
-KERNEL_COMPILER="0"
+KERNEL_COMPILER="3"
 KERNEL_CI="0"
 
 # Compiling For Mido // If mido was selected
@@ -129,6 +129,10 @@ elif [ "$KERNEL_COMPILER" == "2" ];
 	then
 		# Cloning Toolchains Repository
 		echo "Using latest aosp clang from najahii oven"
+elif [ "$KERNEL_COMPILER" == "3" ];
+	then
+		# Cloning Toolchains Repository
+		 git clone --depth=1 https://github.com/HANA-CI-Build-Project/proton-clang -b master p-clang
 fi
 # Kernel Enviroment
 export ARCH=arm64
@@ -154,6 +158,11 @@ elif [ "$KERNEL_COMPILER" == "2" ];
 		export LD_LIBRARY_PATH="/root/aosp-clang/bin/../lib:$PATH"
 		export CROSS_COMPILE=/root/gcc-4.9/arm64/bin/aarch64-linux-android-
 		export CROSS_COMPILE_ARM32=/root/gcc-4.9/arm/bin/arm-linux-androideabi-
+elif [ "$KERNEL_COMPILER" == "3" ];
+	then
+		export CLANG_PATH=$(pwd)/p-clang/bin
+		export PATH=${CLANG_PATH}:${PATH}
+		export LD_LIBRARY_PATH="$(pwd)/p-clang/bin/../lib:$PATH"
 fi
 export KBUILD_BUILD_USER=Kasumi
 export KBUILD_BUILD_HOST=${KERNEL_BOT}
@@ -381,6 +390,14 @@ function compile() {
 								CLANG_TRIPLE=aarch64-linux-gnu- \
 								CROSS_COMPILE=${CROSS_COMPILE} \
 								CROSS_COMPILE_ARM32=${CROSS_COMPILE_ARM32}
+		elif [ "$KERNEL_COMPILER" == "3" ];
+			then
+				PATH="$(pwd)/p-clang/bin/:${PATH}" \
+				make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
+								CC=clang \
+                                                                CLANG_TRIPLE=aarch64-linux-gnu- \
+								CROSS_COMPILE=aarch64-linux-gnu- \
+								CROSS_COMPILE_ARM32=arm-linux-gnueabi-
 		fi
 			if ! [ -a $IMAGE ];
 				then
