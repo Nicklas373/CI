@@ -146,14 +146,14 @@ elif [ "$KERNEL_CI" == "1" ];
 fi
 if [ "$KERNEL_COMPILER" == "0" ];
 	then
-		export CLANG_PATH=/root/clang-old/bin
+		export CLANG_PATH=$(pwd)/clang-old/bin
 		export PATH=${CLANG_PATH}:${PATH}
-		export LD_LIBRARY_PATH="/root/clang-old/bin/../lib:$PATH"
+		export LD_LIBRARY_PATH="$(pwd)/clang-old/bin/../lib:$PATH"
 elif [ "$KERNEL_COMPILER" == "1" ];
 	then
-		export CLANG_PATH=/root/clang-2/bin
+		export CLANG_PATH=$(pwd)/clang-2/bin
                 export PATH=${CLANG_PATH}:${PATH}
-		export LD_LIBRARY_PATH="/root/clang-2/bin/../lib:$PATH"
+		export LD_LIBRARY_PATH="$(pwd)/clang-2/bin/../lib:$PATH"
 elif [ "$KERNEL_COMPILER" == "2" ];
 	then
 		export CLANG_PATH=/root/aosp-clang/bin
@@ -163,9 +163,9 @@ elif [ "$KERNEL_COMPILER" == "2" ];
 		export CROSS_COMPILE_ARM32=/root/gcc-4.9/arm/bin/arm-linux-androideabi-
 elif [ "$KERNEL_COMPILER" == "3" ];
 	then
-		export CLANG_PATH=/root/p-clang/bin
+		export CLANG_PATH=$(pwd)/p-clang/bin
 		export PATH=${CLANG_PATH}:${PATH}
-		export LD_LIBRARY_PATH="/root/p-clang/bin/../lib:$PATH"
+		export LD_LIBRARY_PATH="$(pwd)/p-clang/bin/../lib:$PATH"
 fi
 export KBUILD_BUILD_USER=Kasumi
 export KBUILD_BUILD_HOST=${KERNEL_BOT}
@@ -371,7 +371,7 @@ function compile() {
 			make -s -C ${KERNEL} ${CODENAME}_defconfig O=out
 		if [ "$KERNEL_COMPILER" == "0" ];
 			then
-				PATH="/root/clang-old/bin/:${PATH}" \
+				PATH="$(pwd)/clang-old/bin/:${PATH}" \
         			make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
 								CC=clang \
 								CLANG_TRIPLE=aarch64-linux-gnu- \
@@ -379,7 +379,7 @@ function compile() {
 								CROSS_COMPILE_ARM32=arm-linux-gnueabi-
 		elif [ "$KERNEL_COMPILER" == "1" ];
 			then
-				PATH="/root/clang-2/bin/:${PATH}" \
+				PATH="$(pwd)/clang-2/bin/:${PATH}" \
 				make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
 								CC=clang \
                                                                 CLANG_TRIPLE=aarch64-linux-gnu- \
@@ -395,7 +395,7 @@ function compile() {
 								CROSS_COMPILE_ARM32=${CROSS_COMPILE_ARM32}
 		elif [ "$KERNEL_COMPILER" == "3" ];
 			then
-				PATH="/root/p-clang/bin/:${PATH}" \
+				PATH="$(pwd)/p-clang/bin/:${PATH}" \
 				make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
 								CC=clang \
                                                                 CLANG_TRIPLE=aarch64-linux-gnu- \
@@ -436,7 +436,7 @@ function compile() {
         		make -s -C ${KERNEL} ${CODENAME}_defconfig O=out
 			if [ "$KERNEL_COMPILER" == "0" ];
 				then
-					PATH="/root/clang/bin/:${PATH}" \
+					PATH="$(pwd)/clang/bin/:${PATH}" \
 					make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
 											CC=clang \
 											CLANG_TRIPLE=aarch64-linux-gnu- \
@@ -444,7 +444,7 @@ function compile() {
 											CROSS_COMPILE_ARM32=arm-linux-gnueabi-
 			elif [ "$KERNEL_COMPILER" == "1" ];
 				then
-					PATH="/root/clang-2/bin/:${PATH}" \
+					PATH="$(pwd)/clang-2/bin/:${PATH}" \
 					make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
 											CC=clang \
 											CLANG_TRIPLE=aarch64-linux-gnu- \
@@ -460,7 +460,7 @@ function compile() {
 											CROSS_COMPILE_ARM32=${CROSS_COMPILE_ARM32}
 			elif [ "$KERNEL_COMPILER" == "3" ];
 				then
-					PATH="/root/p-clang/bin/:${PATH}" \
+					PATH="$(pwd)/p-clang/bin/:${PATH}" \
 					make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
 								CC=clang \
 								CLANG_TRIPLE=aarch64-linux-gnu- \
