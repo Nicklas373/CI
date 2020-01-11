@@ -73,11 +73,11 @@ if [ "$KERNEL_CODENAME" == "0" ];
 				if [ "$KERNEL_TYPE" == "1" ];
 					then
 						# Clone kernel & other repositories earlier
-						git clone --depth=1 -b dev/kasumi https://github.com/Nicklas373/kernel_xiaomi_msm8953-3.18-2 kernel
+						git clone --depth=1 -b dev/kasumi-pre https://github.com/Nicklas373/kernel_xiaomi_msm8953-3.18-2 kernel
 
 						# Define Kernel Scheduler
 						KERNEL_SCHED="EAS"
-						KERNEL_BRANCH="dev/kasumi"
+						KERNEL_BRANCH="dev/kasumi-pre"
 				elif [ "$KERNEL_TYPE" == "2" ];
 					then
 						# Clone kernel & other repositories earlier
