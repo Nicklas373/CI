@@ -114,7 +114,7 @@ elif [ "$KERNEL_CODENAME" == "1" ];
 
 		# Define Kernel Scheduler
 		KERNEL_SCHED="EAS"
-		KERNEL_BRANCH="Staging/Kasumi"
+		KERNEL_BRANCH="Rebase"
 fi
 if [ "$KERNEL_COMPILER" == "0" ];
 	then
