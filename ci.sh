@@ -49,7 +49,7 @@ KERNEL_BRANCH_RELEASE="0"
 KERNEL_ANDROID_VERSION="2"
 KERNEL_CODENAME="1"
 KERNEL_EXTEND="1"
-KERNEL_COMPILER="3"
+KERNEL_COMPILER="2"
 KERNEL_CI="0"
 
 # Compiling For Mido // If mido was selected
@@ -114,7 +114,7 @@ elif [ "$KERNEL_CODENAME" == "1" ];
 
 		# Define Kernel Scheduler
 		KERNEL_SCHED="EAS"
-		KERNEL_BRANCH="dev/kasumi-pre"
+		KERNEL_BRANCH="dev/clean"
 fi
 if [ "$KERNEL_COMPILER" == "0" ];
 	then
