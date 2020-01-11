@@ -120,6 +120,11 @@ if [ "$KERNEL_COMPILER" == "0" ];
 	then
 		# Cloning Toolchains Repository
 		echo "Using latest nusantara clang from najahii oven"
+
+		# Checkout to old clang build
+		cd /root/clang
+		git checkout 2d7148bc29d3aa72618b23933ed2836d5d32b191
+		cd ..
 elif [ "$KERNEL_COMPILER" == "1" ];
 	then
 		# Cloning Toolchains Repository
