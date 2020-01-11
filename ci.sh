@@ -146,6 +146,8 @@ elif [ "$KERNEL_CI" == "1" ];
 fi
 if [ "$KERNEL_COMPILER" == "0" ];
 	then
+		export CLANG_PATH=/root/clang-old/bin
+		export PATH=${CLANG_PATH}:${PATH}
 		export LD_LIBRARY_PATH="/root/clang-old/bin/../lib:$PATH"
 elif [ "$KERNEL_COMPILER" == "1" ];
 	then
