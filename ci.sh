@@ -114,7 +114,7 @@ elif [ "$KERNEL_CODENAME" == "1" ];
 
 		# Define Kernel Scheduler
 		KERNEL_SCHED="EAS"
-		KERNEL_BRANCH="dev/kasumi-pre-2"
+		KERNEL_BRANCH="kasumi"
 fi
 if [ "$KERNEL_COMPILER" == "0" ];
 	then
