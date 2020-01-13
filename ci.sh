@@ -103,7 +103,7 @@ elif [ "$KERNEL_CODENAME" == "1" ];
 		# Cloning Kernel Repository // If compiled by Drone CI
 		if [ "$KERNEL_CI" == "1" ];
 			then
-				git clone --depth=1 -b kasumi https://Nicklas373:$git_token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
+				git clone --depth=1 -b kasumi https://Nicklas373:$token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
 		fi
 
 		# Cloning AnyKernel Repository
