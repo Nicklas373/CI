@@ -120,7 +120,7 @@ if [ "$KERNEL_COMPILER" == "0" ];
 	then
 		# Cloning Toolchains Repository
 		# git clone --depth=1 https://github.com/HANA-CI-Build-Project/clang -b dev/old-10.0 clang-old
-
+		echo "Use latest nusantara clang"
 elif [ "$KERNEL_COMPILER" == "1" ];
 	then
 		# Cloning Toolchains Repository
