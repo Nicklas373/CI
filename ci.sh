@@ -371,9 +371,6 @@ function compile() {
 			fi
 			START=$(date +"%s")
 			make -s -C ${KERNEL} ${CODENAME}_defconfig O=out
-			cd ${KERNEL}
-			bot_first_compile
-			cd ..
 		if [ "$KERNEL_COMPILER" == "0" ];
 			then
 				PATH="/root/clang/bin/:${PATH}" \
@@ -407,6 +404,9 @@ function compile() {
 								CROSS_COMPILE=aarch64-linux-gnu- \
 								CROSS_COMPILE_ARM32=arm-linux-gnueabi-
 		fi
+		cd ${KERNEL}
+		bot_first_compile
+		cd ..
 			if ! [ -a $IMAGE ];
 				then
                 			echo "kernel not found"
