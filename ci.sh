@@ -49,7 +49,7 @@ KERNEL_BRANCH_RELEASE="0"
 KERNEL_ANDROID_VERSION="2"
 KERNEL_CODENAME="0"
 KERNEL_EXTEND="0"
-KERNEL_COMPILER="3"
+KERNEL_COMPILER="0"
 KERNEL_CI="0"
 
 # Compiling For Mido // If mido was selected
@@ -119,7 +119,7 @@ fi
 if [ "$KERNEL_COMPILER" == "0" ];
 	then
 		# Cloning Toolchains Repository
-		git clone --depth=1 https://github.com/HANA-CI-Build-Project/clang -b dev/old-10.0 clang-old
+		# git clone --depth=1 https://github.com/HANA-CI-Build-Project/clang -b dev/old-10.0 clang-old
 
 elif [ "$KERNEL_COMPILER" == "1" ];
 	then
@@ -146,9 +146,9 @@ elif [ "$KERNEL_CI" == "1" ];
 fi
 if [ "$KERNEL_COMPILER" == "0" ];
 	then
-		export CLANG_PATH=$(pwd)/clang-old/bin
-		export PATH=${CLANG_PATH}:${PATH}
-		export LD_LIBRARY_PATH="$(pwd)/clang-old/bin/../lib:$PATH"
+		#export CLANG_PATH=$(pwd)/clang-old/bin
+		#export PATH=${CLANG_PATH}:${PATH}
+		export LD_LIBRARY_PATH="/root/clang/bin/../lib:$PATH"
 elif [ "$KERNEL_COMPILER" == "1" ];
 	then
 		export CLANG_PATH=$(pwd)/clang-2/bin
@@ -371,7 +371,7 @@ function compile() {
 			make -s -C ${KERNEL} ${CODENAME}_defconfig O=out
 		if [ "$KERNEL_COMPILER" == "0" ];
 			then
-				PATH="$(pwd)/clang-old/bin/:${PATH}" \
+				PATH="/root/clang/bin/:${PATH}" \
         			make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
 								CC=clang \
 								CLANG_TRIPLE=aarch64-linux-gnu- \
