@@ -38,7 +38,10 @@
 # 0 = Dev-Mido || 1 = Dev-Lave || 2 = Null
 #
 # Kernel Compiler
-# 0 = Clang 10.0.0 (Nusantara Clang) || 1 = Clang 10.0.0 (Pendulum Clang) || 2 = Clang 10.0.3 + (GCC 4.9 Non-elf 32/64) || 3 = Proton clang 10 prebuilt 20200104
+# 0 = Clang 10.0.0 (Nusantara Clang)
+# 1 = Clang 10.0.0 (Pendulum Clang)
+# 2 = Clang 10.0.3 + (GCC 4.9 Non-elf 32/64)
+# 3 = Clang 10.0.0 (Proton Clang prebuilt 20200104)
 #
 # CI Init
 # 0 = Circle-CI || 1 = Drone-CI
@@ -302,6 +305,7 @@ bot_template  "<b>|| ${KERNEL_BOT} Build Bot ||</b>" \
 	      "" \
 	      "<b>Kernel Scheduler :</b><code> ${KERNEL_SCHED} </code>" \
 	      "<b>Kernel Branch :</b><code> ${KERNEL_BRANCH} </code>" \
+	      "<b>Kernel Toolchain :</b><code> ${TELEGRAM_TOOLCHAIN_VER}</code>" \
               "<b>Latest commit :</b><code> $(git --no-pager log --pretty=format:'"%h - %s (%an)"' -1) </code>"
 }
 
@@ -354,8 +358,6 @@ function sendStick() {
 function compile() {
 	if [ "$KERNEL_CODENAME" == "0" ];
 		then
-			cd ${KERNEL}
-			bot_first_compile
 			cd ..
 			if [ "$KERNEL_EXTEND" == "0" ];
 				then
@@ -369,6 +371,9 @@ function compile() {
 			fi
 			START=$(date +"%s")
 			make -s -C ${KERNEL} ${CODENAME}_defconfig O=out
+			cd ${KERNEL}
+			bot_first_compile
+			cd ..
 		if [ "$KERNEL_COMPILER" == "0" ];
 			then
 				PATH="/root/clang/bin/:${PATH}" \
@@ -425,8 +430,6 @@ function compile() {
 			kernel_upload
 	elif [ "$KERNEL_CODENAME" == "1" ];
 		then
-			cd ${KERNEL}
-			bot_first_compile
 			cd ..
 			if [ "$KERNEL_EXTEND" == "1" ] ;
 				then
@@ -434,9 +437,12 @@ function compile() {
 			fi
         		START=$(date +"%s")
         		make -s -C ${KERNEL} ${CODENAME}_defconfig O=out
+			cd ${KERNEL}
+			bot_first_compile
+			cd ..
 			if [ "$KERNEL_COMPILER" == "0" ];
 				then
-					PATH="$(pwd)/clang/bin/:${PATH}" \
+					PATH="/root/clang/bin/:${PATH}" \
 					make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
 											CC=clang \
 											CLANG_TRIPLE=aarch64-linux-gnu- \
