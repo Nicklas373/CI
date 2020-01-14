@@ -212,7 +212,7 @@ elif [ "$KERNEL_TYPE" == "1" ];
 				# Kernel extend aliases
 				KERNEL_REV="r17"
 				KERNEL_NAME="Clarity"
-				COMMIT="e70d423a7638e5cd991782f61c7631835d5ce1f2"
+				COMMIT="07a9171b327f194406cb7203ed3390abaf6f5129"
 		elif [ "$KERNEL_CODENAME" == "1" ];
 			then
 				 # Kernel extend aliases
@@ -305,7 +305,6 @@ bot_template  "<b>|| ${KERNEL_BOT} Build Bot ||</b>" \
 	      "" \
 	      "<b>Kernel Scheduler :</b><code> ${KERNEL_SCHED} </code>" \
 	      "<b>Kernel Branch :</b><code> ${KERNEL_BRANCH} </code>" \
-	      "<b>Kernel Toolchain :</b><code> ${TELEGRAM_TOOLCHAIN_VER}</code>" \
               "<b>Latest commit :</b><code> $(git --no-pager log --pretty=format:'"%h - %s (%an)"' -1) </code>"
 }
 
@@ -358,6 +357,8 @@ function sendStick() {
 function compile() {
 	if [ "$KERNEL_CODENAME" == "0" ];
 		then
+			cd ${KERNEL}
+			bot_first_compile
 			cd ..
 			if [ "$KERNEL_EXTEND" == "0" ];
 				then
@@ -404,9 +405,6 @@ function compile() {
 								CROSS_COMPILE=aarch64-linux-gnu- \
 								CROSS_COMPILE_ARM32=arm-linux-gnueabi-
 		fi
-		cd ${KERNEL}
-		bot_first_compile
-		cd ..
 			if ! [ -a $IMAGE ];
 				then
                 			echo "kernel not found"
@@ -430,6 +428,8 @@ function compile() {
 			kernel_upload
 	elif [ "$KERNEL_CODENAME" == "1" ];
 		then
+			cd ${KERNEL}
+			bot_first_compile
 			cd ..
 			if [ "$KERNEL_EXTEND" == "1" ] ;
 				then
@@ -437,9 +437,6 @@ function compile() {
 			fi
         		START=$(date +"%s")
         		make -s -C ${KERNEL} ${CODENAME}_defconfig O=out
-			cd ${KERNEL}
-			bot_first_compile
-			cd ..
 			if [ "$KERNEL_COMPILER" == "0" ];
 				then
 					PATH="/root/clang/bin/:${PATH}" \
@@ -512,7 +509,9 @@ function anykernel() {
 function kernel_upload(){
 	cd ${KERNEL}
 	bot_complete_compile
-	git --no-pager log --pretty=format:"%h - %s (%an)" --abbrev-commit ${COMMIT}..HEAD > ${KERNEL_TEMP}/git.log
+	echo "" > git.log
+	git --no-pager log --pretty=format:"%h - %s (%an)" --abbrev-commit ${COMMIT}..HEAD > git.log
+	mv git.log ${KERNEL_TEMP}
 	if [ "$KERNEL_CODENAME" == "0" ];
 		then
 			cd ${KERNEL_TEMP}
