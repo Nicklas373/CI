@@ -41,7 +41,7 @@
 # 0 = Clang 10.0.0 (Nusantara Clang)
 # 1 = Clang 10.0.0 (Pendulum Clang)
 # 2 = Clang 10.0.3 + (GCC 4.9 Non-elf 32/64)
-# 3 = Clang 10.0.0 (Proton Clang prebuilt 20200104)
+# 3 = Clang 11.0.0 (Proton Clang prebuilt 202001017)
 #
 # CI Init
 # 0 = Circle-CI || 1 = Drone-CI
@@ -136,7 +136,7 @@ elif [ "$KERNEL_COMPILER" == "2" ];
 elif [ "$KERNEL_COMPILER" == "3" ];
 	then
 		# Cloning Toolchains Repository
-		 git clone --depth=1 https://github.com/HANA-CI-Build-Project/proton-clang -b master p-clang
+		 git clone --depth=1 https://github.com/HANA-CI-Build-Project/proton-clang -b proton-clang-11 p-clang
 fi
 # Kernel Enviroment
 export ARCH=arm64
