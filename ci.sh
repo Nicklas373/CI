@@ -50,8 +50,8 @@ KERNEL_NAME_RELEASE="1"
 KERNEL_TYPE="1"
 KERNEL_BRANCH_RELEASE="0"
 KERNEL_ANDROID_VERSION="0"
-KERNEL_CODENAME="0"
-KERNEL_EXTEND="0"
+KERNEL_CODENAME="1"
+KERNEL_EXTEND="1"
 KERNEL_COMPILER="3"
 KERNEL_CI="0"
 
@@ -183,17 +183,8 @@ if [ "$KERNEL_CODENAME" == "0" ];
 		TELEGRAM_DEVICE="Xiaomi Redmi Note 4x"
 elif [ "$KERNEL_CODENAME" == "1" ];
 	then
-		if [ "$KERNEL_CI" == "0" ];
-			then
-				IMAGE="$(pwd)/out/arch/arm64/boot/Image.gz"
-				DTB="$(pwd)/out/arch/arm64/boot/dts/qcom"
-				KERNEL="$(pwd)"
-		elif [ "$KERNEL_CI" == "1" ];
-			then
-				IMAGE="$(pwd)/kernel/out/arch/arm64/boot/Image.gz"
-				DTB="$(pwd)/kernel/out/arch/arm64/boot/dts/qcom"
-				KERNEL="$(pwd)/kernel"
-		fi
+		IMAGE="$(pwd)/out/arch/arm64/boot/Image.gz-dtb"
+		KERNEL="$(pwd)"
 		KERNEL_TEMP="$(pwd)/TEMP"
 		CODENAME="lavender"
 		KERNEL_CODE="Lavender"
@@ -218,6 +209,8 @@ elif [ "$KERNEL_TYPE" == "1" ];
 				 # Kernel extend aliases
 				KERNEL_REV="r13"
 				KERNEL_NAME="Clarity"
+				COMMIT_START="0fba795671d5c97ef68d772ba1d698fbc4331597"
+				COMMIT_END="a4ec84bd3623bb889f2533ec5aabd7925166c6de"
 		fi
 elif [ "$KERNEL_TYPE" == "2" ];
 	then
@@ -491,8 +484,7 @@ function compile() {
 				then
 					echo ""
 			fi
-        		cp ${IMAGE} AnyKernel3/kernel
-			cp ${DTB}/*.dtb AnyKernel3/dtbs
+        		cp ${IMAGE} AnyKernel3
 			anykernel
 			kernel_upload
 	fi
@@ -510,7 +502,7 @@ function kernel_upload(){
 	cd ${KERNEL}
 	bot_complete_compile
 	echo "" > git.log
-	git --no-pager log --pretty=format:"%h - %s (%an)" --abbrev-commit ${COMMIT}..HEAD > git.log
+	git --no-pager log --pretty=format:"%h - %s (%an)" --abbrev-commit ${COMMIT_START}..${COMMIT_END} > git.log
 	mv git.log ${KERNEL_TEMP}
 	if [ "$KERNEL_CODENAME" == "0" ];
 		then
