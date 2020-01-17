@@ -195,7 +195,6 @@ if [ "$KERNEL_TYPE" == "0" ];
 		# Kernel extend aliases
 		KERNEL_REV="r10"
 		KERNEL_NAME="CAF"
-		COMMIT="1db74c045cad77d37578b457e11f7637e749fb84"
 elif [ "$KERNEL_TYPE" == "1" ];
 	then
 		if [ "$KERNEL_CODENAME" == "0" ];
@@ -203,21 +202,17 @@ elif [ "$KERNEL_TYPE" == "1" ];
 				# Kernel extend aliases
 				KERNEL_REV="r17"
 				KERNEL_NAME="Clarity"
-				COMMIT="07a9171b327f194406cb7203ed3390abaf6f5129"
 		elif [ "$KERNEL_CODENAME" == "1" ];
 			then
 				 # Kernel extend aliases
 				KERNEL_REV="r13"
 				KERNEL_NAME="Clarity"
-				COMMIT_START="0fba795671d5c97ef68d772ba1d698fbc4331597"
-				COMMIT_END="a4ec84bd3623bb889f2533ec5aabd7925166c6de"
 		fi
 elif [ "$KERNEL_TYPE" == "2" ];
 	then
 		# Kernel extend aliases
 		KERNEL_REV="r17"
 		KERNEL_NAME="Clarity"
-		COMMIT="a1c8138bb049459b4ce33f5e9fbae1559af59e2d"
 fi
 KERNEL_SUFFIX="Kernel"
 KERNEL_DATE="$(date +%Y%m%d-%H%M)"
@@ -501,15 +496,11 @@ function anykernel() {
 function kernel_upload(){
 	cd ${KERNEL}
 	bot_complete_compile
-	echo "" > git.log
-	git --no-pager log --pretty=format:"%h - %s (%an)" --abbrev-commit ${COMMIT_START}..${COMMIT_END} > git.log
-	mv git.log ${KERNEL_TEMP}
 	if [ "$KERNEL_CODENAME" == "0" ];
 		then
 			cd ${KERNEL_TEMP}
 	fi
 	curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/${KERNEL_NAME}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip"  https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
-	curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/git.log" https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
 	curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/compile.log"  https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
 }
 
