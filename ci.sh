@@ -53,7 +53,7 @@ KERNEL_BRANCH_RELEASE="0"
 KERNEL_ANDROID_VERSION="1"
 KERNEL_CODENAME="0"
 KERNEL_EXTEND="0"
-KERNEL_COMPILER="4"
+KERNEL_COMPILER="3"
 KERNEL_CI="1"
 
 # Compiling For Mido // If mido was selected
@@ -141,7 +141,7 @@ elif [ "$KERNEL_COMPILER" == "3" ];
 elif [ "$KERNEL_COMPILER" == "4" ];
 	then
 		 # Cloning Toolchains Repository
-		 git clone --depth=1 https://Nicklas373:$token@github.com/Nicklas373/tc-clang -b master l-clang
+		 git clone --depth=1 https://github.com/HANA-CI-Build-Project/LiuNian-clang -b master l-clang
 fi
 # Kernel Enviroment
 export ARCH=arm64
