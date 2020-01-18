@@ -38,10 +38,11 @@
 # 0 = Dev-Mido || 1 = Dev-Lave || 2 = Null
 #
 # Kernel Compiler
-# 0 = Clang 10.0.0 (Nusantara Clang)
+# 0 = Clang 11.0.0 (Nusantara Clang)
 # 1 = Clang 10.0.0 (Pendulum Clang)
 # 2 = Clang 10.0.3 + (GCC 4.9 Non-elf 32/64)
 # 3 = Clang 11.0.0 (Proton Clang prebuilt 202001017)
+# 4 = Clang 11.0.0 (LiuNian clang 2020/01/18-2)
 #
 # CI Init
 # 0 = Circle-CI || 1 = Drone-CI
@@ -49,10 +50,10 @@
 KERNEL_NAME_RELEASE="1"
 KERNEL_TYPE="1"
 KERNEL_BRANCH_RELEASE="0"
-KERNEL_ANDROID_VERSION="2"
+KERNEL_ANDROID_VERSION="1"
 KERNEL_CODENAME="0"
 KERNEL_EXTEND="0"
-KERNEL_COMPILER="3"
+KERNEL_COMPILER="4"
 KERNEL_CI="1"
 
 # Compiling For Mido // If mido was selected
@@ -137,6 +138,10 @@ elif [ "$KERNEL_COMPILER" == "3" ];
 	then
 		# Cloning Toolchains Repository
 		 git clone --depth=1 https://github.com/HANA-CI-Build-Project/proton-clang -b proton-clang-11 p-clang
+elif [ "$KERNEL_COMPILER" == "4" ];
+	then
+		 # Cloning Toolchains Repository
+		 git clone --depth=1 https://Nicklas373:$token@github.com/Nicklas373/tc-clang -b master l-clang
 fi
 # Kernel Enviroment
 export ARCH=arm64
@@ -149,8 +154,6 @@ elif [ "$KERNEL_CI" == "1" ];
 fi
 if [ "$KERNEL_COMPILER" == "0" ];
 	then
-		#export CLANG_PATH=$(pwd)/clang-old/bin
-		#export PATH=${CLANG_PATH}:${PATH}
 		export LD_LIBRARY_PATH="/root/clang/bin/../lib:$PATH"
 elif [ "$KERNEL_COMPILER" == "1" ];
 	then
@@ -169,6 +172,11 @@ elif [ "$KERNEL_COMPILER" == "3" ];
 		export CLANG_PATH=$(pwd)/p-clang/bin
 		export PATH=${CLANG_PATH}:${PATH}
 		export LD_LIBRARY_PATH="$(pwd)/p-clang/bin/../lib:$PATH"
+elif [ "$KERNEL_COMPILER" == "4" ];
+	then
+		export CLANG_PATH=$(pwd)/l-clang/bin
+		export PATH=${CLANG_PATH}:${PATH}
+		export LD_LIBRARY_PATH="$(pwd)/l-clang/bin/../lib:$PATH"
 fi
 export KBUILD_BUILD_USER=Kasumi
 export KBUILD_BUILD_HOST=${KERNEL_BOT}
@@ -392,6 +400,14 @@ function compile() {
                                                                 CLANG_TRIPLE=aarch64-linux-gnu- \
 								CROSS_COMPILE=aarch64-linux-gnu- \
 								CROSS_COMPILE_ARM32=arm-linux-gnueabi-
+		elif [ "$KERNEL_COMPILER" == "4" ];
+			then
+				PATH="$(pwd)/l-clang/bin/:${PATH}" \
+				make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
+								CC=clang \
+								CLANG_TRIPLE=aarch64-linux-gnu- \
+								CROSS_COMPILE=aarch64-linux-gnu- \
+								CROSS_COMPILE_ARM32=arm-linux-gnueabi-
 		fi
 			if ! [ -a $IMAGE ];
 				then
@@ -452,6 +468,14 @@ function compile() {
 			elif [ "$KERNEL_COMPILER" == "3" ];
 				then
 					PATH="$(pwd)/p-clang/bin/:${PATH}" \
+					make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
+								CC=clang \
+								CLANG_TRIPLE=aarch64-linux-gnu- \
+								CROSS_COMPILE=aarch64-linux-gnu- \
+								CROSS_COMPILE_ARM32=arm-linux-gnueabi-
+			elif [ "$KERNEL_COMPILER" == "4" ];
+				then
+					PATH="$(pwd)/l-clang/bin/:${PATH}" \
 					make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
 								CC=clang \
 								CLANG_TRIPLE=aarch64-linux-gnu- \
