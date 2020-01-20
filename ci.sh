@@ -43,6 +43,7 @@
 # 2 = Clang 10.0.3 + (GCC 4.9 Non-elf 32/64)
 # 3 = Clang 11.0.0 (Proton Clang prebuilt 202001017)
 # 4 = Clang 11.0.0 (LiuNian clang 2020/01/18-2)
+# 5 = Clang 10.0.0 (LiuNian clang 2020/01/01)
 #
 # CI Init
 # 0 = Circle-CI || 1 = Drone-CI
@@ -53,8 +54,8 @@ KERNEL_BRANCH_RELEASE="0"
 KERNEL_ANDROID_VERSION="1"
 KERNEL_CODENAME="0"
 KERNEL_EXTEND="0"
-KERNEL_COMPILER="3"
-KERNEL_CI="0"
+KERNEL_COMPILER="5"
+KERNEL_CI="1"
 
 # Compiling For Mido // If mido was selected
 if [ "$KERNEL_CODENAME" == "0" ];
@@ -142,6 +143,10 @@ elif [ "$KERNEL_COMPILER" == "4" ];
 	then
 		 # Cloning Toolchains Repository
 		 git clone --depth=1 https://github.com/HANA-CI-Build-Project/LiuNian-clang -b master l-clang
+elif [ "$KERNEL_COMPILER" == "5" ];
+	then
+		 # Cloning Toolchains Repository
+		git clone --depth=1 https://github.com/HANA-CI-Build-Project/LiuNian-clang -b clang-10 l-clang
 fi
 # Kernel Enviroment
 export ARCH=arm64
@@ -172,7 +177,7 @@ elif [ "$KERNEL_COMPILER" == "3" ];
 		export CLANG_PATH=$(pwd)/p-clang/bin
 		export PATH=${CLANG_PATH}:${PATH}
 		export LD_LIBRARY_PATH="$(pwd)/p-clang/bin/../lib:$PATH"
-elif [ "$KERNEL_COMPILER" == "4" ];
+elif [ "$KERNEL_COMPILER" == "4" ] ||  [ "$KERNEL_COMPILER" == "5" ];
 	then
 		export CLANG_PATH=$(pwd)/l-clang/bin
 		export PATH=${CLANG_PATH}:${PATH}
@@ -400,7 +405,7 @@ function compile() {
                                                                 CLANG_TRIPLE=aarch64-linux-gnu- \
 								CROSS_COMPILE=aarch64-linux-gnu- \
 								CROSS_COMPILE_ARM32=arm-linux-gnueabi-
-		elif [ "$KERNEL_COMPILER" == "4" ];
+		elif [ "$KERNEL_COMPILER" == "4" ] || [ "$KERNEL_COMPILER" == "5" ];
 			then
 				PATH="$(pwd)/l-clang/bin/:${PATH}" \
 				make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
@@ -473,7 +478,7 @@ function compile() {
 								CLANG_TRIPLE=aarch64-linux-gnu- \
 								CROSS_COMPILE=aarch64-linux-gnu- \
 								CROSS_COMPILE_ARM32=arm-linux-gnueabi-
-			elif [ "$KERNEL_COMPILER" == "4" ];
+			elif [ "$KERNEL_COMPILER" == "4" ] || [ "$KERNEL_COMPILER" == "5" ];
 				then
 					PATH="$(pwd)/l-clang/bin/:${PATH}" \
 					make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
