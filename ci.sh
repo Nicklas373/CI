@@ -44,6 +44,7 @@
 # 3 = Clang 11.0.0 (Proton Clang prebuilt 202001017)
 # 4 = Clang 11.0.0 (LiuNian clang 2020/01/18-2)
 # 5 = Clang 10.0.0 (LiuNian clang 2020/01/01)
+# 6 = Clang 10.0.0 (Proton clang 10.0.0 prebuilt)
 #
 # CI Init
 # 0 = Circle-CI || 1 = Drone-CI
@@ -54,7 +55,7 @@ KERNEL_BRANCH_RELEASE="0"
 KERNEL_ANDROID_VERSION="1"
 KERNEL_CODENAME="0"
 KERNEL_EXTEND="0"
-KERNEL_COMPILER="5"
+KERNEL_COMPILER="6"
 KERNEL_CI="1"
 
 # Compiling For Mido // If mido was selected
@@ -147,6 +148,10 @@ elif [ "$KERNEL_COMPILER" == "5" ];
 	then
 		 # Cloning Toolchains Repository
 		git clone --depth=1 https://github.com/HANA-CI-Build-Project/LiuNian-clang -b clang-10 l-clang
+elif [ "$KERNEL_COMPILER" == "6" ];
+        then
+                 # Cloning Toolchains Repository
+                git clone --depth=1 https://github.com/HANA-CI-Build-Project/LiuNian-clang -b clang-10 p-clang
 fi
 # Kernel Enviroment
 export ARCH=arm64
@@ -172,12 +177,12 @@ elif [ "$KERNEL_COMPILER" == "2" ];
 		export LD_LIBRARY_PATH="/root/aosp-clang/bin/../lib:$PATH"
 		export CROSS_COMPILE=/root/gcc-4.9/arm64/bin/aarch64-linux-android-
 		export CROSS_COMPILE_ARM32=/root/gcc-4.9/arm/bin/arm-linux-androideabi-
-elif [ "$KERNEL_COMPILER" == "3" ];
+elif [ "$KERNEL_COMPILER" == "3" ] || [ "$KERNEL_COMPILER" == "6" ];
 	then
 		export CLANG_PATH=$(pwd)/p-clang/bin
 		export PATH=${CLANG_PATH}:${PATH}
 		export LD_LIBRARY_PATH="$(pwd)/p-clang/bin/../lib:$PATH"
-elif [ "$KERNEL_COMPILER" == "4" ] ||  [ "$KERNEL_COMPILER" == "5" ];
+elif [ "$KERNEL_COMPILER" == "4" ] || [ "$KERNEL_COMPILER" == "5" ];
 	then
 		export CLANG_PATH=$(pwd)/l-clang/bin
 		export PATH=${CLANG_PATH}:${PATH}
@@ -397,7 +402,7 @@ function compile() {
 								CLANG_TRIPLE=aarch64-linux-gnu- \
 								CROSS_COMPILE=${CROSS_COMPILE} \
 								CROSS_COMPILE_ARM32=${CROSS_COMPILE_ARM32}
-		elif [ "$KERNEL_COMPILER" == "3" ];
+		elif [ "$KERNEL_COMPILER" == "3" ] || [ "$KERNEL_COMPILER" == "6" ];
 			then
 				PATH="$(pwd)/p-clang/bin/:${PATH}" \
 				make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
@@ -470,7 +475,7 @@ function compile() {
 											CLANG_TRIPLE=aarch64-linux-gnu- \
 											CROSS_COMPILE=${CROSS_COMPILE} \
 											CROSS_COMPILE_ARM32=${CROSS_COMPILE_ARM32}
-			elif [ "$KERNEL_COMPILER" == "3" ];
+			elif [ "$KERNEL_COMPILER" == "3" ] || [ "$KERNEL_COMPILER" == "6" ];
 				then
 					PATH="$(pwd)/p-clang/bin/:${PATH}" \
 					make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
