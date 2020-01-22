@@ -133,7 +133,7 @@ elif [ "$KERNEL_COMPILER" == "1" ];
 elif [ "$KERNEL_COMPILER" == "2" ];
 	then
 		# Cloning Toolchains Repository
-		git clone --depth=1 https://github.com/HANA-CI-Build-Project/proton-clang -b clang-10 p-clang
+		git clone --depth=1 https://github.com/HANA-CI-Build-Project/proton-clang -b master p-clang
 elif [ "$KERNEL_COMPILER" == "3" ];
 	then
 		# Cloning Toolchains Repository
