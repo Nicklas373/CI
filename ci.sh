@@ -393,7 +393,7 @@ function compile() {
                                                                 CLANG_TRIPLE=aarch64-linux-gnu- \
 								CROSS_COMPILE=aarch64-linux-gnu- \
 								CROSS_COMPILE_ARM32=arm-linux-gnueabi-
-		elif [ "$KERNEL_COMPILER" == "2" ] || [ "$KERNEL_COMPILER" == "5"];
+		elif [ "$KERNEL_COMPILER" == "2" ] || [ "$KERNEL_COMPILER" == "5" ];
 			then
 				PATH="$(pwd)/p-clang/bin/:${PATH}" \
 				make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
@@ -466,7 +466,7 @@ function compile() {
 										CLANG_TRIPLE=aarch64-linux-gnu- \
 										CROSS_COMPILE=aarch64-linux-gnu- \
 										CROSS_COMPILE_ARM32=arm-linux-gnueabi-
-			elif [ "$KERNEL_COMPILER" == "2" ] || [ "$KERNEL_COMPILER" == "5"];
+			elif [ "$KERNEL_COMPILER" == "2" ] || [ "$KERNEL_COMPILER" == "5" ];
 				then
 					PATH="$(pwd)/p-clang/bin/:${PATH}" \
 					make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
