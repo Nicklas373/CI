@@ -49,14 +49,14 @@
 # CI Init
 # 0 = Circle-CI || 1 = Drone-CI
 #
-KERNEL_NAME_RELEASE="1"
-KERNEL_TYPE="1"
+KERNEL_NAME_RELEASE="0"
+KERNEL_TYPE="0"
 KERNEL_BRANCH_RELEASE="0"
-KERNEL_ANDROID_VERSION="1"
+KERNEL_ANDROID_VERSION="2"
 KERNEL_CODENAME="0"
-KERNEL_EXTEND="0"
+KERNEL_EXTEND="2"
 KERNEL_COMPILER="2"
-KERNEL_CI="1"
+KERNEL_CI="0"
 
 # Compiling For Mido // If mido was selected
 if [ "$KERNEL_CODENAME" == "0" ];
@@ -210,7 +210,7 @@ fi
 if [ "$KERNEL_TYPE" == "0" ];
 	then
 		# Kernel extend aliases
-		KERNEL_REV="r10"
+		KERNEL_REV="r11"
 		KERNEL_NAME="CAF"
 elif [ "$KERNEL_TYPE" == "1" ];
 	then
