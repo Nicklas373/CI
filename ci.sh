@@ -56,7 +56,7 @@ KERNEL_ANDROID_VERSION="1"
 KERNEL_CODENAME="0"
 KERNEL_EXTEND="0"
 KERNEL_COMPILER="2"
-KERNEL_CI="0"
+KERNEL_CI="1"
 
 # Compiling For Mido // If mido was selected
 if [ "$KERNEL_CODENAME" == "0" ];
@@ -79,11 +79,11 @@ if [ "$KERNEL_CODENAME" == "0" ];
 				if [ "$KERNEL_TYPE" == "1" ];
 					then
 						# Clone kernel & other repositories earlier
-						git clone --depth=1 -b dev/kasumi https://github.com/Nicklas373/kernel_xiaomi_msm8953-3.18-2 kernel
+						git clone --depth=1 -b bak https://github.com/Nicklas373/kernel_xiaomi_msm8953-3.18-2 kernel
 
 						# Define Kernel Scheduler
 						KERNEL_SCHED="EAS"
-						KERNEL_BRANCH="dev/kasumi"
+						KERNEL_BRANCH="bak"
 				elif [ "$KERNEL_TYPE" == "2" ];
 					then
 						# Clone kernel & other repositories earlier
