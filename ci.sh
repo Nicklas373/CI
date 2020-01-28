@@ -201,7 +201,13 @@ if [ "$KERNEL_CODENAME" == "0" ];
 elif [ "$KERNEL_CODENAME" == "1" ];
 	then
 		IMAGE="$(pwd)/out/arch/arm64/boot/Image.gz-dtb"
-		KERNEL="$(pwd)"
+	if [ "$KERNEL_CI" == "0" ];
+		then
+			KERNEL="$(pwd)"
+	elif [ "$KERNEL_CI" == "1" ];
+		then
+			KERNEL="$(pwd)/kernel"
+	fi
 		KERNEL_TEMP="$(pwd)/TEMP"
 		CODENAME="lavender"
 		KERNEL_CODE="Lavender"
