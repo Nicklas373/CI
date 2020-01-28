@@ -20,7 +20,7 @@
 # Let's make some option here
 #
 # Kernel Name Release
-# 0 = CAF || 1 = Clarity
+# 0 = CAF || 1 = Clarity || 2 = Fus10n
 #
 # Kernel Type
 # 0 = HMP || 1 = EAS || 2 = EAS-UC
@@ -49,12 +49,12 @@
 # CI Init
 # 0 = Circle-CI || 1 = Drone-CI
 #
-KERNEL_NAME_RELEASE="1"
+KERNEL_NAME_RELEASE="2"
 KERNEL_TYPE="1"
 KERNEL_BRANCH_RELEASE="0"
 KERNEL_ANDROID_VERSION="1"
-KERNEL_CODENAME="0"
-KERNEL_EXTEND="0"
+KERNEL_CODENAME="1"
+KERNEL_EXTEND="2"
 KERNEL_COMPILER="2"
 KERNEL_CI="1"
 
@@ -109,7 +109,7 @@ elif [ "$KERNEL_CODENAME" == "1" ];
 		# Cloning Kernel Repository // If compiled by Drone CI
 		if [ "$KERNEL_CI" == "1" ];
 			then
-				git clone --depth=1 -b kasumi https://Nicklas373:$token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
+				git clone --depth=1 -b new-hmp https://Nicklas373:$token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
 		fi
 
 		# Cloning AnyKernel Repository
@@ -119,8 +119,8 @@ elif [ "$KERNEL_CODENAME" == "1" ];
 		mkdir TEMP
 
 		# Define Kernel Scheduler
-		KERNEL_SCHED="EAS"
-		KERNEL_BRANCH="kasumi"
+		KERNEL_SCHED="HMP"
+		KERNEL_BRANCH="new-hmp"
 fi
 if [ "$KERNEL_COMPILER" == "0" ];
 	then
@@ -222,8 +222,8 @@ elif [ "$KERNEL_TYPE" == "1" ];
 		elif [ "$KERNEL_CODENAME" == "1" ];
 			then
 				 # Kernel extend aliases
-				KERNEL_REV="r13"
-				KERNEL_NAME="Clarity"
+				KERNEL_REV="r1"
+				KERNEL_NAME="Fus10n"
 		fi
 elif [ "$KERNEL_TYPE" == "2" ];
 	then
@@ -444,12 +444,8 @@ function compile() {
 			cd ${KERNEL}
 			bot_first_compile
 			cd ..
-			if [ "$KERNEL_EXTEND" == "1" ] ;
-				then
-					sed -i -e 's/-友希那-Kernel-r13-LA.UM.8.2.r1-05100-sdm660.0/-戸山-Kernel-r13-LA.UM.8.2.r1-05100-sdm660.0/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig
-			fi
-        		START=$(date +"%s")
-        		make -s -C ${KERNEL} ${CODENAME}_defconfig O=out
+			START=$(date +"%s")
+			make -s -C ${KERNEL} ${CODENAME}_defconfig O=out
 			if [ "$KERNEL_COMPILER" == "0" ];
 				then
 					PATH="$(pwd)/clang-2/bin/:${PATH}" \
