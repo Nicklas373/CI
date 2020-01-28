@@ -20,7 +20,7 @@
 # Let's make some option here
 #
 # Kernel Name Release
-# 0 = CAF || 1 = Clarity || 2 = Fus10n
+# 0 = CAF || 1 = Clarity / Fusion
 #
 # Kernel Type
 # 0 = HMP || 1 = EAS || 2 = EAS-UC
@@ -49,7 +49,7 @@
 # CI Init
 # 0 = Circle-CI || 1 = Drone-CI
 #
-KERNEL_NAME_RELEASE="2"
+KERNEL_NAME_RELEASE="1"
 KERNEL_TYPE="1"
 KERNEL_BRANCH_RELEASE="0"
 KERNEL_ANDROID_VERSION="1"
@@ -223,7 +223,7 @@ elif [ "$KERNEL_TYPE" == "1" ];
 			then
 				 # Kernel extend aliases
 				KERNEL_REV="r1"
-				KERNEL_NAME="Fus10n"
+				KERNEL_NAME="Fusion"
 		fi
 elif [ "$KERNEL_TYPE" == "2" ];
 	then
