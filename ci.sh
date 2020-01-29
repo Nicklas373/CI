@@ -259,10 +259,10 @@ if [ "$KERNEL_BRANCH_RELEASE" == "1" ];
 
 		if [ "$KERNEL_NAME_RELEASE" == "2" ];
 			then
-				CODENAME="Testing"
+				FUSION_CODENAME="Summer_Dream"
 				KERNEL_VERSION="r2"
-				KVERSION="${CODENAME}-${KERNEL_VERSION}"
-				ZIP_NAME="${KERNEL_NAME}-${KVERSION}-${DEVICES}-$(date "+%H%M-%d%m%Y").zip"
+				KVERSION="${FUSION_CODENAME}-${KERNEL_VERSION}"
+				ZIP_NAME="${KERNEL_NAME}-${KVERSION}-${CODENAME}-$(date "+%H%M-%d%m%Y").zip"
 		fi
 elif [ "$KERNEL_BRANCH_RELEASE" == "0" ];
 	then
@@ -270,10 +270,10 @@ elif [ "$KERNEL_BRANCH_RELEASE" == "0" ];
 
 		if [ "$KERNEL_NAME_RELEASE" == "2" ];
 			then
-				CODENAME="Universal"
+				FUSION_CODENAME="Summer_Dream"
 				KERNEL_VERSION="r2"
-				KVERSION="${CODENAME}-$(git log --pretty=format:'%h' -1)-$(date "+%H%M")"
-				ZIP_NAME="${KERNEL_NAME}-${CODENAME}-${DEVICES}-$(git log --pretty=format:'%h' -1)-$(date "+%H%M").zip"
+				KVERSION="${FUSION_CODENAME}-$(git log --pretty=format:'%h' -1)-$(date "+%H%M")"
+				ZIP_NAME="${KERNEL_NAME}-${FUSION_CODENAME}-${CODENAME}-$(git log --pretty=format:'%h' -1)-$(date "+%H%M").zip"
 		fi
 fi
 
