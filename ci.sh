@@ -259,6 +259,8 @@ if [ "$KERNEL_BRANCH_RELEASE" == "1" ];
 
 		if [ "$KERNEL_NAME_RELEASE" == "2" ];
 			then
+				CODENAME="Testing"
+				KERNEL_VERSION="r2"
 				KVERSION="${CODENAME}-${KERNEL_VERSION}"
 				ZIP_NAME="${KERNEL_NAME}-${KVERSION}-${DEVICES}-$(date "+%H%M-%d%m%Y").zip"
 		fi
@@ -268,6 +270,8 @@ elif [ "$KERNEL_BRANCH_RELEASE" == "0" ];
 
 		if [ "$KERNEL_NAME_RELEASE" == "2" ];
 			then
+				CODENAME="Universal"
+				KERNEL_VERSION="r2"
 				KVERSION="${CODENAME}-$(git log --pretty=format:'%h' -1)-$(date "+%H%M")"
 				ZIP_NAME="${KERNEL_NAME}-${CODENAME}-${DEVICES}-$(git log --pretty=format:'%h' -1)-$(date "+%H%M").zip"
 		fi
@@ -332,30 +336,47 @@ bot_template  "<b>|| ${KERNEL_BOT} Build Bot ||</b>" \
               "<b>Latest commit :</b><code> $(git --no-pager log --pretty=format:'"%h - %s (%an)"' -1) </code>"
 }
 
-# Telegram bot message || complete compile notification
-function bot_complete_compile() {
-bot_env
-bot_template  "<b>|| ${KERNEL_BOT} Build Bot ||</b>" \
-    "" \
-    "<b>New ${KERNEL_NAME} Kernel Build Is Available!</b>" \
-    "" \
-    "<b>Build Status :</b><code> ${KERNEL_RELEASE} </code>" \
-    "<b>Device :</b><code> ${TELEGRAM_DEVICE} </code>" \
-    "<b>Android Version :</b><code> ${KERNEL_ANDROID_VER} </code>" \
-    "<b>Filename :</b><code> ${TELEGRAM_FILENAME}</code>" \
-     "" \
-    "<b>Kernel Scheduler :</b><code> ${KERNEL_SCHED} </code>" \
-    "<b>Kernel Version:</b><code> Linux ${TELEGRAM_KERNEL_VER}</code>" \
-    "<b>Kernel Host:</b><code> ${TELEGRAM_COMPILER_NAME}@${TELEGRAM_COMPILER_HOST}</code>" \
-    "<b>Kernel Toolchain :</b><code> ${TELEGRAM_TOOLCHAIN_VER}</code>" \
-    "<b>UTS Version :</b><code> ${TELEGRAM_UTS_VER}</code>" \
-    "" \
-    "<b>Latest commit :</b><code> $(git --no-pager log --pretty=format:'"%h - %s (%an)"' -1)</code>" \
-    "<b>Compile Time :</b><code> $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) second(s)</code>" \
-    "" \
-    "<b>                         HANA-CI Build Project | 2016-2020                            </b>"
-}
+if [ "$KERNEL_NAME_RELEASE" == "0" ] || [ "$KERNEL_NAME_RELEASE" == "1" ];
+	then
 
+		# Telegram bot message || complete compile notification
+		function bot_complete_compile() {
+		bot_env
+		bot_template  "<b>|| ${KERNEL_BOT} Build Bot ||</b>" \
+    		"" \
+    		"<b>New ${KERNEL_NAME} Kernel Build Is Available!</b>" \
+    		"" \
+    		"<b>Build Status :</b><code> ${KERNEL_RELEASE} </code>" \
+    		"<b>Device :</b><code> ${TELEGRAM_DEVICE} </code>" \
+    		"<b>Android Version :</b><code> ${KERNEL_ANDROID_VER} </code>" \
+    		"<b>Filename :</b><code> ${TELEGRAM_FILENAME}</code>" \
+     		"" \
+    		"<b>Kernel Scheduler :</b><code> ${KERNEL_SCHED} </code>" \
+    		"<b>Kernel Version:</b><code> Linux ${TELEGRAM_KERNEL_VER}</code>" \
+    		"<b>Kernel Host:</b><code> ${TELEGRAM_COMPILER_NAME}@${TELEGRAM_COMPILER_HOST}</code>" \
+    		"<b>Kernel Toolchain :</b><code> ${TELEGRAM_TOOLCHAIN_VER}</code>" \
+    		"<b>UTS Version :</b><code> ${TELEGRAM_UTS_VER}</code>" \
+    		"" \
+    		"<b>Latest commit :</b><code> $(git --no-pager log --pretty=format:'"%h - %s (%an)"' -1)</code>" \
+    		"<b>Compile Time :</b><code> $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) second(s)</code>" \
+    		"" \
+    		"<b>                         HANA-CI Build Project | 2016-2020                            </b>"
+		}
+elif [ "$KERNEL_NAME_RELEASE" == "2" ];
+	then
+		function bot_complete_compile() {
+		bot_env
+		bot_template "<b>---- ${KERNEL_NAME} New Kernel ----</b>" \
+    		"<b>Device:</b> ${CODENAME} or ${TELEGRAM_DEVICE}" \
+    		"<b>Name:</b> <code>${KERNEL_NAME}-${KVERSION}</code>" \
+    		"<b>Kernel Version:</b> <code>${TELEGRAM_KERNEL_VER}</code>" \
+    		"<b>Type:</b> <code>${KERNEL_SCHED}</code>" \
+    		"<b>Commit:</b> <code>$(git log --pretty=format:'%h : %s' -1)</code>" \
+    		"<b>Started on:</b> <code>$(hostname)</code>" \
+    		"<b>Compiler:</b> <code>${TELEGRAM_TOOLCHAIN_VER}</code>" \
+    		"<b>Started at</b> <code>${KERNEL_DATE}</code>"
+		}
+fi
 # Telegram bot message || success notification
 function bot_build_success() {
 bot_template  "<b>|| ${KERNEL_BOT} Build Bot ||</b>" \
@@ -559,7 +580,7 @@ function kernel_upload(){
 			curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/${KERNEL_NAME}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip"  https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
 	elif [ "$KERNEL_NAME_RELEASE" == "2" ];
 		then
-			curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/$ZIP_NAME"
+			curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/$ZIP_NAME" https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
 	fi
 	if [ "$KERNEL_BRANCH_RELEASE" == "0" ];
 		then
