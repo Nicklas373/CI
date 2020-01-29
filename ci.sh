@@ -56,7 +56,7 @@ KERNEL_ANDROID_VERSION="2"
 KERNEL_CODENAME="0"
 KERNEL_EXTEND="0"
 KERNEL_COMPILER="2"
-KERNEL_CI="1"
+KERNEL_CI="0"
 
 # Compiling For Mido // If mido was selected
 if [ "$KERNEL_CODENAME" == "0" ];
@@ -558,12 +558,11 @@ function compile() {
 function anykernel() {
 	cd AnyKernel3
 	make -j4
-	if [ "$KERNEL_NAME_RELEASE" == "0" ] || [ "KERNEL_NAME_RELEASE" == "1" ];
-		then
-			mv Clarity-Kernel-${KERNEL_CODE}-signed.zip  ${KERNEL_TEMP}/${KERNEL_NAME}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip
-	elif [ "$KERNEL_NAME_RELEASE" == "2" ];
+	if [ "$KERNEL_NAME_RELEASE" == "2" ];
 		then
 			mv *.zip ${KERNEL_TEMP}/$ZIP_NAME
+	else
+		mv Clarity-Kernel-${KERNEL_CODE}-signed.zip  ${KERNEL_TEMP}/${KERNEL_NAME}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip
 	fi
 }
 
@@ -571,12 +570,11 @@ function anykernel() {
 function kernel_upload(){
 	cd ${KERNEL}
 	bot_complete_compile
-	if [ "$KERNEL_NAME_RELEASE" == "0" ] || [ "$KERNEL_NAME_RELEASE" == "1" ];
-		then
-			curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/${KERNEL_NAME}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip"  https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
-	elif [ "$KERNEL_NAME_RELEASE" == "2" ];
+	if [ "$KERNEL_NAME_RELEASE" == "2" ];
 		then
 			curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/$ZIP_NAME" https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
+	else
+		curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/${KERNEL_NAME}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip"  https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
 	fi
 	if [ "$KERNEL_BRANCH_RELEASE" == "0" ];
 		then
