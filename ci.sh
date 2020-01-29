@@ -563,7 +563,7 @@ function anykernel() {
 			mv Clarity-Kernel-${KERNEL_CODE}-signed.zip  ${KERNEL_TEMP}/${KERNEL_NAME}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip
 	elif [ "$KERNEL_NAME_RELEASE" == "2" ];
 		then
-			mv $ZIP_NAME ${KERNEL_TEMP}
+			mv *.zip ${KERNEL_TEMP}/$ZIP_NAME
 	fi
 }
 
