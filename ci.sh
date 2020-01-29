@@ -571,10 +571,6 @@ function anykernel() {
 function kernel_upload(){
 	cd ${KERNEL}
 	bot_complete_compile
-	if [ "$KERNEL_CODENAME" == "0" ];
-		then
-			cd ${KERNEL_TEMP}
-	fi
 	if [ "$KERNEL_NAME_RELEASE" == "0" ] || [ "$KERNEL_NAME_RELEASE" == "1" ];
 		then
 			curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/${KERNEL_NAME}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip"  https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
