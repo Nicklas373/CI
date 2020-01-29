@@ -20,7 +20,7 @@
 # Let's make some option here
 #
 # Kernel Name Release
-# 0 = CAF || 1 = Clarity / Fusion
+# 0 = CAF || 1 = Clarity || 2 = Fusion (Co-operate with @alanndz)
 #
 # Kernel Type
 # 0 = HMP || 1 = EAS || 2 = EAS-UC
@@ -49,11 +49,11 @@
 # CI Init
 # 0 = Circle-CI || 1 = Drone-CI
 #
-KERNEL_NAME_RELEASE="1"
+KERNEL_NAME_RELEASE="2"
 KERNEL_TYPE="1"
-KERNEL_BRANCH_RELEASE="1"
-KERNEL_ANDROID_VERSION="1"
-KERNEL_CODENAME="0"
+KERNEL_BRANCH_RELEASE="0"
+KERNEL_ANDROID_VERSION="2"
+KERNEL_CODENAME="1"
 KERNEL_EXTEND="2"
 KERNEL_COMPILER="2"
 KERNEL_CI="1"
@@ -109,18 +109,18 @@ elif [ "$KERNEL_CODENAME" == "1" ];
 		# Cloning Kernel Repository // If compiled by Drone CI
 		if [ "$KERNEL_CI" == "1" ];
 			then
-				git clone --depth=1 -b new-hmp https://Nicklas373:$token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
+				git clone --depth=1 -b fusion-eas https://Nicklas373:$token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
 		fi
 
 		# Cloning AnyKernel Repository
-		git clone --depth=1 -b lavender https://github.com/Nicklas373/AnyKernel3
+		git clone --depth=1 -b fusion https://github.com/alanndz/AnyKernel3
 
 		# Create Temporary Folder
 		mkdir TEMP
 
 		# Define Kernel Scheduler
-		KERNEL_SCHED="HMP"
-		KERNEL_BRANCH="new-hmp"
+		KERNEL_SCHED="EAS"
+		KERNEL_BRANCH="fusion-eas"
 fi
 if [ "$KERNEL_COMPILER" == "0" ];
 	then
@@ -187,8 +187,15 @@ elif [ "$KERNEL_COMPILER" == "4" ]
 	then
 		export LD_LIBRARY_PATH="root/clang/bin/../lib:$PATH"
 fi
-export KBUILD_BUILD_USER=Kasumi
-export KBUILD_BUILD_HOST=${KERNEL_BOT}
+if [ "$KERNEL_NAME_RELEASE" == "0" ] || [ "$KERNEL_NAME_RELEASE" == "1" ];
+	then
+		export KBUILD_BUILD_USER=Kasumi
+		export KBUILD_BUILD_HOST=${KERNEL_BOT}
+elif [ "$KERNEL_NAME_RELEASE" == "2" ];
+	then
+		export KBUILD_BUILD_USER=alanndz-nicklas373
+		export KBUILD_BUILD_HOST=fusion_lavender-Dev
+fi
 # Kernel aliases
 if [ "$KERNEL_CODENAME" == "0" ];
 	then
@@ -213,29 +220,22 @@ elif [ "$KERNEL_CODENAME" == "1" ];
 		KERNEL_CODE="Lavender"
 		TELEGRAM_DEVICE="Xiaomi Redmi Note 7"
 fi
-if [ "$KERNEL_TYPE" == "0" ];
+
+if [ "$KERNEL_NAME_RELEASE" == "0" ];
 	then
 		# Kernel extend aliases
 		KERNEL_REV="r11"
 		KERNEL_NAME="CAF"
-elif [ "$KERNEL_TYPE" == "1" ];
-	then
-		if [ "$KERNEL_CODENAME" == "0" ];
-			then
-				# Kernel extend aliases
-				KERNEL_REV="r17"
-				KERNEL_NAME="Clarity"
-		elif [ "$KERNEL_CODENAME" == "1" ];
-			then
-				 # Kernel extend aliases
-				KERNEL_REV="r1"
-				KERNEL_NAME="Fusion"
-		fi
-elif [ "$KERNEL_TYPE" == "2" ];
+elif [ "$KERNEL_NAME_RELEASE" == "1" ];
 	then
 		# Kernel extend aliases
 		KERNEL_REV="r17"
 		KERNEL_NAME="Clarity"
+elif [ "$KERNEL_NAME_RELEASE" == "2" ];
+	then
+		# Kernel extend aliases
+		KERNEL_REV="r2"
+		KERNEL_NAME="Fusion"
 fi
 KERNEL_SUFFIX="Kernel"
 KERNEL_DATE="$(date +%Y%m%d-%H%M)"
@@ -255,9 +255,21 @@ fi
 if [ "$KERNEL_BRANCH_RELEASE" == "1" ];
 	then
 		KERNEL_RELEASE="Stable"
+
+		if [ "$KERNEL_NAME_RELEASE" == "2" ];
+			then
+				KVERSION="${CODENAME}-${KERNEL_VERSION}"
+				ZIP_NAME="${KERNEL_NAME}-${KVERSION}-${DEVICES}-$(date "+%H%M-%d%m%Y").zip"
+		fi
 elif [ "$KERNEL_BRANCH_RELEASE" == "0" ];
 	then
 		KERNEL_RELEASE="BETA"
+
+		if [ "$KERNEL_NAME_RELEASE" == "2" ];
+			then
+				KVERSION="${CODENAME}-$(git log --pretty=format:'%h' -1)-$(date "+%H%M")"
+				ZIP_NAME="${KERNEL_NAME}-${CODENAME}-${DEVICES}-$(git log --pretty=format:'%h' -1)-$(date "+%H%M").zip"
+		fi
 fi
 
 # Telegram aliases
@@ -524,7 +536,13 @@ function compile() {
 function anykernel() {
 	cd AnyKernel3
 	make -j4
-        mv Clarity-Kernel-${KERNEL_CODE}-signed.zip  ${KERNEL_TEMP}/${KERNEL_NAME}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip
+	if [ "$KERNEL_NAME_RELEASE" == "0" ] || [ "KERNEL_NAME_RELEASE" == "1" ];
+		then
+			mv Clarity-Kernel-${KERNEL_CODE}-signed.zip  ${KERNEL_TEMP}/${KERNEL_NAME}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip
+	elif [ "$KERNEL_NAME_RELEASE" == "2" ];
+		then
+			mv $ZIP_NAME ${KERNEL_TEMP}
+	fi
 }
 
 # Upload Kernel
@@ -535,7 +553,13 @@ function kernel_upload(){
 		then
 			cd ${KERNEL_TEMP}
 	fi
-	curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/${KERNEL_NAME}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip"  https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
+	if [ "$KERNEL_NAME_RELEASE" == "0" ] || [ "$KERNEL_NAME_RELEASE" == "1" ];
+		then
+			curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/${KERNEL_NAME}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip"  https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
+	elif [ "$KERNEL_NAME_RELEASE" == "2" ];
+		then
+			curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/$ZIP_NAME"
+	fi
 	if [ "$KERNEL_BRANCH_RELEASE" == "0" ];
 		then
 			curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/compile.log"  https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
