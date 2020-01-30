@@ -49,12 +49,12 @@
 # CI Init
 # 0 = Circle-CI || 1 = Drone-CI
 #
-KERNEL_NAME_RELEASE="2"
+KERNEL_NAME_RELEASE="1"
 KERNEL_TYPE="1"
 KERNEL_BRANCH_RELEASE="0"
 KERNEL_ANDROID_VERSION="2"
-KERNEL_CODENAME="1"
-KERNEL_EXTEND="2"
+KERNEL_CODENAME="0"
+KERNEL_EXTEND="0"
 KERNEL_COMPILER="2"
 KERNEL_CI="1"
 
@@ -409,10 +409,10 @@ function compile() {
 				then
 					if [ "$KERNEL_TYPE" == "1" ] ;
 						then
-							sed -i -e 's/-友希那-Kernel-r17-LA.UM.8.6.r1-02900-89xx.0/-戸山-Kernel-r17-LA.UM.8.6.r1-02900-89xx.0/g'  ${KERNEL}/arch/arm64/configs/mido_defconfig
+							sed -i -e 's/-友希那-Kernel-r17-LA.UM.8.6.r1-03400-89xx.0/-戸山-Kernel-r17-LA.UM.8.6.r1-03400-89xx.0/g'  ${KERNEL}/arch/arm64/configs/mido_defconfig
 					elif [ "$KERNEL_TYPE" == "2" ];
 						then
-							sed -i -e 's/-友希那-Kernel-r17-LA.UM.8.6.r1-02900-89xx.0/-戸山-Kernel-r17-UC-LA.UM.8.6.r1-02900-89xx.0/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
+							sed -i -e 's/-友希那-Kernel-r17-LA.UM.8.6.r1-03400-89xx.0/-戸山-Kernel-r17-UC-LA.UM.8.6.r1-03400-89xx.0/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 					fi
 			fi
 			START=$(date +"%s")
