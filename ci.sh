@@ -23,7 +23,7 @@
 # 0 = CAF || 1 = Clarity || 2 = Fusion (Co-operate with @alanndz)
 #
 # Kernel Type
-# 0 = HMP || 1 = EAS || 2 = EAS-UC
+# 0 = HMP || 1 = EAS
 #
 # Kernel Branch Relase
 # 0 = BETA || 1 = Stable
@@ -76,23 +76,12 @@ if [ "$KERNEL_CODENAME" == "0" ];
 
 		elif [ "$KERNEL_NAME_RELEASE" == "1" ];
 			then
-				if [ "$KERNEL_TYPE" == "1" ];
-					then
-						# Clone kernel & other repositories earlier
-						git clone --depth=1 -b dev/kasumi https://github.com/Nicklas373/kernel_xiaomi_msm8953-3.18-2 kernel
+				# Clone kernel & other repositories earlier
+				git clone --depth=1 -b dev/kasumi https://github.com/Nicklas373/kernel_xiaomi_msm8953-3.18-2 kernel
 
-						# Define Kernel Scheduler
-						KERNEL_SCHED="EAS"
-						KERNEL_BRANCH="dev/kasumi"
-				elif [ "$KERNEL_TYPE" == "2" ];
-					then
-						# Clone kernel & other repositories earlier
-						git clone --depth=1 -b dev/kasumi-uc https://github.com/Nicklas373/kernel_xiaomi_msm8953-3.18-2 kernel
-
-						# Define Kernel Scheduler
-						KERNEL_SCHED="EAS-UC"
-						KERNEL_BRANCH="dev/kasumi-uc"
-				fi
+				# Define Kernel Scheduler
+				KERNEL_SCHED="EAS"
+				KERNEL_BRANCH="dev/kasumi"
 
 				# Detect Android Version earlier and clone AnyKernel depend on android version
 				if [ "$KERNEL_ANDROID_VERSION" == "0" ];
@@ -109,7 +98,7 @@ elif [ "$KERNEL_CODENAME" == "1" ];
 		# Cloning Kernel Repository // If compiled by Drone CI
 		if [ "$KERNEL_CI" == "1" ];
 			then
-				git clone --depth=1 -b fusion-eas-side https://Nicklas373:$token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
+				git clone --depth=1 -b caf/hmp https://Nicklas373:$token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
 		fi
 
 		# Cloning AnyKernel Repository
@@ -119,8 +108,8 @@ elif [ "$KERNEL_CODENAME" == "1" ];
 		mkdir TEMP
 
 		# Define Kernel Scheduler
-		KERNEL_SCHED="EAS"
-		KERNEL_BRANCH="fusion-eas-side"
+		KERNEL_SCHED="HMP"
+		KERNEL_BRANCH="caf/hmp"
 fi
 if [ "$KERNEL_COMPILER" == "0" ];
 	then
@@ -230,7 +219,7 @@ if [ "$KERNEL_NAME_RELEASE" == "0" ];
 elif [ "$KERNEL_NAME_RELEASE" == "1" ];
 	then
 		# Kernel extend aliases
-		KERNEL_REV="r17"
+		KERNEL_REV="r18"
 		KERNEL_NAME="Clarity"
 elif [ "$KERNEL_NAME_RELEASE" == "2" ];
 	then
@@ -407,13 +396,7 @@ function compile() {
 			cd ..
 			if [ "$KERNEL_EXTEND" == "0" ];
 				then
-					if [ "$KERNEL_TYPE" == "1" ] ;
-						then
-							sed -i -e 's/-友希那-Kernel-r17-LA.UM.8.6.r1-03400-89xx.0/-戸山-Kernel-r17-LA.UM.8.6.r1-03400-89xx.0/g'  ${KERNEL}/arch/arm64/configs/mido_defconfig
-					elif [ "$KERNEL_TYPE" == "2" ];
-						then
-							sed -i -e 's/-友希那-Kernel-r17-LA.UM.8.6.r1-03400-89xx.0/-戸山-Kernel-r17-UC-LA.UM.8.6.r1-03400-89xx.0/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
-					fi
+					sed -i -e 's/-友希那-Kernel-r18-LA.UM.8.6.r1-03400-89xx.0/-戸山-Kernel-r18-LA.UM.8.6.r1-03400-89xx.0/g'  ${KERNEL}/arch/arm64/configs/mido_defconfig
 			fi
 			START=$(date +"%s")
 			make -s -C ${KERNEL} ${CODENAME}_defconfig O=out
