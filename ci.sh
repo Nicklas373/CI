@@ -77,11 +77,11 @@ if [ "$KERNEL_CODENAME" == "0" ];
 		elif [ "$KERNEL_NAME_RELEASE" == "1" ];
 			then
 				# Clone kernel & other repositories earlier
-				git clone --depth=1 -b dev/kasumi https://github.com/Nicklas373/kernel_xiaomi_msm8953-3.18-2 kernel
+				git clone --depth=1 -b dev/ion-2 https://github.com/Nicklas373/kernel_xiaomi_msm8953-3.18-2 kernel
 
 				# Define Kernel Scheduler
 				KERNEL_SCHED="EAS"
-				KERNEL_BRANCH="dev/kasumi"
+				KERNEL_BRANCH="dev/ion-2"
 
 				# Detect Android Version earlier and clone AnyKernel depend on android version
 				if [ "$KERNEL_ANDROID_VERSION" == "0" ];
