@@ -77,7 +77,7 @@ if [ "$KERNEL_CODENAME" == "0" ];
 		elif [ "$KERNEL_NAME_RELEASE" == "1" ];
 			then
 				# Clone kernel & other repositories earlier
-				git clone --depth=1 -b dev/kasumi https://github.com/Nicklas373/kernel_xiaomi_msm8953-3.18-2 kernel
+				git clone --depth=1 -b dev/wake https://github.com/Nicklas373/kernel_xiaomi_msm8953-3.18-2 kernel
 
 				# Define Kernel Scheduler
 				KERNEL_SCHED="EAS"
