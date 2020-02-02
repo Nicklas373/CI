@@ -38,16 +38,10 @@
 # 0 = Dev-Mido || 1 = Dev-Lave || 2 = Null
 #
 # Kernel Compiler
-# 0 = Clang 10.0.0 (Pendulum Clang)
-# 1 = Clang 10.0.0 (LiuNian Clang 10.0.0)
-# 2 = Clang 10.0.0 (Proton Clang 10.0.0)
-# 3 = Clang 10.0.3 + (GCC 4.9 Non-elf 32/64)
-# 4 = Clang 11.0.0 (Nusantara Clang)
-# 5 = Clang 11.0.0 (Proton Clang prebuilt 202001017)
-# 6 = Clang 11.0.0 (LiuNian clang 2020/01/18-2)
+# 1 = Proton Clang 10.0.0
 #
 # CI Init
-# 0 = Circle-CI || 1 = Drone-CI
+# 0 = Circle-CI || 1 = Drone-CI || 2 = Semaphore-CI
 #
 KERNEL_NAME_RELEASE="1"
 KERNEL_TYPE="1"
@@ -55,8 +49,7 @@ KERNEL_BRANCH_RELEASE="0"
 KERNEL_ANDROID_VERSION="1"
 KERNEL_CODENAME="0"
 KERNEL_EXTEND="0"
-KERNEL_COMPILER="2"
-KERNEL_CI="0"
+KERNEL_CI="2"
 
 # Compiling For Mido // If mido was selected
 if [ "$KERNEL_CODENAME" == "0" ];
@@ -95,8 +88,8 @@ if [ "$KERNEL_CODENAME" == "0" ];
 elif [ "$KERNEL_CODENAME" == "1" ];
 	then
 
-		# Cloning Kernel Repository // If compiled by Drone CI
-		if [ "$KERNEL_CI" == "1" ];
+		# Cloning Kernel Repository // If compiled by Drone CI or Semaphore CI
+		if [ "$KERNEL_CI" == "1" ] || [ "$KERNEL_CI" == "2" ];
 			then
 				git clone --depth=1 -b fusion-eas-side https://Nicklas373:$token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
 		fi
@@ -111,35 +104,6 @@ elif [ "$KERNEL_CODENAME" == "1" ];
 		KERNEL_SCHED="EAS"
 		KERNEL_BRANCH="fusion-eas-side"
 fi
-if [ "$KERNEL_COMPILER" == "0" ];
-	then
-		# Cloning Toolchains Repository
-		git clone --depth=1 https://github.com/Haseo97/Clang-10.0.0 -b clang-10.0.0 clang-2
-elif [ "$KERNEL_COMPILER" == "1" ];
-	then
-		# Cloning Toolchains Repository
-		git clone --depth=1 https://github.com/HANA-CI-Build-Project/LiuNian-clang -b clang-10 l-clang
-elif [ "$KERNEL_COMPILER" == "2" ];
-	then
-		# Cloning Toolchains Repository
-		git clone --depth=1 https://github.com/HANA-CI-Build-Project/proton-clang -b master p-clang
-elif [ "$KERNEL_COMPILER" == "3" ];
-	then
-		# Cloning Toolchains Repository
-		echo "Use latest AOSP Clang & GCC 4.9 From Najahii Oven"
-elif [ "$KERNEL_COMPILER" == "4" ];
-	then
-		# Cloning Toolchains Repository
-		echo "Use latest nusantara clang"
-elif [ "$KERNEL_COMPILER" == "5" ];
-        then
-                # Cloning Toolchains Repository
-                git clone --depth=1 https://github.com/HANA-CI-Build-Project/proton-clang -b proton-clang-11 p-clang
-elif [ "$KERNEL_COMPILER" == "6" ];
-	then
-		# Cloning Toolchains Repository
-		git clone --depth=1 https://github.com/HANA-CI-Build-Project/LiuNian-clang -b master l-clang
-fi
 
 # Kernel Enviroment
 export ARCH=arm64
@@ -149,43 +113,27 @@ if [ "$KERNEL_CI" == "0" ];
 elif [ "$KERNEL_CI" == "1" ];
 	then
 		KERNEL_BOT="Drone-CI"
+elif [ "$KERNEL_CI" == "2" ];
+	then
+		KERNEL_BOT="Semaphore-CI"
 fi
-if [ "$KERNEL_COMPILER" == "0" ];
-	then
-		export CLANG_PATH=$(pwd)/clang-2/bin
-		export PATH=${CLANG_PATH}:${PATH}
-		export LD_LIBRARY_PATH="$(pwd)/clang-2/bin/../lib:$PATH"
-elif [ "$KERNEL_COMPILER" == "1" ] || [ "$KERNEL_COMPILER" == "6" ];
-	then
-		export CLANG_PATH=$(pwd)/l-clang/bin
-                export PATH=${CLANG_PATH}:${PATH}
-		export LD_LIBRARY_PATH="$(pwd)/l-clang-2/bin/../lib:$PATH"
-elif [ "$KERNEL_COMPILER" == "2" ] || [ "$KERNEL_COMPILER" == "5" ];
-	then
-		export CLANG_PATH=$(pwd)/p-clang/bin
-                export PATH=${CLANG_PATH}:${PATH}
-		export LD_LIBRARY_PATH="$(pwd)/p-clang/bin/../lib:$PATH"
-elif [ "$KERNEL_COMPILER" == "3" ]
-	then
-		export CLANG_PATH=/root/aosp-clang/bin
-		export PATH=${CLANG_PATH}:${PATH}
-		export LD_LIBRARY_PATH="/root/aosp-clang/bin/../lib:$PATH"
-		export CROSS_COMPILE=/root/gcc-4.9/arm64/bin/aarch64-linux-android-
-		export CROSS_COMPILE_ARM32=/root/gcc-4.9/arm/bin/arm-linux-androideabi-
-elif [ "$KERNEL_COMPILER" == "4" ]
-	then
-		export LD_LIBRARY_PATH="root/clang/bin/../lib:$PATH"
-fi
-if [ "$KERNEL_NAME_RELEASE" == "0" ] || [ "$KERNEL_NAME_RELEASE" == "1" ];
-	then
-		export KBUILD_BUILD_USER=Kasumi
-		export KBUILD_BUILD_HOST=${KERNEL_BOT}
-elif [ "$KERNEL_NAME_RELEASE" == "2" ];
+
+# Clang environment
+export CLANG_PATH=/root/proton-10/bin
+export PATH=${CLANG_PATH}:${PATH}
+export LD_LIBRARY_PATH="/root/proton-10/bin/../lib:$PATH"
+
+# Kernel host environment
+if [ "$KERNEL_NAME_RELEASE" == "2" ];
 	then
 		export KBUILD_BUILD_USER=alanndz-nicklas373
 		export KBUILD_BUILD_HOST=fusion_lavender-Dev
+else
+	export KBUILD_BUILD_USER=Kasumi
+	export KBUILD_BUILD_HOST=${KERNEL_BOT}
 fi
-# Kernel aliases
+
+# Kernel directory environment
 if [ "$KERNEL_CODENAME" == "0" ];
 	then
 		IMAGE="$(pwd)/kernel/out/arch/arm64/boot/Image.gz-dtb"
@@ -200,30 +148,27 @@ elif [ "$KERNEL_CODENAME" == "1" ];
 		then
 			KERNEL="$(pwd)"
 			IMAGE="$(pwd)/out/arch/arm64/boot/Image.gz-dtb"
-	elif [ "$KERNEL_CI" == "1" ];
-		then
-			KERNEL="$(pwd)/kernel"
-			IMAGE="$(pwd)/kernel/out/arch/arm64/boot/Image.gz-dtb"
+	else
+		KERNEL="$(pwd)/kernel"
+		IMAGE="$(pwd)/kernel/out/arch/arm64/boot/Image.gz-dtb"
 	fi
-		KERNEL_TEMP="$(pwd)/TEMP"
-		CODENAME="lavender"
-		KERNEL_CODE="Lavender"
-		TELEGRAM_DEVICE="Xiaomi Redmi Note 7"
+	KERNEL_TEMP="$(pwd)/TEMP"
+	CODENAME="lavender"
+	KERNEL_CODE="Lavender"
+	TELEGRAM_DEVICE="Xiaomi Redmi Note 7"
 fi
 
+# Kernel version environment
 if [ "$KERNEL_NAME_RELEASE" == "0" ];
 	then
-		# Kernel extend aliases
 		KERNEL_REV="r11"
 		KERNEL_NAME="CAF"
 elif [ "$KERNEL_NAME_RELEASE" == "1" ];
 	then
-		# Kernel extend aliases
 		KERNEL_REV="r18"
 		KERNEL_NAME="Clarity"
 elif [ "$KERNEL_NAME_RELEASE" == "2" ];
 	then
-		# Kernel extend aliases
 		KERNEL_REV="r2"
 		KERNEL_NAME="Fusion"
 fi
@@ -266,18 +211,8 @@ elif [ "$KERNEL_BRANCH_RELEASE" == "0" ];
 		fi
 fi
 
-# Telegram aliases
-if [ "$KERNEL_CI" == "0" ];
-	then
-		TELEGRAM_BOT_ID=${telegram_bot_id}
-		if [ "$KERNEL_BRANCH_RELEASE" == "1" ];
-			then
-				TELEGRAM_GROUP_ID=${telegram_group_official_id}
-		elif [ "$KERNEL_BRANCH_RELEASE" == "0" ];
-			then
-				TELEGRAM_GROUP_ID=${telegram_group_dev_id}
-		fi
-elif [ "$KERNEL_CI" == "1" ];
+# Telegram channel aliases
+if [ "$KERNEL_CI" == "1" ];
 	then
 		TELEGRAM_BOT_ID=${tg_bot_id}
                 if [ "$KERNEL_BRANCH_RELEASE" == "1" ];
@@ -286,6 +221,15 @@ elif [ "$KERNEL_CI" == "1" ];
                 elif [ "$KERNEL_BRANCH_RELEASE" == "0" ];
                         then
                                 TELEGRAM_GROUP_ID=${tg_group_id}
+                fi
+else
+	TELEGRAM_BOT_ID=${telegram_bot_id}
+	if [ "$KERNEL_BRANCH_RELEASE" == "1" ];
+		then
+			TELEGRAM_GROUP_ID=${telegram_group_official_id}
+	elif [ "$KERNEL_BRANCH_RELEASE" == "0" ];
+		then
+			TELEGRAM_GROUP_ID=${telegram_group_dev_id}
                 fi
 fi
 TELEGRAM_FILENAME="${KERNEL_NAME}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip"
@@ -400,140 +344,69 @@ function compile() {
 			fi
 			START=$(date +"%s")
 			make -s -C ${KERNEL} ${CODENAME}_defconfig O=out
-		if [ "$KERNEL_COMPILER" == "0" ];
-			then
-				PATH="$(pwd)/clang-2/bin/:${PATH}" \
-        			make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
-								CC=clang \
-								CLANG_TRIPLE=aarch64-linux-gnu- \
-		        					CROSS_COMPILE=aarch64-linux-gnu- \
-								CROSS_COMPILE_ARM32=arm-linux-gnueabi-
-		elif [ "$KERNEL_COMPILER" == "1" ] || [ "$KERNEL_COMPILER" == "6" ];
-			then
-				PATH="$(pwd)/l-clang/bin/:${PATH}" \
-				make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
-								CC=clang \
-                                                                CLANG_TRIPLE=aarch64-linux-gnu- \
-								CROSS_COMPILE=aarch64-linux-gnu- \
-								CROSS_COMPILE_ARM32=arm-linux-gnueabi-
-		elif [ "$KERNEL_COMPILER" == "2" ] || [ "$KERNEL_COMPILER" == "5" ];
-			then
-				PATH="$(pwd)/p-clang/bin/:${PATH}" \
-				make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
-								CC=clang \
-								CLANG_TRIPLE=aarch64-linux-gnu- \
-								CROSS_COMPILE=aarch64-linux-gnu- \
-								CROSS_COMPILE_ARM32=arm-linux-gnueabi-
-		elif [ "$KERNEL_COMPILER" == "3" ]
-			then
-				PATH="/root/aosp-clang/bin/:/root/gcc-4.9/arm64/bin/:/root/gcc-4.9/arm/bin/:${PATH}" \
-				make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
-								CC=clang \
-                                                                CLANG_TRIPLE=aarch64-linux-gnu- \
-								CROSS_COMPILE=${CROSS_COMPILE} \
-								CROSS_COMPILE_ARM32=${CROSS_COMPILE_ARM32}
-		elif [ "$KERNEL_COMPILER" == "4" ]
-			then
-				PATH="/root/clang/bin/:${PATH}" \
-				make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
-								CC=clang \
-								CLANG_TRIPLE=aarch64-linux-gnu- \
-								CROSS_COMPILE=aarch64-linux-gnu- \
-								CROSS_COMPILE_ARM32=arm-linux-gnueabi-
-		fi
-		if ! [ -a $IMAGE ];
-			then
-                		echo "kernel not found"
-                		END=$(date +"%s")
-                		DIFF=$(($END - $START))
-				cd ${KERNEL}
-                		bot_build_failed
-				cd ..
-				sendStick "${TELEGRAM_FAIL}"
-				curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/compile.log"  https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
-                		exit 1
-        	fi
-        	END=$(date +"%s")
-        	DIFF=$(($END - $START))
-		cd ${KERNEL}
-		bot_build_success
-		cd ..
-		sendStick "${TELEGRAM_SUCCESS}"
-		cp ${IMAGE} AnyKernel3
-		anykernel
-		kernel_upload
-	elif [ "$KERNEL_CODENAME" == "1" ];
-		then
-			cd ${KERNEL}
-			bot_first_compile
-			cd ..
-			START=$(date +"%s")
-			make -s -C ${KERNEL} ${CODENAME}_defconfig O=out
-			if [ "$KERNEL_COMPILER" == "0" ];
-				then
-					PATH="$(pwd)/clang-2/bin/:${PATH}" \
-					make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
-										CC=clang \
-										CLANG_TRIPLE=aarch64-linux-gnu- \
-										CROSS_COMPILE=aarch64-linux-gnu- \
-										CROSS_COMPILE_ARM32=arm-linux-gnueabi-
-			elif [ "$KERNEL_COMPILER" == "1" ] || [ "$KERNEL_COMPILER" == "6" ];
-     				then
-					PATH="$(pwd)/l-clang/bin/:${PATH}" \
-					make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
-										CC=clang \
-										CLANG_TRIPLE=aarch64-linux-gnu- \
-										CROSS_COMPILE=aarch64-linux-gnu- \
-										CROSS_COMPILE_ARM32=arm-linux-gnueabi-
-			elif [ "$KERNEL_COMPILER" == "2" ] || [ "$KERNEL_COMPILER" == "5" ];
-				then
-					PATH="$(pwd)/p-clang/bin/:${PATH}" \
-					make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
-										CC=clang \
-										CLANG_TRIPLE=aarch64-linux-gnu- \
-										CROSS_COMPILE=aarch64-linux-gnu- \
-										CROSS_COMPILE_ARM32=arm-linux-gnueabi-
-			elif [ "$KERNEL_COMPILER" == "3" ]
-				then
-					PATH="/root/aosp-clang/bin/:/root/gcc-4.9/arm64/bin/:/root/gcc-4.9/arm/bin/:${PATH}" \
-					make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
-										CC=clang \
-										CLANG_TRIPLE=aarch64-linux-gnu- \
-										CROSS_COMPILE=${CROSS_COMPILE} \
-										CROSS_COMPILE_ARM32=${CROSS_COMPILE_ARM32}
-			elif [ "$KERNEL_COMPILER" == "4" ]
-				then
-					PATH="/root/clang/bin/:${PATH}" \
-					make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
-										CC=clang \
-										CLANG_TRIPLE=aarch64-linux-gnu- \
-										CROSS_COMPILE=aarch64-linux-gnu- \
-										CROSS_COMPILE_ARM32=arm-linux-gnueabi-
-			fi
+			PATH="/root/proton-10/bin/:${PATH}" \
+        		make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
+						CC=clang \
+						CLANG_TRIPLE=aarch64-linux-gnu- \
+		        			CROSS_COMPILE=aarch64-linux-gnu- \
+						CROSS_COMPILE_ARM32=arm-linux-gnueabi-
 			if ! [ -a $IMAGE ];
 				then
                 			echo "kernel not found"
                 			END=$(date +"%s")
                 			DIFF=$(($END - $START))
+					cd ${KERNEL}
                 			bot_build_failed
+					cd ..
 					sendStick "${TELEGRAM_FAIL}"
 					curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/compile.log"  https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
-               				exit 1
+                			exit 1
         		fi
-       			END=$(date +"%s")
+        		END=$(date +"%s")
         		DIFF=$(($END - $START))
+			cd ${KERNEL}
 			bot_build_success
+			cd ..
 			sendStick "${TELEGRAM_SUCCESS}"
-			if [ "$KERNEL_CI" == "0" ];
-				then
-					cd ${KERNEL}
-			elif [ "$KERNEL_CI" == "1" ];
-				then
-					echo ""
-			fi
-        		cp ${IMAGE} AnyKernel3
+			cp ${IMAGE} AnyKernel3
 			anykernel
 			kernel_upload
+	elif [ "$KERNEL_CODENAME" == "1" ];
+			then
+				cd ${KERNEL}
+				bot_first_compile
+				cd ..
+				START=$(date +"%s")
+				make -s -C ${KERNEL} ${CODENAME}_defconfig O=out
+				PATH="/root/clang-2/bin/:${PATH}" \
+				make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
+							CC=clang \
+							CLANG_TRIPLE=aarch64-linux-gnu- \
+							CROSS_COMPILE=aarch64-linux-gnu- \
+							CROSS_COMPILE_ARM32=arm-linux-gnueabi-
+				if ! [ -a $IMAGE ];
+					then
+                				echo "kernel not found"
+                				END=$(date +"%s")
+                				DIFF=$(($END - $START))
+                				bot_build_failed
+						sendStick "${TELEGRAM_FAIL}"
+						curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/compile.log"  https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
+               					exit 1
+        			fi
+       				END=$(date +"%s")
+        			DIFF=$(($END - $START))
+				bot_build_success
+				sendStick "${TELEGRAM_SUCCESS}"
+				if [ "$KERNEL_CI" == "1" ];
+					then
+						echo ""
+				else
+					cd ${KERNEL}
+				fi
+        			cp ${IMAGE} AnyKernel3
+				anykernel
+				kernel_upload
 	fi
 }
 
