@@ -109,7 +109,7 @@ elif [ "$KERNEL_CODENAME" == "1" ];
 
 		# Define Kernel Scheduler
 		KERNEL_SCHED="EAS"
-		KERNEL_BRANCH="fusion-eas-side"
+		KERNEL_BRANCH="eas-bak"
 fi
 if [ "$KERNEL_COMPILER" == "0" ];
 	then
