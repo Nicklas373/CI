@@ -49,11 +49,11 @@
 # CI Init
 # 0 = Circle-CI || 1 = Drone-CI
 #
-KERNEL_NAME_RELEASE="2"
+KERNEL_NAME_RELEASE="1"
 KERNEL_TYPE="1"
 KERNEL_BRANCH_RELEASE="0"
-KERNEL_ANDROID_VERSION="2"
-KERNEL_CODENAME="1"
+KERNEL_ANDROID_VERSION="1"
+KERNEL_CODENAME="0"
 KERNEL_EXTEND="0"
 KERNEL_COMPILER="2"
 KERNEL_CI="0"
@@ -77,11 +77,11 @@ if [ "$KERNEL_CODENAME" == "0" ];
 		elif [ "$KERNEL_NAME_RELEASE" == "1" ];
 			then
 				# Clone kernel & other repositories earlier
-				git clone --depth=1 -b dev/util-2 https://github.com/Nicklas373/kernel_xiaomi_msm8953-3.18-2 kernel
+				git clone --depth=1 -b dev/kasumi https://github.com/Nicklas373/kernel_xiaomi_msm8953-3.18-2 kernel
 
 				# Define Kernel Scheduler
 				KERNEL_SCHED="EAS"
-				KERNEL_BRANCH="dev/util-2"
+				KERNEL_BRANCH="dev/kasumi"
 
 				# Detect Android Version earlier and clone AnyKernel depend on android version
 				if [ "$KERNEL_ANDROID_VERSION" == "0" ];
