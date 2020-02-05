@@ -173,7 +173,7 @@ elif [ "$KERNEL_NAME_RELEASE" == "2" ];
 		KERNEL_NAME="Fusion"
 fi
 KERNEL_SUFFIX="Kernel"
-KERNEL_DATE="$(date +%Y%m%d-%H%M)"
+KERNEL_DATE="$(TZ=Asia/Jakarta date +%Y%m%d-%H%M)"
 if [ "$KERNEL_ANDROID_VERSION" == "0" ];
 	then
 		KERNEL_ANDROID_VER="9"
@@ -196,7 +196,7 @@ if [ "$KERNEL_BRANCH_RELEASE" == "1" ];
 				FUSION_CODENAME="Summer_Dream"
 				KERNEL_VERSION="r2"
 				KVERSION="${FUSION_CODENAME}-${KERNEL_VERSION}"
-				ZIP_NAME="${KERNEL_NAME}-${KVERSION}-${CODENAME}-$(date "+%H%M-%d%m%Y").zip"
+				ZIP_NAME="${KERNEL_NAME}-${KVERSION}-${CODENAME}-$(TZ=Asia/Jakarta date "+%H%M-%d%m%Y").zip"
 		fi
 elif [ "$KERNEL_BRANCH_RELEASE" == "0" ];
 	then
@@ -206,8 +206,8 @@ elif [ "$KERNEL_BRANCH_RELEASE" == "0" ];
 			then
 				FUSION_CODENAME="Summer_Dream"
 				KERNEL_VERSION="r2"
-				KVERSION="${FUSION_CODENAME}-$(git log --pretty=format:'%h' -1)-$(date "+%H%M")"
-				ZIP_NAME="${KERNEL_NAME}-${FUSION_CODENAME}-${CODENAME}-$(git log --pretty=format:'%h' -1)-$(date "+%H%M").zip"
+				KVERSION="${FUSION_CODENAME}-$(git log --pretty=format:'%h' -1)-$(TZ=Asia/Jakarta date "+%H%M")"
+				ZIP_NAME="${KERNEL_NAME}-${FUSION_CODENAME}-${CODENAME}-$(git log --pretty=format:'%h' -1)-$(TZ=Asia/Jakarta date "+%H%M").zip"
 		fi
 fi
 
@@ -342,7 +342,7 @@ function compile() {
 				then
 					sed -i -e 's/-友希那-Kernel-r18-LA.UM.8.6.r1-03400-89xx.0/-戸山-Kernel-r18-LA.UM.8.6.r1-03400-89xx.0/g'  ${KERNEL}/arch/arm64/configs/mido_defconfig
 			fi
-			START=$(date +"%s")
+			START=$(TZ=Asia/Jakarta date +"%s")
 			make -s -C ${KERNEL} ${CODENAME}_defconfig O=out
 			PATH="/root/proton-10/bin/:${PATH}" \
         		make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
@@ -353,7 +353,7 @@ function compile() {
 			if ! [ -a $IMAGE ];
 				then
                 			echo "kernel not found"
-                			END=$(date +"%s")
+                			END=$(TZ=Asia/Jakarta date +"%s")
                 			DIFF=$(($END - $START))
 					cd ${KERNEL}
                 			bot_build_failed
@@ -362,7 +362,7 @@ function compile() {
 					curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/compile.log"  https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
                 			exit 1
         		fi
-        		END=$(date +"%s")
+        		END=$(TZ=Asia/Jakarta date +"%s")
         		DIFF=$(($END - $START))
 			cd ${KERNEL}
 			bot_build_success
@@ -376,7 +376,7 @@ function compile() {
 				cd ${KERNEL}
 				bot_first_compile
 				cd ..
-				START=$(date +"%s")
+				START=$(TZ=Asia/Jakarta date +"%s")
 				make -s -C ${KERNEL} ${CODENAME}_defconfig O=out
 				PATH="/root/clang-2/bin/:${PATH}" \
 				make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
@@ -387,14 +387,14 @@ function compile() {
 				if ! [ -a $IMAGE ];
 					then
                 				echo "kernel not found"
-                				END=$(date +"%s")
+                				END=$(TZ=Asia/Jakarta date +"%s")
                 				DIFF=$(($END - $START))
                 				bot_build_failed
 						sendStick "${TELEGRAM_FAIL}"
 						curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/compile.log"  https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
                					exit 1
         			fi
-       				END=$(date +"%s")
+       				END=$(TZ=Asia/Jakarta date +"%s")
         			DIFF=$(($END - $START))
 				bot_build_success
 				sendStick "${TELEGRAM_SUCCESS}"
