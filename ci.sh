@@ -43,11 +43,11 @@
 # CI Init
 # 0 = Circle-CI || 1 = Drone-CI || 2 = Semaphore-CI
 #
-KERNEL_NAME_RELEASE="1"
+KERNEL_NAME_RELEASE="2"
 KERNEL_TYPE="1"
 KERNEL_BRANCH_RELEASE="0"
 KERNEL_ANDROID_VERSION="1"
-KERNEL_CODENAME="0"
+KERNEL_CODENAME="1"
 KERNEL_EXTEND="0"
 KERNEL_CI="0"
 
@@ -91,7 +91,7 @@ elif [ "$KERNEL_CODENAME" == "1" ];
 		# Cloning Kernel Repository // If compiled by Drone CI or Semaphore CI
 		if [ "$KERNEL_CI" == "1" ] || [ "$KERNEL_CI" == "2" ];
 			then
-				git clone --depth=1 -b fusion-eas-side https://Nicklas373:$token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
+				git clone --depth=1 -b fusion-eas-no-boost https://Nicklas373:$token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
 		fi
 
 		# Cloning AnyKernel Repository
