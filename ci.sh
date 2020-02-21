@@ -490,16 +490,15 @@ function anykernel() {
 }
 
 # Upload Kernel
-function kernel_upload(){
+function kernel_upload() {
 	cd ${KERNEL}
 	if [ "$KERNEL_NAME_RELEASE" == "0" ] || [ "$KERNEL_NAME_RELEASE" == "1" ];
 		then
 			bot_complete_compile
+			curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/${KERNEL_NAME}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip"  https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
 	elif [ "$KERNEL_NAME_RELEASE" == "2" ];
 		then
 			curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/$ZIP_NAME" https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
-	else
-		curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/${KERNEL_NAME}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip"  https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
 	fi
 	if [ "$KERNEL_BRANCH_RELEASE" == "0" ];
 		then
