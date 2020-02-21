@@ -1,21 +1,12 @@
 #!bin/bash
 #
-# Copyright 2019, Najahiiii <najahiii@outlook.co.id>
+# Clarity Kernel Builder Script || For Continous Integration
+#
+# Copyright 2019, Ahmad Thoriq Najahi "Najahiii" <najahiii@outlook.co.id>
 # Copyright 2019, alanndz <alanmahmud0@gmail.com>
 # Copyright 2020, Dicky Herlambang "Nicklas373" <herlambangdicky5@gmail.com>
 # Copyright 2016-2020, HANA-CI Build Project
-#
-# Clarity Kernel Builder Script || For Continous Integration
-#
-# This software is licensed under the terms of the GNU General Public
-# License version 2, as published by the Free Software Foundation, and
-# may be copied, distributed, and modified under those terms.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 # Let's make some option here
 #
@@ -43,13 +34,17 @@
 # CI Init
 # 0 = Circle-CI || 1 = Drone-CI || 2 = Semaphore-CI
 #
+# Camera Patch
+# 0 = Disable || 1 = Pie Patch + Q Patch
+#
 KERNEL_NAME_RELEASE="2"
 KERNEL_TYPE="1"
 KERNEL_BRANCH_RELEASE="0"
-KERNEL_ANDROID_VERSION="1"
+KERNEL_ANDROID_VERSION="2"
 KERNEL_CODENAME="1"
 KERNEL_EXTEND="0"
 KERNEL_CI="0"
+KERNEL_CAM="1"
 
 # Compiling For Mido // If mido was selected
 if [ "$KERNEL_CODENAME" == "0" ];
@@ -91,7 +86,7 @@ elif [ "$KERNEL_CODENAME" == "1" ];
 		# Cloning Kernel Repository // If compiled by Drone CI or Semaphore CI
 		if [ "$KERNEL_CI" == "1" ] || [ "$KERNEL_CI" == "2" ];
 			then
-				git clone --depth=1 -b fusion-eas-no-boost https://Nicklas373:$token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
+				git clone --depth=1 -b new-eas-2 https://Nicklas373:$token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
 		fi
 
 		# Cloning AnyKernel Repository
@@ -102,7 +97,7 @@ elif [ "$KERNEL_CODENAME" == "1" ];
 
 		# Define Kernel Scheduler
 		KERNEL_SCHED="EAS"
-		KERNEL_BRANCH="fusion-eas-side"
+		KERNEL_BRANCH="new-eas-2"
 fi
 
 # Kernel Enviroment
@@ -193,7 +188,7 @@ if [ "$KERNEL_BRANCH_RELEASE" == "1" ];
 
 		if [ "$KERNEL_NAME_RELEASE" == "2" ];
 			then
-				FUSION_CODENAME="Summer_Dream"
+				FUSION_CODENAME="Fuxi"
 				KERNEL_VERSION="r2"
 				KVERSION="${FUSION_CODENAME}-${KERNEL_VERSION}"
 				ZIP_NAME="${KERNEL_NAME}-${KVERSION}-${CODENAME}-$(TZ=Asia/Jakarta date "+%H%M-%d%m%Y").zip"
@@ -204,7 +199,7 @@ elif [ "$KERNEL_BRANCH_RELEASE" == "0" ];
 
 		if [ "$KERNEL_NAME_RELEASE" == "2" ];
 			then
-				FUSION_CODENAME="Summer_Dream"
+				FUSION_CODENAME="Fuxi"
 				KERNEL_VERSION="r2"
 				KVERSION="${FUSION_CODENAME}-$(git log --pretty=format:'%h' -1)-$(TZ=Asia/Jakarta date "+%H%M")"
 				ZIP_NAME="${KERNEL_NAME}-${FUSION_CODENAME}-${CODENAME}-$(git log --pretty=format:'%h' -1)-$(TZ=Asia/Jakarta date "+%H%M").zip"
@@ -212,25 +207,38 @@ elif [ "$KERNEL_BRANCH_RELEASE" == "0" ];
 fi
 
 # Telegram channel aliases
-if [ "$KERNEL_CI" == "1" ];
+if [ "$KERNEL_NAME_RELEASE" == "2" ];
 	then
-		TELEGRAM_BOT_ID=${tg_bot_id}
-                if [ "$KERNEL_BRANCH_RELEASE" == "1" ];
+		if [ "$KERNEL_CI" == "1" ];
 			then
-				TELEGRAM_GROUP_ID=${tg_channel_id}
-                elif [ "$KERNEL_BRANCH_RELEASE" == "0" ];
-                        then
-                                TELEGRAM_GROUP_ID=${tg_group_id}
-                fi
-else
-	TELEGRAM_BOT_ID=${telegram_bot_id}
-	if [ "$KERNEL_BRANCH_RELEASE" == "1" ];
-		then
-			TELEGRAM_GROUP_ID=${telegram_group_official_id}
-	elif [ "$KERNEL_BRANCH_RELEASE" == "0" ];
-		then
-			TELEGRAM_GROUP_ID=${telegram_group_dev_id}
-                fi
+				TELEGRAM_BOT_ID=${tg_bot_id}
+				TELEGRAM_GROUP_ID=${tg_aln_id}
+		else
+			TELEGRAM_BOT_ID=${telegram_bot_id}
+			TELEGRAM_GROUP_ID=${telegram_group_aln_id}
+		fi
+elif [ "$KERNEL_NAME_RELEASE" == "0" ] || [ "$KERNEL_NAME_RELEASE" == "1" ];
+	then
+		if [ "$KERNEL_CI" == "1" ];
+			then
+				TELEGRAM_BOT_ID=${tg_bot_id}
+				if [ "$KERNEL_BRANCH_RELEASE" == "1" ];
+					then
+						TELEGRAM_GROUP_ID=${tg_channel_id}
+				elif [ "$KERNEL_BRANCH_RELEASE" == "0" ];
+					then
+						TELEGRAM_GROUP_ID=${tg_group_id}
+				fi
+		else
+			TELEGRAM_BOT_ID=${telegram_bot_id}
+			if [ "$KERNEL_BRANCH_RELEASE" == "1" ];
+				then
+					TELEGRAM_GROUP_ID=${telegram_group_official_id}
+			elif [ "$KERNEL_BRANCH_RELEASE" == "0" ];
+				then
+					TELEGRAM_GROUP_ID=${telegram_group_dev_id}
+			fi
+		fi
 fi
 TELEGRAM_FILENAME="${KERNEL_NAME}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip"
 export TELEGRAM_SUCCESS="CAADAgADDSMAAuCjggeXsvhpxp-R4xYE"
@@ -254,23 +262,22 @@ curl -s -X POST https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendMessage -d ch
           )"
 }
 
-# Telegram bot message || first notification
-function bot_first_compile() {
-bot_template  "<b>|| ${KERNEL_BOT} Build Bot ||</b>" \
-              "" \
-	      "<b>${KERNEL_NAME} Kernel build Start!</b>" \
-	      "" \
- 	      "<b>Build Status :</b><code> ${KERNEL_RELEASE} </code>" \
-              "<b>Device :</b><code> ${TELEGRAM_DEVICE} </code>" \
-	      "<b>Android Version :</b><code> ${KERNEL_ANDROID_VER} </code>" \
-	      "" \
-	      "<b>Kernel Scheduler :</b><code> ${KERNEL_SCHED} </code>" \
-	      "<b>Kernel Branch :</b><code> ${KERNEL_BRANCH} </code>" \
-              "<b>Latest commit :</b><code> $(git --no-pager log --pretty=format:'"%h - %s (%an)"' -1) </code>"
-}
-
 if [ "$KERNEL_NAME_RELEASE" == "0" ] || [ "$KERNEL_NAME_RELEASE" == "1" ];
 	then
+		# Telegram bot message || first notification
+		function bot_first_compile() {
+		bot_template  "<b>|| ${KERNEL_BOT} Build Bot ||</b>" \
+                "" \
+	        "<b>${KERNEL_NAME} Kernel build Start!</b>" \
+	        "" \
+ 	        "<b>Build Status :</b><code> ${KERNEL_RELEASE} </code>" \
+                "<b>Device :</b><code> ${TELEGRAM_DEVICE} </code>" \
+	        "<b>Android Version :</b><code> ${KERNEL_ANDROID_VER} </code>" \
+	        "" \
+	        "<b>Kernel Scheduler :</b><code> ${KERNEL_SCHED} </code>" \
+	        "<b>Kernel Branch :</b><code> ${KERNEL_BRANCH} </code>" \
+                "<b>Latest commit :</b><code> $(git --no-pager log --pretty=format:'"%h - %s (%an)"' -1) </code>"
+		}
 
 		# Telegram bot message || complete compile notification
 		function bot_complete_compile() {
@@ -297,7 +304,7 @@ if [ "$KERNEL_NAME_RELEASE" == "0" ] || [ "$KERNEL_NAME_RELEASE" == "1" ];
 		}
 elif [ "$KERNEL_NAME_RELEASE" == "2" ];
 	then
-		function bot_complete_compile() {
+		function bot_init_compile() {
 		bot_env
 		bot_template "<b>---- ${KERNEL_NAME} New Kernel ----</b>" \
     		"<b>Device:</b> ${CODENAME} or ${TELEGRAM_DEVICE}" \
@@ -331,83 +338,143 @@ function sendStick() {
 	curl -s -X POST https://api.telegram.org/bot$TELEGRAM_BOT_ID/sendSticker -d sticker="${1}" -d chat_id=$TELEGRAM_GROUP_ID &>/dev/null
 }
 
-# Compile Begin
-function compile() {
-	if [ "$KERNEL_CODENAME" == "0" ];
+# Compile Mido Begin
+function compile_mido() {
+	cd ${KERNEL}
+	bot_first_compile
+	cd ..
+	if [ "$KERNEL_EXTEND" == "0" ];
 		then
-			cd ${KERNEL}
-			bot_first_compile
-			cd ..
-			if [ "$KERNEL_EXTEND" == "0" ];
-				then
-					sed -i -e 's/-友希那-Kernel-r18-LA.UM.8.6.r1-03400-89xx.0/-戸山-Kernel-r18-LA.UM.8.6.r1-03400-89xx.0/g'  ${KERNEL}/arch/arm64/configs/mido_defconfig
-			fi
-			START=$(TZ=Asia/Jakarta date +"%s")
-			make -s -C ${KERNEL} ${CODENAME}_defconfig O=out
-			PATH="/root/proton-10/bin/:${PATH}" \
-        		make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
-						CC=clang \
-						CLANG_TRIPLE=aarch64-linux-gnu- \
-		        			CROSS_COMPILE=aarch64-linux-gnu- \
-						CROSS_COMPILE_ARM32=arm-linux-gnueabi-
-			if ! [ -a $IMAGE ];
-				then
-                			echo "kernel not found"
-                			END=$(TZ=Asia/Jakarta date +"%s")
-                			DIFF=$(($END - $START))
-					cd ${KERNEL}
-                			bot_build_failed
-					cd ..
-					sendStick "${TELEGRAM_FAIL}"
-					curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/compile.log"  https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
-                			exit 1
-        		fi
-        		END=$(TZ=Asia/Jakarta date +"%s")
-        		DIFF=$(($END - $START))
-			cd ${KERNEL}
-			bot_build_success
-			cd ..
-			sendStick "${TELEGRAM_SUCCESS}"
-			cp ${IMAGE} AnyKernel3
-			anykernel
-			kernel_upload
-	elif [ "$KERNEL_CODENAME" == "1" ];
-			then
-				cd ${KERNEL}
-				bot_first_compile
-				cd ..
-				START=$(TZ=Asia/Jakarta date +"%s")
-				make -s -C ${KERNEL} ${CODENAME}_defconfig O=out
-				PATH="/root/clang-2/bin/:${PATH}" \
-				make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
-							CC=clang \
-							CLANG_TRIPLE=aarch64-linux-gnu- \
-							CROSS_COMPILE=aarch64-linux-gnu- \
-							CROSS_COMPILE_ARM32=arm-linux-gnueabi-
-				if ! [ -a $IMAGE ];
-					then
-                				echo "kernel not found"
-                				END=$(TZ=Asia/Jakarta date +"%s")
-                				DIFF=$(($END - $START))
-                				bot_build_failed
-						sendStick "${TELEGRAM_FAIL}"
-						curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/compile.log"  https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
-               					exit 1
-        			fi
-       				END=$(TZ=Asia/Jakarta date +"%s")
-        			DIFF=$(($END - $START))
-				bot_build_success
-				sendStick "${TELEGRAM_SUCCESS}"
-				if [ "$KERNEL_CI" == "1" ];
-					then
-						echo ""
-				else
-					cd ${KERNEL}
-				fi
-        			cp ${IMAGE} AnyKernel3
-				anykernel
-				kernel_upload
+			sed -i -e 's/-友希那-Kernel-r18-LA.UM.8.6.r1-03400-89xx.0/-戸山-Kernel-r18-LA.UM.8.6.r1-03400-89xx.0/g'  ${KERNEL}/arch/arm64/configs/mido_defconfig
 	fi
+	START=$(TZ=Asia/Jakarta date +"%s")
+	make -s -C ${KERNEL} ${CODENAME}_defconfig O=out
+	PATH="/root/proton-10/bin/:${PATH}" \
+        make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
+				CC=clang \
+				CLANG_TRIPLE=aarch64-linux-gnu- \
+				CROSS_COMPILE=aarch64-linux-gnu- \
+				CROSS_COMPILE_ARM32=arm-linux-gnueabi-
+	if ! [ -a $IMAGE ];
+		then
+			echo "kernel not found"
+			END=$(TZ=Asia/Jakarta date +"%s")
+			DIFF=$(($END - $START))
+			cd ${KERNEL}
+			bot_build_failed
+			cd ..
+			sendStick "${TELEGRAM_FAIL}"
+			curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/compile.log"  https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
+			exit 1
+	fi
+	END=$(TZ=Asia/Jakarta date +"%s")
+	DIFF=$(($END - $START))
+	cd ${KERNEL}
+	bot_build_success
+	cd ..
+	sendStick "${TELEGRAM_SUCCESS}"
+	cp ${IMAGE} AnyKernel3
+	anykernel
+	kernel_upload
+}
+
+# Compile Lavender Begin
+function compile_lave() {
+	cd ..
+	START=$(TZ=Asia/Jakarta date +"%s")
+	make -s -C ${KERNEL} ${CODENAME}_defconfig O=out
+	PATH="/root/clang-2/bin/:${PATH}" \
+	make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
+					CC=clang \
+					CLANG_TRIPLE=aarch64-linux-gnu- \
+					CROSS_COMPILE=aarch64-linux-gnu- \
+					CROSS_COMPILE_ARM32=arm-linux-gnueabi-
+	if ! [ -a $IMAGE ];
+		then
+			echo "kernel not found"
+			END=$(TZ=Asia/Jakarta date +"%s")
+			DIFF=$(($END - $START))
+			bot_build_failed
+			sendStick "${TELEGRAM_FAIL}"
+			curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/compile.log"  https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
+			exit 1
+	fi
+	END=$(TZ=Asia/Jakarta date +"%s")
+	DIFF=$(($END - $START))
+	cd ${KERNEL}
+	bot_init_compile
+	bot_build_success
+	sendStick "${TELEGRAM_SUCCESS}"
+	if [ "$KERNEL_CI" == "1" ];
+		then
+			echo ""
+	else
+		cd ${KERNEL}
+	fi
+        cp ${IMAGE} AnyKernel3
+	anykernel
+	kernel_upload
+	if [ "$NEW_PATCH_STATS" == "0" ];
+		then
+			new_patch
+	elif [ "$NEW_PATCH_STATS" == "1" ];
+		then
+			exit 1
+	fi
+}
+
+# Camera patch
+function init_patch() {
+
+# Download patch
+wget https://raw.githubusercontent.com/alanndz/build_kernel/fusion/patches/01.patch
+
+# Declare HEAD commit before patch
+cd ${KERNEL}
+RESET_COMMIT=$(git --no-pager log --pretty=format:'%h')
+
+# Declare specified kernel name for pie patch
+KVERSION="${FUSION_CODENAME}-Old_CAM-$(git log --pretty=format:'%h' -1)-$(TZ=Asia/Jakarta date "+%H%M")"
+ZIP_NAME="${KERNEL_NAME}-${FUSION_CODENAME}-${CODENAME}-Old_CAM-$(git log --pretty=format:'%h' -1)-$(TZ=Asia/Jakarta date "+%H%M").zip"
+
+# Apply pie camera patch
+git am 01.patch
+
+# Tell if new cam patch not initialized
+NEW_PATCH_STATS="0"
+
+# Begin init compiling process
+cd ..
+compile_lave
+}
+
+function new_patch() {
+
+# Declare specified kernel name
+KVERSION="${FUSION_CODENAME}-New_CAM-$(git log --pretty=format:'%h' -1)-$(TZ=Asia/Jakarta date "+%H%M")"
+ZIP_NAME="${KERNEL_NAME}-${FUSION_CODENAME}-${CODENAME}-New_CAM-$(git log --pretty=format:'%h' -1)-$(TZ=Asia/Jakarta date "+%H%M").zip"
+
+# Reset commit after pie cmaera patch
+git reset --hard $RESET_COMMIT
+
+# Cleanup some old files
+cd ..
+rm -rvf ${KERNEL}/out
+rm -rvf AnyKernel3/*.gz-dtb
+
+# Go to Kernel Dir
+cd ${KERNEL}
+
+# Apply new camera patch
+wget https://raw.githubusercontent.com/alanndz/build_kernel/fusion/patches/02.patch
+git am 02.patch
+
+# Tell if new cam patch already executed
+NEW_PATCH_STATS="1"
+
+# Begin compile process
+cd ..
+compile_lave
 }
 
 # AnyKernel
@@ -425,8 +492,10 @@ function anykernel() {
 # Upload Kernel
 function kernel_upload(){
 	cd ${KERNEL}
-	bot_complete_compile
-	if [ "$KERNEL_NAME_RELEASE" == "2" ];
+	if [ "$KERNEL_NAME_RELEASE" == "0" ] || [ "$KERNEL_NAME_RELEASE" == "1" ];
+		then
+			bot_complete_compile
+	elif [ "$KERNEL_NAME_RELEASE" == "2" ];
 		then
 			curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/$ZIP_NAME" https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
 	else
@@ -438,5 +507,21 @@ function kernel_upload(){
 	fi
 }
 
+function run() {
+if [ "$KERNEL_CODENAME" == "1" ];
+	then
+		if [ "$KERNEL_CAM" == "1" ];
+			then
+				init_patch
+		elif [ "$KERNEL_CAM" == "0" ];
+			then
+				compile_lave
+		fi
+elif [ "$KERNEL_CODENAME" == "0" ];
+	then
+		compile_mido
+fi
+}
+
 # Running
-compile
+run
