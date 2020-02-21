@@ -1,0 +1,46 @@
+#!/bin/bash
+#
+# Clarity Kernel Build Trigger Script || For Continous Integration
+#
+# Copyright 2019, alanndz <alanmahmud0@gmail.com>
+# Copyright 2020, Dicky Herlambang "Nicklas373" <herlambangdicky5@gmail.com>
+# Copyright 2016-2020, HANA-CI Build Project
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+function main() {
+# Begin decision
+echo "Which CI services that you want to use ?"
+echo ""
+echo "1. Circle-CI"
+echo "2. Semaphore-CI"
+echo "3. Drone-CI"
+echo ""
+echo "NOTE: Write number only!"
+read decision
+
+if [ "$decision" == "1" ];
+	then
+		echo "Push to Circle-CI"
+		cd /hana/build_kernel
+elif [ "$decision" == "2" ];
+	then
+		echo "Push to Semaphore-CI"
+		cd /hana/Semaphore-CI
+elif [ "$decision" == "3" ];
+	then
+		echo "Push to Drone-CI"
+		cd /hana/Drone-CI
+fi
+
+# Run trigger
+trigger_ci
+}
+
+# Trigger CI
+function trigger_ci() {
+git commit --allow-empty -am "Trigger CI"
+git push -f
+}
+
+# run main
+main
