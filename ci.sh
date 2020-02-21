@@ -44,7 +44,7 @@ KERNEL_ANDROID_VERSION="2"
 KERNEL_CODENAME="1"
 KERNEL_EXTEND="0"
 KERNEL_CI="0"
-KERNEL_CAM="1"
+KERNEL_CAM="0"
 
 # Compiling For Mido // If mido was selected
 if [ "$KERNEL_CODENAME" == "0" ];
@@ -419,7 +419,7 @@ function compile_lave() {
 			new_patch
 	elif [ "$NEW_PATCH_STATS" == "1" ];
 		then
-			exit 1
+			echo "Build Done :3"
 	fi
 }
 
