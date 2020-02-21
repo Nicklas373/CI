@@ -21,15 +21,15 @@ read decision
 if [ "$decision" == "1" ];
 	then
 		echo "Push to Circle-CI"
-		cd /hana/build_kernel
+		cd ~/hana/build_kernel
 elif [ "$decision" == "2" ];
 	then
 		echo "Push to Semaphore-CI"
-		cd /hana/Semaphore-CI
+		cd ~/hana/Semaphore-CI
 elif [ "$decision" == "3" ];
 	then
 		echo "Push to Drone-CI"
-		cd /hana/Drone-CI
+		cd ~/hana/Drone-CI
 fi
 
 # Run trigger
