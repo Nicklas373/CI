@@ -172,9 +172,11 @@ elif [ "$user" == "1" ];
 		if [ "$kdev" == "1" ];
 			then
 				sed -i -e 's/KERNEL_CODENAME=1/KERNEL_CODENAME=0/g'  ~/hana/CI/ci
+				sed -i -e 's/git clone --depth=1 -b new-eas-2 https://Nicklas373:$git_token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 ./#git clone --depth=1 -b new-eas-2 https://Nicklas373:$git_token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 ./g' ~/hana/build_kernel/.circleci/build.sh
 		elif [ "$kdev" == "2" ];
 			then
 				sed -i -e 's/KERNEL_CODENAME=0/KERNEL_CODENAME=1/g'  ~/hana/CI/ci
+				sed -i -e 's/#git clone --depth=1 -b new-eas-2 https://Nicklas373:$git_token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 ./git clone --depth=1 -b new-eas-2 https://Nicklas373:$git_token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 ./g' ~/hana/build_kernel/.circleci/build.sh
 				echo ""
 				echo "Want to use custom cam ?"
 				echo "1. yes"
