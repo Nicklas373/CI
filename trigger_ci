@@ -16,28 +16,202 @@ echo "2. Semaphore-CI"
 echo "3. Drone-CI"
 echo ""
 echo "NOTE: Write number only!"
-read decision
+read -s decision
 
 if [ "$decision" == "1" ];
 	then
-		echo "Push to Circle-CI"
-		cd ~/hana/build_kernel
+		bot="Circle-CI"
 elif [ "$decision" == "2" ];
 	then
-		echo "Push to Semaphore-CI"
-		cd ~/hana/Semaphore-CI
+		bot="Semaphore-CI"
 elif [ "$decision" == "3" ];
 	then
-		echo "Push to Drone-CI"
-		cd ~/hana/Drone-CI
+		bot="Drone-CI"
 fi
 
-# Run trigger
-trigger_ci
+echo ""
+echo "Which devices that you want to compile ?"
+echo ""
+echo "1. Xiaomi Redmi Note 4x"
+echo "2. Xiaomi Redmi Note 7"
+echo ""
+echo "NOTE: Write number only!"
+read -s kdev
+
+if [ "$kdev" == "1" ];
+	then
+		devices="Xiaomi Redmi Note 4x"
+elif [ "$kdev" == "2" ];
+	then
+		devices="Xiaomi Redmi Note 7"
+fi
+
+echo ""
+echo "Which kernel that you want to compile ?"
+echo ""
+echo "1. CAF Kernel"
+echo "2. Clarity Kernel"
+echo "3. Fusion Kernel"
+echo ""
+echo "NOTE: Write number only!"
+read -s kname
+
+if [ "$kname" == "1" ];
+	then
+		name="CAF Kernel"
+elif [ "$kname" == "2" ];
+	then
+		name="Clarity Kernel"
+elif [ "$kname" == "3" ];
+	then
+		name="Fusion Kernel"
+fi
+
+echo ""
+echo "Which android version that you want to compile ?"
+echo ""
+echo "1. Pie"
+echo "2. Ten"
+echo "3. Pie - Ten"
+echo ""
+echo "NOTE: Write number only!"
+read -s kversion
+
+if [ "$kversion" == "1" ];
+	then
+		version="9.0"
+elif [ "$kversion" == "2" ];
+	then
+		version="10.0"
+elif [ "$kversion" == "3" ];
+	then
+		version="9.0 - 10.0"
+fi
+
+# Show user option
+echo ""
+echo "========================================="
+echo "| Your selection			|"
+echo "|					|"
+echo "| CI Services	: $bot		|"
+echo "| Devices	: $devices	|"
+echo "| Kernel	: $name	|"
+echo "| Android Ver	: $version			|"
+echo "|					|"
+echo "| is this right option ?		|"
+echo "|					|"
+echo "| 1. Yes				|"
+echo "| 2. No					|"
+echo "|					|"
+echo "| NOTE: Write number only!		|"
+echo "========================================="
+read -s user
+
+# Configuring CI
+if [ "$user" == "2" ];
+	then
+		echo "See ya"
+		exit 1
+elif [ "$user" == "1" ];
+	then
+		echo "Configuring CI Script"
+		if [ "$bot" == "1" ];
+			then
+				sed -i -e 's/KERNEL_CI=2/KERNEL_CI=0/g'  ~/hana/CI/ci
+				sed -i -e 's/KERNEL_CI=1/KERNEL_CI=0/g'  ~/hana/CI/ci
+		elif [ "$bot" == "2" ];
+			then
+				sed -i -e 's/KERNEL_CI=0/KERNEL_CI=1/g'  ~/hana/CI/ci
+				sed -i -e 's/KERNEL_CI=2/KERNEL_CI=1/g'  ~/hana/CI/ci
+		elif [ "$bot" == "3" ];
+			then
+				sed -i -e 's/KERNEL_CI=0/KERNEL_CI=2/g'  ~/hana/CI/ci
+				sed -i -e 's/KERNEL_CI=1/KERNEL_CI=2/g'  ~/hana/CI/ci
+		fi
+		if [ "$kname" == "1" ];
+			then
+				sed -i -e 's/KERNEL_NAME_RELEASE=1/KERNEL_NAME_RELEASE=0/g'  ~/hana/CI/ci
+				sed -i -e 's/KERNEL_NAME_RELEASE=2/KERNEL_NAME_RELEASE=0/g'  ~/hana/CI/ci
+				sed -i -e 's/KERNEL_TYPE=1/KERNEL_TYPE=0/g'  ~/hana/CI/ci
+				sed -i -e 's/KERNEL_EXTEND=1/KERNEL_EXTEND=0/g'  ~/hana/CI/ci
+				sed -i -e 's/KERNEL_EXTEND=2/KERNEL_EXTEND=0/g'  ~/hana/CI/ci
+		elif [ "$kname" == "2" ];
+			then
+				sed -i -e 's/KERNEL_NAME_RELEASE=0/KERNEL_NAME_RELEASE=1/g'  ~/hana/CI/ci
+				sed -i -e 's/KERNEL_NAME_RELEASE=2/KERNEL_NAME_RELEASE=1/g'  ~/hana/CI/ci
+				sed -i -e 's/KERNEL_TYPE=0/KERNEL_TYPE=1/g'  ~/hana/CI/ci
+				sed -i -e 's/KERNEL_EXTEND=0/KERNEL_EXTEND=1/g'  ~/hana/CI/ci
+				sed -i -e 's/KERNEL_EXTEND=0/KERNEL_EXTEND=1/g'  ~/hana/CI/ci
+		elif [ "$kname" == "3" ];
+			then
+				sed -i -e 's/KERNEL_NAME_RELEASE=0/KERNEL_NAME_RELEASE=2/g'  ~/hana/CI/ci
+				sed -i -e 's/KERNEL_NAME_RELEASE=1/KERNEL_NAME_RELEASE=2/g'  ~/hana/CI/ci
+				sed -i -e 's/KERNEL_TYPE=0/KERNEL_TYPE=1/g'  ~/hana/CI/ci
+				sed -i -e 's/KERNEL_TYPE=0/KERNEL_TYPE=1/g'  ~/hana/CI/ci
+				sed -i -e 's/KERNEL_EXTEND=1/KERNEL_EXTEND=0/g'  ~/hana/CI/ci
+				sed -i -e 's/KERNEL_EXTEND=1/KERNEL_EXTEND=0/g'  ~/hana/CI/ci
+		fi
+		if [ "$kdev" == "1" ];
+			then
+				sed -i -e 's/KERNEL_CODENAME=1/KERNEL_CODENAME=0/g'  ~/hana/CI/ci
+		elif [ "$kdev" == "2" ];
+			then
+				sed -i -e 's/KERNEL_CODENAME=0/KERNEL_CODENAME=1/g'  ~/hana/CI/ci
+				echo ""
+				echo "Want to use custom cam ?"
+				echo "1. yes"
+				echo "2. no"
+				echo "NOTE: Choose number only! "
+				read -s cam
+				if [ "$cam" == "1" ];
+					then
+						sed -i -e 's/KERNEL_CAM=0/KERNEL_CAM=1/g'  ~/hana/CI/ci
+				elif [ "$cam" == "2" ];
+					then
+						sed -i -e 's/KERNEL_CAM=1/KERNEL_CAM=0/g'  ~/hana/CI/ci
+				fi
+		fi
+		if [ "$kversion" == "1" ];
+			then
+				sed -i -e 's/KERNEL_ANDROID_VERSION=2/KERNEL_ANDROID_VERSION=0/g'  ~/hana/CI/ci
+				sed -i -e 's/KERNEL_ANDROID_VERSION=1/KERNEL_ANDROID_VERSION=0/g'  ~/hana/CI/ci
+		elif [ "$kversion" == "2" ];
+			then
+				sed -i -e 's/KERNEL_ANDROID_VERSION=2/KERNEL_ANDROID_VERSION=1/g'  ~/hana/CI/ci
+				sed -i -e 's/KERNEL_ANDROID_VERSION=0/KERNEL_ANDROID_VERSION=1/g'  ~/hana/CI/ci
+		elif [ "$kversion" == "3" ];
+			then
+				sed -i -e 's/KERNEL_ANDROID_VERSION=1/KERNEL_ANDROID_VERSION=2/g'  ~/hana/CI/ci
+				sed -i -e 's/KERNEL_ANDROID_VERSION=0/KERNEL_ANDROID_VERSION=2/g'  ~/hana/CI/ci
+		fi
+
+		echo "Configuring Done :3"
+		echo "Triggering CI"
+
+
+		# Triggering earlier
+		trigger_ci
+
+		if [ "$decision" == "1" ];
+			then
+				echo "Push to Circle-CI"
+				cd ~/hana/build_kernel
+		elif [ "$decision" == "2" ];
+			then
+				echo "Push to Semaphore-CI"
+				cd ~/hana/Semaphore-CI
+		elif [ "$decision" == "3" ];
+			then
+				echo "Push to Drone-CI"
+				cd ~/hana/Drone-CI
+		fi
+
+		# Triggering again :p
+		trigger_ci
+fi
 }
 
-# Trigger CI
-function trigger_ci() {
+function trigger_ci () {
 git commit --allow-empty -am "Trigger CI"
 git push -f
 }
