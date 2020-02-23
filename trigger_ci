@@ -210,12 +210,11 @@ elif [ "$user" == "1" ];
 				sed -i -e 's/KERNEL_BRANCH_RELEASE=1/KERNEL_BRANCH_RELEASE=0/g'  ~/hana/CI/ci
 		fi
 
-		echo "Configuring Done :3"
 		echo "Triggering CI"
 
 
-		# Triggering earlier
-		trigger_ci
+		# Trigger script earlier
+		trigger_script
 
 		if [ "$decision" == "1" ];
 			then
@@ -231,9 +230,15 @@ elif [ "$user" == "1" ];
 				cd ~/hana/Drone-CI
 		fi
 
-		# Triggering again :p
+		# Trigger CI
 		trigger_ci
 fi
+}
+
+function trigger_script() {
+git add .
+git commit -m "ci: trigger: Automated Trigger CI" -s
+git push origin CI
 }
 
 function trigger_ci() {
