@@ -133,18 +133,18 @@ if [ "$user" == "2" ];
 elif [ "$user" == "1" ];
 	then
 		echo "Configuring CI Script"
-		if [ "$bot" == "1" ];
+		if [ "$decision" == "1" ];
 			then
 				sed -i -e 's/KERNEL_CI=2/KERNEL_CI=0/g'  ~/hana/CI/ci
 				sed -i -e 's/KERNEL_CI=1/KERNEL_CI=0/g'  ~/hana/CI/ci
-		elif [ "$bot" == "2" ];
-			then
-				sed -i -e 's/KERNEL_CI=0/KERNEL_CI=1/g'  ~/hana/CI/ci
-				sed -i -e 's/KERNEL_CI=2/KERNEL_CI=1/g'  ~/hana/CI/ci
-		elif [ "$bot" == "3" ];
+		elif [ "$decision" == "2" ];
 			then
 				sed -i -e 's/KERNEL_CI=0/KERNEL_CI=2/g'  ~/hana/CI/ci
 				sed -i -e 's/KERNEL_CI=1/KERNEL_CI=2/g'  ~/hana/CI/ci
+		elif [ "$decision" == "3" ];
+			then
+				sed -i -e 's/KERNEL_CI=0/KERNEL_CI=1/g'  ~/hana/CI/ci
+				sed -i -e 's/KERNEL_CI=2/KERNEL_CI=1/g'  ~/hana/CI/ci
 		fi
 		if [ "$kname" == "1" ];
 			then
