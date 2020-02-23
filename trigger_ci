@@ -242,7 +242,7 @@ git push origin CI
 }
 
 function trigger_ci() {
-git commit --allow-empty -am "ci: trigger: Automated Trigger CI"
+git commit --allow-empty -am "ci: trigger: Automated Trigger CI" -s
 git push -f
 }
 
