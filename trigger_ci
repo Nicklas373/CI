@@ -81,7 +81,7 @@ if [ "$krelease" == "1" ];
 		release="Stable"
 elif [ "$krelease" == "2" ];
 	then
-		release"BETA"
+		release="BETA"
 fi
 
 echo ""
@@ -113,7 +113,7 @@ echo "|					|"
 echo "| CI Services	: $bot		|"
 echo "| Devices	: $devices	|"
 echo "| Kernel	: $name	|"
-echo "| Release	: $release	|"
+echo "| Release	: $release			|"
 echo "| Android Ver	: $version			|"
 echo "|					|"
 echo "| is this right option ?		|"
