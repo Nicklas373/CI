@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Clarity Kernel Build Trigger Script || For Continous Integration
+# Clarity Kernel Build Automated Trigger Script || For Continous Integration
 #
 # Copyright 2019, alanndz <alanmahmud0@gmail.com>
 # Copyright 2020, Dicky Herlambang "Nicklas373" <herlambangdicky5@gmail.com>
@@ -68,6 +68,23 @@ elif [ "$kname" == "3" ];
 fi
 
 echo ""
+echo "Which release type that you want to compile ?"
+echo ""
+echo "1. Stable"
+echo "2. BETA"
+echo ""
+echo "NOTE: Write number only!"
+read -s krelease
+
+if [ "$krelease" == "1" ];
+	then
+		release="Stable"
+elif [ "$krelease" == "2" ];
+	then
+		release"BETA"
+fi
+
+echo ""
 echo "Which android version that you want to compile ?"
 echo ""
 echo "1. Pie"
@@ -96,6 +113,7 @@ echo "|					|"
 echo "| CI Services	: $bot		|"
 echo "| Devices	: $devices	|"
 echo "| Kernel	: $name	|"
+echo "| Release	: $release	|"
 echo "| Android Ver	: $version			|"
 echo "|					|"
 echo "| is this right option ?		|"
@@ -184,6 +202,13 @@ elif [ "$user" == "1" ];
 				sed -i -e 's/KERNEL_ANDROID_VERSION=1/KERNEL_ANDROID_VERSION=2/g'  ~/hana/CI/ci
 				sed -i -e 's/KERNEL_ANDROID_VERSION=0/KERNEL_ANDROID_VERSION=2/g'  ~/hana/CI/ci
 		fi
+		if [ "$krelease" == "1" ];
+			then
+				sed -i -e 's/KERNEL_BRANCH_RELEASE=0/KERNEL_BRANCH_RELEASE=1/g'  ~/hana/CI/ci
+		elif [ "$krelease" == "2" ];
+			then
+				sed -i -e 's/KERNEL_BRANCH_RELEASE=1/KERNEL_BRANCH_RELEASE=0/g'  ~/hana/CI/ci
+		fi
 
 		echo "Configuring Done :3"
 		echo "Triggering CI"
@@ -211,8 +236,8 @@ elif [ "$user" == "1" ];
 fi
 }
 
-function trigger_ci () {
-git commit --allow-empty -am "Trigger CI"
+function trigger_ci() {
+git commit --allow-empty -am "ci: trigger: Automated Trigger CI"
 git push -f
 }
 
