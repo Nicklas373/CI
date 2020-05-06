@@ -159,22 +159,22 @@ elif [ "$user" == "1" ];
 		echo "Configuring CI Script"
 		if [ "$decision" == "1" ];
 			then
-				sed -i -e 's/KERNEL_CI_SERVICE=2/KERNEL_CI_SERVICE=0/g'  ~/CI/ci
-				sed -i -e 's/KERNEL_CI_SERVICE=1/KERNEL_CI_SERVICE=0/g'  ~/CI/ci
+				sed -i -e 's/KERNEL_CI_SERVICE=0/KERNEL_CI_SERVICE=1/g'  ~/CI/ci
+				sed -i -e 's/KERNEL_CI_SERVICE=2/KERNEL_CI_SERVICE=1/g'  ~/CI/ci
 		elif [ "$decision" == "2" ];
 			then
 				sed -i -e 's/KERNEL_CI_SERVICE=0/KERNEL_CI_SERVICE=2/g'  ~/CI/ci
 				sed -i -e 's/KERNEL_CI_SERVICE=1/KERNEL_CI_SERVICE=2/g'  ~/CI/ci
 		elif [ "$decision" == "3" ];
 			then
-				sed -i -e 's/KERNEL_CI_SERVICE=0/KERNEL_CI_SERVICE=1/g'  ~/CI/ci
-				sed -i -e 's/KERNEL_CI_SERVICE=2/KERNEL_CI_SERVICE=1/g'  ~/CI/ci
+				sed -i -e 's/KERNEL_CI_SERVICE=2/KERNEL_CI_SERVICE=0/g'  ~/CI/ci
+				sed -i -e 's/KERNEL_CI_SERVICE=1/KERNEL_CI_SERVICE=0/g'  ~/CI/ci
 		fi
 		if [ "$kname" == "1" ];
 			then
 				sed -i -e 's/KERNEL_NAME=1/KERNEL_NAME=0/g'  ~/CI/ci
 				sed -i -e 's/KERNEL_NAME=2/KERNEL_NAME=0/g'  ~/CI/ci
-				sed -i -e 's/KERNEL_SCHED=1/KERNEL_SCHED=0/g'  ~/CI/ci
+				sed -i -e 's/KERNEL_SCHED=0/KERNEL_SCHED=1/g'  ~/CI/ci
 		elif [ "$kname" == "2" ];
 			then
 				sed -i -e 's/KERNEL_NAME=0/KERNEL_NAME=1/g'  ~/CI/ci
