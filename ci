@@ -43,7 +43,7 @@ KERNEL_STATE=0
 KERNEL_AND_VER=1
 KERNEL_CODENAME=0
 KERNEL_COMPILER=1
-KERNEL_CI_SERVICE=0
+KERNEL_CI_SERVICE=2
 
 # Make sure if new cam declare only for lavender
 if [ "$KERNEL_CODENAME" == "1" ];
