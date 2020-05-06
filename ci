@@ -290,18 +290,17 @@ curl -s -X POST https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendMessage -d ch
 
 # Telegram Bot Service || Compiling Message
 function bot_first_compile() {
-	telegram_init
-	bot_template  "<b>|| ${KERNEL_BOT} Build Bot ||</b>" \
-		"" \
-		"<b>${KERNEL_REL} Kernel build Start!</b>" \
-		"" \
-		"<b>Build Status :</b><code> ${KERNEL_RELEASE} </code>" \
-		"<b>Device :</b><code> ${TELEGRAM_DEVICE} </code>" \
-		"<b>Android Version :</b><code> ${KERNEL_ANDROID_VER} </code>" \
-		"" \
-		"<b>Kernel Scheduler :</b><code> ${KERNEL_SCHED} </code>" \
-		"<b>Kernel Branch :</b><code> ${KERNEL_BRANCH} </code>" \
-		"<b>Latest commit :</b><code> $(git --no-pager log --pretty=format:'"%h - %s (%an)"' -1) </code>"
+	bot_template	"<b>|| ${KERNEL_BOT} Build Bot ||</b>" \
+			"" \
+			"<b>${KERNEL_REL} Kernel build Start!</b>" \
+			"" \
+			"<b>Build Status :</b><code> ${KERNEL_RELEASE} </code>" \
+			"<b>Device :</b><code> ${TELEGRAM_DEVICE} </code>" \
+			"<b>Android Version :</b><code> ${KERNEL_ANDROID_VER} </code>" \
+			"" \
+			"<b>Kernel Scheduler :</b><code> ${KERNEL_SCHED} </code>" \
+			"<b>Kernel Branch :</b><code> ${KERNEL_BRANCH} </code>" \
+			"<b>Latest commit :</b><code> $(git --no-pager log --pretty=format:'"%h - %s (%an)"' -1) </code>"
 }
 
 # Telegram bot message || complete compile notification
@@ -343,7 +342,6 @@ function bot_init_compile() {
 
 # Telegram bot message || success notification
 function bot_build_success() {
-	telegram_init
 	bot_template	"<b>|| ${KERNEL_BOT} Build Bot ||</b>" \
 			"" \
 			"<b>${KERNEL_REL} Kernel build Success!</b>"
@@ -351,7 +349,6 @@ function bot_build_success() {
 
 # Telegram bot message || failed notification
 function bot_build_failed() {
-	telegram_init
 	bot_template	"<b>|| ${KERNEL_BOT} Build Bot ||</b>" \
 			"" \
 			"<b>${KERNEL_REL} Kernel build Failed!</b>" \
