@@ -43,7 +43,7 @@ KERNEL_STATE=0
 KERNEL_AND_VER=1
 KERNEL_CODENAME=1
 KERNEL_COMPILER=1
-KERNEL_CI_SERVICE=1
+KERNEL_CI_SERVICE=0
 
 # Make sure if new cam declare only for lavender
 if [ "$KERNEL_CODENAME" == "1" ];
@@ -431,6 +431,7 @@ fi
 
 # Compile Lavender Begin
 function compile_lave() {
+	cd ${KERNEL}
 	cd ..
 	START=$(TZ=Asia/Jakarta date +"%s")
 	make -s -C ${KERNEL} ${CODENAME}_defconfig O=out
