@@ -212,6 +212,7 @@ elif [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
 			elif [ "$KERNEL_STATE" == "1" ];
 				then
 					TELEGRAM_GROUP_ID=${telegram_group_official_id}
+			fi
 		fi
 fi
 KERNEL_TEMP="$(pwd)/TEMP"
