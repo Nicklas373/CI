@@ -428,7 +428,13 @@ fi
 
 # Compile Lavender Begin
 function compile_lave() {
-	cd ..
+if [ "$KERNEL_CI_SERVICE" == "1" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
+	then
+		cd ..
+elif [ "$KERNEL_CI_SERVICE" == "0" ];
+	then
+		echo ""
+fi
 	START=$(TZ=Asia/Jakarta date +"%s")
 	make -s -C ${KERNEL} ${CODENAME}_defconfig O=out
 if [ "$KERNEL_EXT_CLANG" == "0" ];
