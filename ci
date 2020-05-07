@@ -156,17 +156,20 @@ fi
 # Lavender init
 function lave_init() {
 
+# Create temporary folder
+mkdir TEMP
+
 # Cloning Kernel Repository
 if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
 	then
 		git clone --depth=1 -b fusion-rework https://Nicklas373:$token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
+elif [ "$KERNEL_CI_SERVICE" == "1" ];
+	then
+		git clone --depth=1 -b fusion-rework https://Nicklas373:$git_token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
 fi
 
 # Cloning AnyKernel Repository
 git clone --depth=1 -b fusion https://github.com/alanndz/AnyKernel3
-
-# Create Temporary Folder
-mkdir TEMP
 
 # Define Kernel Scheduler
 KERNEL_SCHED="EAS"
@@ -179,8 +182,8 @@ export KBUILD_BUILD_HOST=fusion_lavender-Dev
 # Define Lavender Specific Environment && Telegram Channel Release
 if [ "$KERNEL_CI_SERVICE" == "1" ];
 	then
-		KERNEL="$(pwd)"
-		IMAGE="$(pwd)/out/arch/arm64/boot/Image.gz-dtb"
+		KERNEL="$(pwd)/kernel"
+		IMAGE="$(pwd)/kernel/out/arch/arm64/boot/Image.gz-dtb"
 		TELEGRAM_BOT_ID=${telegram_bot_id}
 		if [ "$KERNEL_STATE" == "0" ];
 			then
@@ -428,13 +431,7 @@ fi
 
 # Compile Lavender Begin
 function compile_lave() {
-if [ "$KERNEL_CI_SERVICE" == "1" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
-	then
-		cd ..
-elif [ "$KERNEL_CI_SERVICE" == "0" ];
-	then
-		echo ""
-fi
+	cd ..
 	START=$(TZ=Asia/Jakarta date +"%s")
 	make -s -C ${KERNEL} ${CODENAME}_defconfig O=out
 if [ "$KERNEL_EXT_CLANG" == "0" ];
@@ -466,12 +463,7 @@ fi
 	bot_init_compile
 	bot_build_success
 	sendStick "${TELEGRAM_SUCCESS}"
-	if [ "$KERNEL_CI" == "1" ];
-		then
-			echo ""
-	else
-		cd ..
-	fi
+	cd ..
         cp ${IMAGE} AnyKernel3
 	anykernel
 	kernel_upload
