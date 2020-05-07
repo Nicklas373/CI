@@ -163,9 +163,6 @@ mkdir TEMP
 if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
 	then
 		git clone --depth=1 -b fusion-rework https://Nicklas373:$token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
-elif [ "$KERNEL_CI_SERVICE" == "1" ];
-	then
-		git clone --depth=1 -b fusion-rework https://Nicklas373:$git_token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
 fi
 
 # Cloning AnyKernel Repository
@@ -182,8 +179,8 @@ export KBUILD_BUILD_HOST=fusion_lavender-Dev
 # Define Lavender Specific Environment && Telegram Channel Release
 if [ "$KERNEL_CI_SERVICE" == "1" ];
 	then
-		KERNEL="$(pwd)/kernel"
-		IMAGE="$(pwd)/kernel/out/arch/arm64/boot/Image.gz-dtb"
+		KERNEL="$(pwd)"
+		IMAGE="$(pwd)/out/arch/arm64/boot/Image.gz-dtb"
 		TELEGRAM_BOT_ID=${telegram_bot_id}
 		if [ "$KERNEL_STATE" == "0" ];
 			then
@@ -431,18 +428,9 @@ fi
 
 # Compile Lavender Begin
 function compile_lave() {
-	cd ${KERNEL}
-	cd ..
 	START=$(TZ=Asia/Jakarta date +"%s")
 	make -s -C ${KERNEL} ${CODENAME}_defconfig O=out
-if [ "$KERNEL_EXT_CLANG" == "0" ];
-	then
-		CLANG_PATH="/root/proton-11/bin/:${PATH}"
-elif [ "$KERNEL_EXT_CLANG" == "1" ];
-	then
-		CLANG_PATH="$(pwd)/p-clang/bin/:${PATH}"
-fi
-	PATH="$CLANG_PATH" \
+	PATH="$(pwd)/p-clang/bin/:${PATH}" \
 	make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
 					CC=clang \
 					CLANG_TRIPLE=aarch64-linux-gnu- \
@@ -464,7 +452,12 @@ fi
 	bot_init_compile
 	bot_build_success
 	sendStick "${TELEGRAM_SUCCESS}"
-	cd ..
+	if [ "$KERNEL_CI" == "0" ];
+		then
+			echo ""
+	else
+	     cd ${KERNEL}
+	fi
         cp ${IMAGE} AnyKernel3
 	anykernel
 	kernel_upload
