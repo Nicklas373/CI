@@ -43,7 +43,7 @@ KERNEL_STATE=0
 KERNEL_AND_VER=1
 KERNEL_CODENAME=1
 KERNEL_COMPILER=1
-KERNEL_CI_SERVICE=0
+KERNEL_CI_SERVICE=1
 
 # Make sure if new cam declare only for lavender
 if [ "$KERNEL_CODENAME" == "1" ];
@@ -190,7 +190,6 @@ if [ "$KERNEL_CI_SERVICE" == "1" ];
 			TELEGRAM_GROUP_ID=${telegram_official_id}
 	fi
 else
-	then
 		KERNEL="$(pwd)/kernel"
 		IMAGE="$(pwd)/kernel/out/arch/arm64/boot/Image.gz-dtb"
 	if [ "$KERNEL_CI_SERVICE" == "0" ];
