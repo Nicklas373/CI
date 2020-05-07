@@ -428,7 +428,6 @@ fi
 
 # Compile Lavender Begin
 function compile_lave() {
-	cd ..
 	START=$(TZ=Asia/Jakarta date +"%s")
 	make -s -C ${KERNEL} ${CODENAME}_defconfig O=out
 	PATH="$(pwd)/p-clang/bin/:${PATH}" \
