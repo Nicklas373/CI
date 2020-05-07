@@ -39,7 +39,7 @@
 # Declare Kernel Details
 KERNEL_NAME=2
 KERNEL_SCHED=1
-KERNEL_STATE=1
+KERNEL_STATE=0
 KERNEL_AND_VER=1
 KERNEL_CODENAME=1
 KERNEL_COMPILER=1
@@ -157,12 +157,9 @@ fi
 function lave_init() {
 
 # Cloning Kernel Repository
-if [ "$KERNEL_CI_SERVICE" == "0" ];
+if [ "$KERNEL_CI_SERVICE" == "1" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
 	then
 		git clone --depth=1 -b fusion-rework https://Nicklas373:$token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
-elif [ "$KERNEL_CI_SERVICE" == "1" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
-	then
-		git clone --depth=1 -b fusion-rework https://Nicklas373:$git_token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
 fi
 
 # Cloning AnyKernel Repository
