@@ -233,10 +233,10 @@ elif [ "$user" == "1" ];
 		fi
 		if [ "$comp" == "1" ];
 			then
-				sed -i -e 's/KERNEL_COMPILER=1/KERNEL_COMPILER=0/g'  ~/CI/ci
+				sed -i -e 's/KERNEL_COMPILER=0/KERNEL_COMPILER=1/g'  ~/CI/ci
 		elif [ "$comp" == "2" ];
 			then
-				sed -i -e 's/KERNEL_COMPILER=0/KERNEL_COMPILER=1/g'  ~/CI/ci
+				sed -i -e 's/KERNEL_COMPILER=1/KERNEL_COMPILER=0/g'  ~/CI/ci
 		fi
 
 		echo "Triggering CI"

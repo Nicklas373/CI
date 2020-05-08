@@ -42,7 +42,7 @@ KERNEL_SCHED=1
 KERNEL_STATE=0
 KERNEL_AND_VER=1
 KERNEL_CODENAME=1
-KERNEL_COMPILER=1
+KERNEL_COMPILER=0
 KERNEL_CI_SERVICE=1
 
 # Make sure if new cam declare only for lavender
@@ -430,9 +430,9 @@ fi
 function compile_lave() {
 	cd ..
 	START=$(TZ=Asia/Jakarta date +"%s")
-	make -s -C ${KERNEL} ${CODENAME}_defconfig O=out
+	make ${CODENAME}_defconfig O=out
 	PATH="$(pwd)/p-clang/bin/:${PATH}" \
-	make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
+	make -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
 					CC=clang \
 					CLANG_TRIPLE=aarch64-linux-gnu- \
 					CROSS_COMPILE=aarch64-linux-gnu- \
