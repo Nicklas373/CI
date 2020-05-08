@@ -39,7 +39,7 @@
 # Declare Kernel Details
 KERNEL_NAME=2
 KERNEL_SCHED=1
-KERNEL_STATE=0
+KERNEL_STATE=1
 KERNEL_AND_VER=1
 KERNEL_CODENAME=1
 KERNEL_COMPILER=1
@@ -160,7 +160,7 @@ function lave_init() {
 # Cloning Kernel Repository
 if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
 	then
-		git clone --depth=1 -b fusion-rework https://Nicklas373:$token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
+		git clone --depth=1 -b fusion-rework-2 https://Nicklas373:$git_token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
 fi
 
 # Cloning AnyKernel Repository
@@ -171,7 +171,7 @@ mkdir TEMP
 
 # Define Kernel Scheduler
 KERNEL_SCHED="EAS"
-KERNEL_BRANCH="fusion-rework"
+KERNEL_BRANCH="fusion-rework-2"
 
 # Define CI Specific Environment
 export KBUILD_BUILD_USER=alanndz-nicklas373
@@ -202,7 +202,7 @@ elif [ "$KERNEL_CI_SERVICE" == "0" ];
 			then
 				TELEGRAM_GROUP_ID=${tg_aln_id}
 		fi
-elif [ "$KERNEL_CI_SERVICE" == "2"];
+elif [ "$KERNEL_CI_SERVICE" == "2" ];
 	then
 		KERNEL="$(pwd)/kernel"
 		IMAGE="$(pwd)/kernel/out/arch/arm64/boot/Image.gz-dtb"
