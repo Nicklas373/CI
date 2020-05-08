@@ -39,7 +39,7 @@
 # Declare Kernel Details
 KERNEL_NAME=2
 KERNEL_SCHED=1
-KERNEL_STATE=1
+KERNEL_STATE=0
 KERNEL_AND_VER=1
 KERNEL_CODENAME=1
 KERNEL_COMPILER=1
@@ -443,15 +443,11 @@ elif [ "$KERNEL_COMPILER" == "1" ];
 fi
 if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
 	then
-		make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
+		alt_compile_1
 elif [ "$KERNEL_CI_SERVICE" == "1" ];
 	then
-		make -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
+		alt_compile_2
 fi
-					CC=clang \
-					CLANG_TRIPLE=aarch64-linux-gnu- \
-					CROSS_COMPILE=aarch64-linux-gnu- \
-					CROSS_COMPILE_ARM32=arm-linux-gnueabi-
 	if ! [ -a $IMAGE ];
 		then
 			echo "kernel not found"
@@ -490,6 +486,25 @@ fi
 					echo "Build Done :3"
 			fi
 	fi
+}
+
+# Alternate compile for lavender
+function alt_compile_1() {
+PATH="$CLANG_PATH"
+make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
+					CC=clang \
+					CLANG_TRIPLE=aarch64-linux-gnu- \
+					CROSS_COMPILE=aarch64-linux-gnu- \
+					CROSS_COMPILE_ARM32=arm-linux-gnueabi-
+}
+
+function alt_compile_2() {
+PATH="$CLANG_PATH"
+make -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
+					CC=clang \
+					CLANG_TRIPLE=aarch64-linux-gnu- \
+					CROSS_COMPILE=aarch64-linux-gnu- \
+					CROSS_COMPILE_ARM32=arm-linux-gnueabi-
 }
 
 # Camera patch
