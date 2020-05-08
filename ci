@@ -43,7 +43,7 @@ KERNEL_STATE=1
 KERNEL_AND_VER=1
 KERNEL_CODENAME=1
 KERNEL_COMPILER=1
-KERNEL_CI_SERVICE=1
+KERNEL_CI_SERVICE=2
 
 # Make sure if new cam declare only for lavender
 if [ "$KERNEL_CODENAME" == "1" ];
@@ -188,7 +188,7 @@ if [ "$KERNEL_CI_SERVICE" == "1" ];
 				TELEGRAM_GROUP_ID=${telegram_group_dev_id}
 		elif [ "$KERNEL_STATE" == "1" ];
 			then
-				TELEGRAM_GROUP_ID=${telegram_group_official_id}
+				TELEGRAM_GROUP_ID=${telegram_group_aln_id}
 		fi
 elif [ "$KERNEL_CI_SERVICE" == "0" ];
 	then
@@ -200,7 +200,7 @@ elif [ "$KERNEL_CI_SERVICE" == "0" ];
 				TELEGRAM_GROUP_ID=${tg_group_id}
 		elif [ "$KERNEL_STATE" == "1" ];
 			then
-				TELEGRAM_GROUP_ID=${tg_channel_id}
+				TELEGRAM_GROUP_ID=${tg_aln_id}
 		fi
 elif [ "$KERNEL_CI_SERVICE" == "2"];
 	then
@@ -212,7 +212,7 @@ elif [ "$KERNEL_CI_SERVICE" == "2"];
 				TELEGRAM_GROUP_ID=${telegram_group_dev_id}
 		elif [ "$KERNEL_STATE" == "1" ];
 			then
-				TELEGRAM_GROUP_ID=${telegram_group_official_id}
+				TELEGRAM_GROUP_ID=${telegram_group_aln_id}
 		fi
 fi
 KERNEL_TEMP="$(pwd)/TEMP"
@@ -428,6 +428,10 @@ fi
 
 # Compile Lavender Begin
 function compile_lave() {
+if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
+	then
+		cd ..
+fi
 	START=$(TZ=Asia/Jakarta date +"%s")
 	make ${CODENAME}_defconfig O=out
 if [ "$KERNEL_COMPILER" == "0" ];
@@ -437,7 +441,13 @@ elif [ "$KERNEL_COMPILER" == "1" ];
 	then
 		CLANG_PATH="$(pwd)/p-clang/bin/:${PATH}"
 fi
-	make -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
+if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
+	then
+		make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
+elif [ "$KERNEL_CI_SERVICE" == "1" ];
+	then
+		make -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
+fi
 					CC=clang \
 					CLANG_TRIPLE=aarch64-linux-gnu- \
 					CROSS_COMPILE=aarch64-linux-gnu- \
