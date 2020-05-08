@@ -39,16 +39,16 @@
 # Declare Kernel Details
 KERNEL_NAME=2
 KERNEL_SCHED=1
-KERNEL_STATE=0
+KERNEL_STATE=1
 KERNEL_AND_VER=1
 KERNEL_CODENAME=1
-KERNEL_COMPILER=0
+KERNEL_COMPILER=1
 KERNEL_CI_SERVICE=1
 
 # Make sure if new cam declare only for lavender
 if [ "$KERNEL_CODENAME" == "1" ];
 	then
-		KERNEL_NEW_CAM=0
+		KERNEL_NEW_CAM=1
 fi
 
 # Environment init
@@ -349,9 +349,9 @@ function bot_complete_compile() {
 			"<b>                         HANA-CI Build Project | 2016-2020                            </b>"
 }
 
-function bot_init_compile() {
+function bot_lave_compile() {
 		telegram_init
-		bot_template	"<b>---- ${KERNEL_NAME} New Kernel ----</b>" \
+		bot_template	"<b>---- ${KERNEL_REL} New Kernel ----</b>" \
 				"<b>Device:</b> ${CODENAME} or ${TELEGRAM_DEVICE}" \
 				"<b>Name:</b> <code>${KERNEL_NAME}-${KVERSION}</code>" \
 				"<b>Kernel Version:</b> <code>${TELEGRAM_KERNEL_VER}</code>" \
@@ -430,7 +430,13 @@ fi
 function compile_lave() {
 	START=$(TZ=Asia/Jakarta date +"%s")
 	make ${CODENAME}_defconfig O=out
-	PATH="$(pwd)/p-clang/bin/:${PATH}" \
+if [ "$KERNEL_COMPILER" == "0" ];
+	then
+		CLANG_PATH="/root/proton-11/bin/:${PATH}"
+elif [ "$KERNEL_COMPILER" == "1" ];
+	then
+		CLANG_PATH="$(pwd)/p-clang/bin/:${PATH}"
+fi
 	make -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
 					CC=clang \
 					CLANG_TRIPLE=aarch64-linux-gnu- \
@@ -449,7 +455,7 @@ function compile_lave() {
 	END=$(TZ=Asia/Jakarta date +"%s")
 	DIFF=$(($END - $START))
 	cd ${KERNEL}
-	bot_init_compile
+	bot_lave_compile
 	bot_build_success
 	sendStick "${TELEGRAM_SUCCESS}"
 	if [ "$KERNEL_CI" == "0" ];
@@ -548,7 +554,6 @@ function kernel_upload() {
 	elif [ "$KERNEL_CODENAME" == "1" ];
 		then
 			cd ${KERNEL}
-			bot_complete_compile
 			if [ "$KERNEL_STATE" == "0" ];
 				then
 					# Upload kernel file
