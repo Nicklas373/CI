@@ -123,9 +123,12 @@ read -s clang
 
 if [ "$clang" == "1" ];
 	then
+		comp="1"
 		ext_clang="Proton Clang 11 20200502"
-else
-	ext_clang="Docker Clang"
+elif [ "$clang" == "2" ];
+	then
+		comp="2"
+		ext_clang="Docker Clang"
 fi
 
 # Show user option
@@ -228,10 +231,10 @@ elif [ "$user" == "1" ];
 			then
 				sed -i -e 's/KERNEL_STATE=1/KERNEL_STATE=0/g'  ~/CI/ci
 		fi
-		if [ "$clang" == "0" ];
+		if [ "$comp" == "1" ];
 			then
 				sed -i -e 's/KERNEL_COMPILER=1/KERNEL_COMPILER=0/g'  ~/CI/ci
-		elif [ "$clang" == "1" ];
+		elif [ "$comp" == "2" ];
 			then
 				sed -i -e 's/KERNEL_COMPILER=0/KERNEL_COMPILER=1/g'  ~/CI/ci
 		fi
