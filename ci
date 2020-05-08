@@ -39,8 +39,8 @@
 # Declare Kernel Details
 KERNEL_NAME=2
 KERNEL_SCHED=1
-KERNEL_STATE=0
-KERNEL_AND_VER=1
+KERNEL_STATE=1
+KERNEL_AND_VER=2
 KERNEL_CODENAME=1
 KERNEL_COMPILER=1
 KERNEL_CI_SERVICE=0
@@ -428,10 +428,6 @@ fi
 
 # Compile Lavender Begin
 function compile_lave() {
-if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
-	then
-		cd ..
-fi
 	START=$(TZ=Asia/Jakarta date +"%s")
 	make ${CODENAME}_defconfig O=out
 if [ "$KERNEL_COMPILER" == "0" ];
@@ -443,9 +439,11 @@ elif [ "$KERNEL_COMPILER" == "1" ];
 fi
 if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
 	then
+		echo "alt_compile_1"
 		alt_compile_1
 elif [ "$KERNEL_CI_SERVICE" == "1" ];
 	then
+		echo "alt_compile_2"
 		alt_compile_2
 fi
 	if ! [ -a $IMAGE ];
