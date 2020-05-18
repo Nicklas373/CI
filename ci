@@ -286,7 +286,7 @@ elif [ "$KERNEL_COMPILER" == "1" ];
 		echo "Using External Clang"
 
 		# Clone External Clang
-		git clone --depth=1 - master https://github.com/kdrag0n/proton-clang p-clang
+		git clone --depth=1 -b master https://github.com/kdrag0n/proton-clang p-clang
 
 		# External clang environment
 		export CLANG_PATH=$(pwd)/p-clang/bin
