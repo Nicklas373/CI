@@ -8,7 +8,7 @@
 # Copyright 2016-2020, HANA-CI Build Project
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-# CI Script Revision = 20200508
+# CI Script Revision = 20200520
 
 # Build Information
 #
@@ -28,7 +28,7 @@
 # 0 = Mido || 1 = Lavender
 #
 # Kernel Compiler
-# 0 = Docker Clang || 1 = Proton Clang 11 (Untested)
+# 0 = Docker Clang || 1 = Proton Clang 11 (Latest)
 #
 # CI Service
 # 0 = Drone CI || 1 = Circle CI || 2 = Semaphore CI
@@ -40,7 +40,7 @@
 KERNEL_NAME=0
 KERNEL_SCHED=1
 KERNEL_STATE=0
-KERNEL_AND_VER=2
+KERNEL_AND_VER=1
 KERNEL_CODENAME=0
 KERNEL_COMPILER=1
 KERNEL_CI_SERVICE=1
@@ -606,8 +606,8 @@ function kernel_upload() {
 function run() {
 if [ "$KERNEL_CODENAME" == "1" ];
 	then
-		lave_init
 		env_init
+		lave_init
 		clang_init
 		add_init
 		if [ "$KERNEL_NEW_CAM" == "1" ];
@@ -623,8 +623,8 @@ if [ "$KERNEL_CODENAME" == "1" ];
 		fi
 elif [ "$KERNEL_CODENAME" == "0" ];
 	then
-		mido_init
 		env_init
+		mido_init
 		clang_init
 		add_init
 		compile_mido

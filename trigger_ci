@@ -124,7 +124,7 @@ read -s clang
 if [ "$clang" == "1" ];
 	then
 		comp="1"
-		ext_clang="Proton Clang 11 20200502"
+		ext_clang="Latest Proton"
 elif [ "$clang" == "2" ];
 	then
 		comp="2"
