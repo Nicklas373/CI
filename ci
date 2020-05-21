@@ -42,8 +42,8 @@ KERNEL_SCHED=1
 KERNEL_STATE=0
 KERNEL_AND_VER=1
 KERNEL_CODENAME=0
-KERNEL_COMPILER=0
-KERNEL_CI_SERVICE=1
+KERNEL_COMPILER=1
+KERNEL_CI_SERVICE=0
 
 # Make sure if new cam declare only for lavender
 if [ "$KERNEL_CODENAME" == "1" ];
@@ -84,7 +84,7 @@ mkdir TEMP
 if [ "$KERNEL_NAME" == "0" ];
 	then
 		# Clone kernel repositories earlier
-		git clone --depth=1 -b next/lineage-17.1 https://github.com/Nicklas373/kernel_xiaomi_msm8953-4.9 kernel
+		git clone --depth=1 -b lineage-17.1 https://github.com/Nicklas373/kernel_xiaomi_msm8953-4.9 kernel
 
 		# Cloning AnyKernel Repository
 		git clone --depth=1 -b caf/mido-4.9 https://github.com/Nicklas373/AnyKernel3
