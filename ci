@@ -84,7 +84,7 @@ mkdir TEMP
 if [ "$KERNEL_NAME" == "0" ];
 	then
 		# Clone kernel repositories earlier
-		git clone --depth=1 -b next/lineage-17.1 https://github.com/Nicklas373/kernel_xiaomi_msm8953-4.9 kernel
+		git clone --depth=1 -b kiseki https://github.com/Nicklas373/kernel_xiaomi_msm8953-4.9 kernel
 
 		# Cloning AnyKernel Repository
 		git clone --depth=1 -b caf/mido-4.9 https://github.com/Nicklas373/AnyKernel3
