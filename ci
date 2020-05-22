@@ -36,19 +36,23 @@
 # Lavender Cam Patch
 # 0 = Old cam || 1 = New cam
 #
+# Lavender NLMK Patch Disabler
+# 0 = Disable || 1 = Enable
+#
 # Declare Kernel Details
 KERNEL_NAME=2
 KERNEL_SCHED=1
-KERNEL_STATE=1
+KERNEL_STATE=0
 KERNEL_AND_VER=1
 KERNEL_CODENAME=1
 KERNEL_COMPILER=0
 KERNEL_CI_SERVICE=1
+KERNEL_NLMK=1
 
 # Make sure if new cam declare only for lavender
 if [ "$KERNEL_CODENAME" == "1" ];
 	then
-		KERNEL_NEW_CAM=1
+		KERNEL_NEW_CAM=0
 fi
 
 # Environment init
@@ -237,6 +241,12 @@ elif [ "$KERNEL_STATE" == "0" ];
 		KERNEL_VERSION="r5"
 		KVERSION="${FUSION_CODENAME}-$(git log --pretty=format:'%h' -1)-$(TZ=Asia/Jakarta date "+%H%M")"
 		ZIP_NAME="${KERNEL_REL}-${FUSION_CODENAME}-${CODENAME}-$(git log --pretty=format:'%h' -1)-$(TZ=Asia/Jakarta date "+%H%M").zip"
+
+		# Enable NLMK Patch Disabler
+		wget https://raw.githubusercontent.com/Nicklas373/CI/CI/nlmk.patch
+
+		# Apply pie camera patch
+		git am nlmk.patch
 fi
 }
 
@@ -497,7 +507,6 @@ fi
 # Alternate compile for lavender
 function alt_compile_1() {
 PATH="$CLANG_PATH"
-sed -i -e 's/CONFIG_ANDROID_NLMK=y/# CONFIG_ANDROID_NLMK is not set/g'  ${KERNEL}/arch/arm64/configs/lavender_defconfig
 make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
 					CC=clang \
 					CLANG_TRIPLE=aarch64-linux-gnu- \
@@ -507,7 +516,6 @@ make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
 
 function alt_compile_2() {
 PATH="$CLANG_PATH"
-sed -i -e 's/CONFIG_ANDROID_NLMK=y/# CONFIG_ANDROID_NLMK is not set/g'  ${KERNEL}/arch/arm64/configs/lavender_defconfig
 make -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
 					CC=clang \
 					CLANG_TRIPLE=aarch64-linux-gnu- \
@@ -519,7 +527,7 @@ make -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
 function init_patch() {
 
 # Download patch
-cd ${KERNEL}
+cd ..
 wget https://raw.githubusercontent.com/alanndz/build_kernel/fusion/patches/02.patch
 
 # Declare HEAD commit before patch
