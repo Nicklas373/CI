@@ -160,7 +160,7 @@ function lave_init() {
 # Cloning Kernel Repository
 if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
 	then
-		git clone --depth=1 -b fusion-nothing https://Nicklas373:$token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
+		git clone --depth=1 -b fusion-nothing https://Nicklas373:$token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 .
 fi
 
 # Cloning AnyKernel Repository
@@ -178,10 +178,8 @@ export KBUILD_BUILD_USER=alanndz-nicklas373
 export KBUILD_BUILD_HOST=fusion_lavender-Dev
 
 # Define Lavender Specific Environment && Telegram Channel Release
-if [ "$KERNEL_CI_SERVICE" == "1" ];
+if [ "$KERNEL_CI_SERVICE" == "1" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
 	then
-		KERNEL="$(pwd)"
-		IMAGE="$(pwd)/out/arch/arm64/boot/Image.gz-dtb"
 		TELEGRAM_BOT_ID=${telegram_bot_id}
 		if [ "$KERNEL_STATE" == "0" ];
 			then
@@ -192,8 +190,6 @@ if [ "$KERNEL_CI_SERVICE" == "1" ];
 		fi
 elif [ "$KERNEL_CI_SERVICE" == "0" ];
 	then
-		KERNEL="$(pwd)/kernel"
-		IMAGE="$(pwd)/kernel/out/arch/arm64/boot/Image.gz-dtb"
 		TELEGRAM_BOT_ID=${tg_bot_id}
 		if [ "$KERNEL_STATE" == "0" ];
 			then
@@ -202,19 +198,9 @@ elif [ "$KERNEL_CI_SERVICE" == "0" ];
 			then
 				TELEGRAM_GROUP_ID=${tg_aln_id}
 		fi
-elif [ "$KERNEL_CI_SERVICE" == "2" ];
-	then
-		KERNEL="$(pwd)/kernel"
-		IMAGE="$(pwd)/kernel/out/arch/arm64/boot/Image.gz-dtb"
-		TELEGRAM_BOT_ID=${telegram_bot_id}
-		if [ "$KERNEL_STATE" == "0" ];
-			then
-				TELEGRAM_GROUP_ID=${telegram_group_dev_id}
-		elif [ "$KERNEL_STATE" == "1" ];
-			then
-				TELEGRAM_GROUP_ID=${telegram_group_aln_id}
-		fi
 fi
+KERNEL="$(pwd)"
+IMAGE="$(pwd)/kernel/out/arch/arm64/boot/Image.gz-dtb"
 KERNEL_TEMP="$(pwd)/TEMP"
 CODENAME="lavender"
 KERNEL_CODE="Lavender"
