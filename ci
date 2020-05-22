@@ -160,7 +160,7 @@ function lave_init() {
 # Cloning Kernel Repository
 if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
 	then
-		git clone --depth=1 -b fusion-nothing https://Nicklas373:$token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 .
+		git clone --depth=1 -b fusion-nothing https://Nicklas373:$token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
 fi
 
 # Cloning AnyKernel Repository
@@ -178,8 +178,10 @@ export KBUILD_BUILD_USER=alanndz-nicklas373
 export KBUILD_BUILD_HOST=fusion_lavender-Dev
 
 # Define Lavender Specific Environment && Telegram Channel Release
-if [ "$KERNEL_CI_SERVICE" == "1" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
+if [ "$KERNEL_CI_SERVICE" == "1" ];
 	then
+		KERNEL="$(pwd)"
+		IMAGE="$(pwd)/out/arch/arm64/boot/Image.gz-dtb"
 		TELEGRAM_BOT_ID=${telegram_bot_id}
 		if [ "$KERNEL_STATE" == "0" ];
 			then
@@ -190,6 +192,8 @@ if [ "$KERNEL_CI_SERVICE" == "1" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
 		fi
 elif [ "$KERNEL_CI_SERVICE" == "0" ];
 	then
+		KERNEL="$(pwd)/kernel"
+		IMAGE="$(pwd)/kernel/out/arch/arm64/boot/Image.gz-dtb"
 		TELEGRAM_BOT_ID=${tg_bot_id}
 		if [ "$KERNEL_STATE" == "0" ];
 			then
@@ -198,9 +202,19 @@ elif [ "$KERNEL_CI_SERVICE" == "0" ];
 			then
 				TELEGRAM_GROUP_ID=${tg_aln_id}
 		fi
+elif [ "$KERNEL_CI_SERVICE" == "2" ];
+	then
+		KERNEL="$(pwd)/kernel"
+		IMAGE="$(pwd)/kernel/out/arch/arm64/boot/Image.gz-dtb"
+		TELEGRAM_BOT_ID=${telegram_bot_id}
+		if [ "$KERNEL_STATE" == "0" ];
+			then
+				TELEGRAM_GROUP_ID=${telegram_group_dev_id}
+		elif [ "$KERNEL_STATE" == "1" ];
+			then
+				TELEGRAM_GROUP_ID=${telegram_group_aln_id}
+		fi
 fi
-KERNEL="$(pwd)"
-IMAGE="$(pwd)/kernel/out/arch/arm64/boot/Image.gz-dtb"
 KERNEL_TEMP="$(pwd)/TEMP"
 CODENAME="lavender"
 KERNEL_CODE="Lavender"
@@ -431,12 +445,15 @@ elif [ "$KERNEL_COMPILER" == "1" ];
 	then
 		CLANG_PATH="$(pwd)/p-clang/bin/:${PATH}"
 fi
-	PATH="$CLANG_PATH"
-	make -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
-					CC=clang \
-					CLANG_TRIPLE=aarch64-linux-gnu- \
-					CROSS_COMPILE=aarch64-linux-gnu- \
-					CROSS_COMPILE_ARM32=arm-linux-gnueabi-
+if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
+	then
+		echo "alt_compile_1"
+		alt_compile_1
+elif [ "$KERNEL_CI_SERVICE" == "1" ];
+	then
+		echo "alt_compile_2"
+		alt_compile_2
+fi
 	if ! [ -a $IMAGE ];
 		then
 			echo "kernel not found"
@@ -475,6 +492,25 @@ fi
 					echo "Build Done :3"
 			fi
 	fi
+}
+
+# Alternate compile for lavender
+function alt_compile_1() {
+PATH="$CLANG_PATH"
+make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
+					CC=clang \
+					CLANG_TRIPLE=aarch64-linux-gnu- \
+					CROSS_COMPILE=aarch64-linux-gnu- \
+					CROSS_COMPILE_ARM32=arm-linux-gnueabi-
+}
+
+function alt_compile_2() {
+PATH="$CLANG_PATH"
+make -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
+					CC=clang \
+					CLANG_TRIPLE=aarch64-linux-gnu- \
+					CROSS_COMPILE=aarch64-linux-gnu- \
+					CROSS_COMPILE_ARM32=arm-linux-gnueabi-
 }
 
 # Camera patch
