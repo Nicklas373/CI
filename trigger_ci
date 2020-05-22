@@ -192,11 +192,11 @@ elif [ "$user" == "1" ];
 		if [ "$kdev" == "1" ];
 			then
 				sed -i -e 's/KERNEL_CODENAME=1/KERNEL_CODENAME=0/g'  ~/ci/ci
-				sed -i -e 's/git clone --depth=1 -b fusion-nothing https://Nicklas373:$git_token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 ./#git clone --depth=1 -b fusion-nothing https://Nicklas373:$git_token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 ./g' ~/build_kernel/.circleci/build.sh
+				sed -i -e 's/git clone --depth=1 -b fusion-nothing https://Nicklas373:$git_token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 . /#git clone --depth=1 -b fusion-nothing https://Nicklas373:$git_token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 . /g' ~/build_kernel/.circleci/build.sh
 		elif [ "$kdev" == "2" ];
 			then
 				sed -i -e 's/KERNEL_CODENAME=0/KERNEL_CODENAME=1/g'  ~/ci/ci
-				sed -i -e 's/#git clone --depth=1 -b fusion-nothing https://Nicklas373:$git_token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 ./git clone --depth=1 -b fusion-nothing https://Nicklas373:$git_token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 ./g' ~/build_kernel/.circleci/build.sh
+				sed -i -e 's/#git clone --depth=1 -b fusion-nothing https://Nicklas373:$git_token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 . /git clone --depth=1 -b fusion-nothing https://Nicklas373:$git_token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 . /g' ~/build_kernel/.circleci/build.sh
 				echo ""
 				echo "Want to use custom cam ?"
 				echo "1. yes"
