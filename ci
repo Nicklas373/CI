@@ -37,11 +37,11 @@
 # 0 = Old cam || 1 = New cam
 #
 # Declare Kernel Details
-KERNEL_NAME=0
+KERNEL_NAME=2
 KERNEL_SCHED=1
-KERNEL_STATE=0
+KERNEL_STATE=1
 KERNEL_AND_VER=1
-KERNEL_CODENAME=0
+KERNEL_CODENAME=1
 KERNEL_COMPILER=1
 KERNEL_CI_SERVICE=1
 
@@ -160,7 +160,7 @@ function lave_init() {
 # Cloning Kernel Repository
 if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
 	then
-		git clone --depth=1 -b fusion-rework https://Nicklas373:$token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
+		git clone --depth=1 -b fusion-nothing https://Nicklas373:$token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
 fi
 
 # Cloning AnyKernel Repository
@@ -171,7 +171,7 @@ mkdir TEMP
 
 # Define Kernel Scheduler
 KERNEL_SCHED="EAS"
-KERNEL_BRANCH="fusion-rework"
+KERNEL_BRANCH="fusion-nothing"
 
 # Define CI Specific Environment
 export KBUILD_BUILD_USER=alanndz-nicklas373
