@@ -246,7 +246,7 @@ elif [ "$KERNEL_STATE" == "0" ];
 		wget https://raw.githubusercontent.com/Nicklas373/CI/CI/nlmk.patch
 
 		# Apply pie camera patch
-	if ["$KERNEL_CI" == "1" ];
+	if [ "$KERNEL_CI" == "1" ];
 		then
 			git apply nlmk.patch
 	else
