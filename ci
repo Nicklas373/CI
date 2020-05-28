@@ -40,13 +40,13 @@
 # 0 = Disable || 1 = Enable
 #
 # Declare Kernel Details
-KERNEL_NAME=0
+KERNEL_NAME=2
 KERNEL_SCHED=1
-KERNEL_STATE=0
+KERNEL_STATE=1
 KERNEL_AND_VER=1
-KERNEL_CODENAME=0
+KERNEL_CODENAME=1
 KERNEL_COMPILER=1
-KERNEL_CI_SERVICE=0
+KERNEL_CI_SERVICE=1
 KERNEL_NLMK=1
 
 # Make sure if new cam declare only for lavender
@@ -153,7 +153,7 @@ elif [ "$KERNEL_CI_SERVICE" == "1" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
 				TELEGRAM_GROUP_ID=${telegram_group_official_id}
 		elif [ "$KERNEL_STATE" == "0" ];
 			then
-				TELEGRAM_GROUP_ID=${telegram_temp_id}
+				TELEGRAM_GROUP_ID=${telegram_group_dev_id}
 		fi
 fi
 }
@@ -527,7 +527,6 @@ make -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
 function init_patch() {
 
 # Download patch
-cd ..
 wget https://raw.githubusercontent.com/alanndz/build_kernel/fusion/patches/02.patch
 
 # Declare HEAD commit before patch
@@ -544,7 +543,6 @@ git am 02.patch
 NEW_PATCH_STATS="1"
 
 # Begin init compiling process
-cd ..
 compile_lave
 }
 
