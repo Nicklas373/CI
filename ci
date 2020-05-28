@@ -246,7 +246,13 @@ elif [ "$KERNEL_STATE" == "0" ];
 		wget https://raw.githubusercontent.com/Nicklas373/CI/CI/nlmk.patch
 
 		# Apply pie camera patch
+	if ["$KERNEL_CI" == "1" ];
+		then
+			git apply nlmk.patch
+	else
+		cd ${KERNEL}
 		git apply nlmk.patch
+	fi
 fi
 }
 
@@ -447,7 +453,14 @@ fi
 # Compile Lavender Begin
 function compile_lave() {
 	START=$(TZ=Asia/Jakarta date +"%s")
-	make ${CODENAME}_defconfig O=out
+if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
+	then
+		cd ${KERNEL}
+		make ${CODENAME}_defconfig O=out
+elif [ "$KERNEL_CI_SERVICE" == "1" ];
+	then
+		make ${CODENAME}_defconfig O=out
+fi
 if [ "$KERNEL_COMPILER" == "0" ];
 	then
 		CLANG_PATH="/root/proton-11/bin/:${PATH}"
@@ -455,15 +468,8 @@ elif [ "$KERNEL_COMPILER" == "1" ];
 	then
 		CLANG_PATH="$(pwd)/p-clang/bin/:${PATH}"
 fi
-if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
-	then
-		echo "alt_compile_1"
-		alt_compile_1
-elif [ "$KERNEL_CI_SERVICE" == "1" ];
-	then
-		echo "alt_compile_2"
-		alt_compile_2
-fi
+	echo "alt_compile_2"
+	alt_compile_2
 	if ! [ -a $IMAGE ];
 		then
 			echo "kernel not found"
