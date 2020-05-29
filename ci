@@ -486,12 +486,19 @@ fi
 	fi
 	END=$(TZ=Asia/Jakarta date +"%s")
 	DIFF=$(($END - $START))
-	cd ${KERNEL}
+if [ "$KERNEL_CI" == "1" ];
+	then
+		cd ${KERNEL}
+fi
 	bot_lave_compile
 	bot_build_success
 	sendStick "${TELEGRAM_SUCCESS}"
-	cd ${KERNEL}
-        cp ${IMAGE} AnyKernel3
+if [ "$KERNEL_CI" == "1" ];
+	then
+		cp ${IMAGE} AnyKernel3
+else
+	cp ${IMAGE} $(pwd)/AnyKernel3
+fi
 	anykernel
 	kernel_upload
 	if [ "$KERNEL_NEW_CAM" == "0" ];
@@ -522,8 +529,16 @@ RESET_COMMIT=$(git --no-pager log --pretty=format:'%h')
 KVERSION="${FUSION_CODENAME}-New_CAM-$(git log --pretty=format:'%h' -1)-$(TZ=Asia/Jakarta date "+%H%M")"
 ZIP_NAME="${KERNEL_REL}-${FUSION_CODENAME}-${CODENAME}-New_CAM-$(git log --pretty=format:'%h' -1)-$(TZ=Asia/Jakarta date "+%H%M").zip"
 
-# Apply pie camera patch
-git am 02.patch
+if [ "$KERNEL_CI" == "1" ];
+	then
+		# Apply pie camera patch
+		git am 02.patch
+else
+	cd ${KERNEL}
+
+	# Apply pie camera patch
+	git am 02.patch
+fi
 
 # Tell if new cam patch already executed
 NEW_PATCH_STATS="1"
