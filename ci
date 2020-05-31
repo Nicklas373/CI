@@ -8,7 +8,7 @@
 # Copyright 2016-2020, HANA-CI Build Project
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-# CI Script Revision = 20200530
+# CI Script Revision = 20200531
 
 # Build Information
 #
@@ -28,7 +28,7 @@
 # 0 = Mido || 1 = Lavender
 #
 # Kernel Compiler
-# 0 = Docker Clang || 1 = Proton Clang 11 (Latest)
+# 0 = Proton Clang 11 (Latest) || 1 = Proton Clang 11 (Backup) || 2 = Azure Clang
 #
 # CI Service
 # 0 = Drone CI || 1 = Circle CI || 2 = Semaphore CI
@@ -289,8 +289,7 @@ function clang_init() {
 
 if [ "$KERNEL_COMPILER" == "0" ];
 	then
-		# Tell to CI if we're used docker clang
-		echo "Using Docker Clang"
+		echo "Latest Proton Clang"
 
 		# Clang environment
 		export CLANG_PATH=/root/proton-11/bin
@@ -298,17 +297,20 @@ if [ "$KERNEL_COMPILER" == "0" ];
 		export LD_LIBRARY_PATH="/root/proton-11/bin/../lib:$PATH"
 elif [ "$KERNEL_COMPILER" == "1" ];
 	then
-		# Tell to CI if we're used external clang
-		echo "Using External Clang"
+		echo "Backup Proton Clang"
 
-		# Clone External Clang
-		git clone --depth=1 -b master https://github.com/kdrag0n/proton-clang p-clang
-
-		# External clang environment
-		export CLANG_PATH=$(pwd)/p-clang/bin
+		# Clang environment
+		export CLANG_PATH=/root/p-clang/bin
 		export PATH=${CLANG_PATH}:${PATH}
-		export LD_LIBRARY_PATH="$(pwd)/p-clang/bin/../lib:$PATH"
-fi
+		export LD_LIBRARY_PATH="/root/p-clang/bin/../lib:$PATH"
+elif [ "$KERNEL_COMPILER" == "2" ];
+	then
+		echo "Azure Clang"
+
+		# Clang environment
+                export CLANG_PATH=/root/azure/bin
+                export PATH=${CLANG_PATH}:${PATH}
+                export LD_LIBRARY_PATH="/root/azure/bin/../lib:$PATH"
 }
 
 # Declare Telegram Bot Aliases
@@ -419,7 +421,10 @@ if [ "$KERNEL_COMPILER" == "0" ];
 		CLANG_PATH="/root/proton-11/bin/:${PATH}"
 elif [ "$KERNEL_COMPILER" == "1" ];
 	then
-		CLANG_PATH="$(pwd)/p-clang/bin/:${PATH}"
+		CLANG_PATH="/root/p-clang/bin/:${PATH}"
+elif [ "$KERNEL_COMPILER" == "2" ];
+	then
+		CLANG_PATH="/root/azure/bin:${PATH}"
 fi
 	PATH="$CLANG_PATH" \
 	make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
@@ -466,7 +471,10 @@ if [ "$KERNEL_COMPILER" == "0" ];
 		CLANG_PATH="/root/proton-11/bin/:${PATH}"
 elif [ "$KERNEL_COMPILER" == "1" ];
 	then
-		CLANG_PATH="$(pwd)/p-clang/bin/:${PATH}"
+		CLANG_PATH="/root/p-clang/bin/:${PATH}"
+elif [ "$KERNEL_COMPILER" == "2" ];
+	then
+		CLANG_PATH="/root/azure/bin:${PATH}"
 fi
 	PATH="$CLANG_PATH"
 	make -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \

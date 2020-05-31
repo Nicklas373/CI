@@ -112,11 +112,11 @@ else
 fi
 
 echo ""
-echo "Want to use external clang ? "
-echo "External clang: proton clang 11 20200502"
+echo "Select your compiler :3"
 echo ""
-echo "1. yes"
-echo "2. no"
+echo "1. Proton Clang 11 (Latest)"
+echo "2. Proton Clang 11 (Backup)"
+echo "3. Azure Clang 11"
 echo ""
 echo "NOTE: Write number only !"
 read -s clang
@@ -124,11 +124,15 @@ read -s clang
 if [ "$clang" == "1" ];
 	then
 		comp="1"
-		ext_clang="Latest Proton"
+		ext_clang="Proton Clang 11 (Latest)"
 elif [ "$clang" == "2" ];
 	then
 		comp="2"
-		ext_clang="Docker Clang"
+		ext_clang="Proton Clang 11 (Backup)"
+elif [ "$clang" == "3" ];
+	then
+		comp="3"
+		ext_clang="Azure Clang 11"
 fi
 
 # Show user option
@@ -226,17 +230,23 @@ elif [ "$user" == "1" ];
 		fi
 		if [ "$krelease" == "1" ];
 			then
-				sed -i -e 's/KERNEL_STATE=0/KERNEL_STATE=1/g'  ~/ci/ci
+				sed -i -e 's/KERNEL_STATE=2/KERNEL_STATE=0/g'  ~/ci/ci
 		elif [ "$krelease" == "2" ];
 			then
 				sed -i -e 's/KERNEL_STATE=1/KERNEL_STATE=0/g'  ~/ci/ci
 		fi
 		if [ "$comp" == "1" ];
 			then
-				sed -i -e 's/KERNEL_COMPILER=0/KERNEL_COMPILER=1/g'  ~/ci/ci
+				sed -i -e 's/KERNEL_COMPILER=1/KERNEL_COMPILER=0/g'  ~/ci/ci
+				sed -i -e 's/KERNEL_COMPILER=2/KERNEL_COMPILER=0/g'  ~/ci/ci
 		elif [ "$comp" == "2" ];
 			then
-				sed -i -e 's/KERNEL_COMPILER=1/KERNEL_COMPILER=0/g'  ~/ci/ci
+				sed -i -e 's/KERNEL_COMPILER=0/KERNEL_COMPILER=1/g'  ~/ci/ci
+				sed -i -e 's/KERNEL_COMPILER=2/KERNEL_COMPILER=1/g'  ~/ci/ci
+		elif [ "$comp" == "3" ];
+			then
+				sed -i -e 's/KERNEL_COMPILER=0/KERNEL_COMPILER=2/g'  ~/ci/ci
+				sed -i -e 's/KERNEL_COMPILER=1/KERNEL_COMPILER=2/g'  ~/ci/ci
 		fi
 
 		echo "Triggering CI"
