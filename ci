@@ -45,7 +45,7 @@ KERNEL_SCHED=1
 KERNEL_STATE=0
 KERNEL_AND_VER=1
 KERNEL_CODENAME=0
-KERNEL_COMPILER=1
+KERNEL_COMPILER=0
 KERNEL_CI_SERVICE=0
 KERNEL_NLMK=1
 
@@ -311,6 +311,7 @@ elif [ "$KERNEL_COMPILER" == "2" ];
                 export CLANG_PATH=/root/azure/bin
                 export PATH=${CLANG_PATH}:${PATH}
                 export LD_LIBRARY_PATH="/root/azure/bin/../lib:$PATH"
+fi
 }
 
 # Declare Telegram Bot Aliases
