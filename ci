@@ -8,7 +8,7 @@
 # Copyright 2016-2020, HANA-CI Build Project
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-# CI Script Revision = 20200531
+# CI Script Revision = 20200603
 
 # Build Information
 #
@@ -28,7 +28,7 @@
 # 0 = Mido || 1 = Lavender
 #
 # Kernel Compiler
-# 0 = Proton Clang 11 (Latest) || 1 = Proton Clang 11 (Backup) || 2 = Azure Clang
+# 0 = Proton Clang 11 || 1 = Nusantara Clang 11
 #
 # CI Service
 # 0 = Drone CI || 1 = Circle CI || 2 = Semaphore CI
@@ -45,7 +45,7 @@ KERNEL_SCHED=1
 KERNEL_STATE=0
 KERNEL_AND_VER=1
 KERNEL_CODENAME=0
-KERNEL_COMPILER=2
+KERNEL_COMPILER=0
 KERNEL_CI_SERVICE=0
 KERNEL_NLMK=1
 
@@ -61,9 +61,6 @@ function env_init() {
 # Set ARCH
 export ARCH=arm64
 export SUBARCH=arm64
-
-# Set Timezone
-export TZ=Asia/Jakarta
 
 # Set CI Service
 if [ "$KERNEL_CI_SERVICE" == "0" ];
@@ -101,7 +98,7 @@ if [ "$KERNEL_NAME" == "0" ];
 elif [ "$KERNEL_NAME" == "1" ];
 	then
 		# Clone kernel repositories earlier
-		git clone --depth=1 -b kizuna https://github.com/Nicklas373/kernel_xiaomi_msm8953-4.9 kernel
+		git clone --depth=1 -b staging/kizuna https://github.com/Nicklas373/kernel_xiaomi_msm8953-4.9 kernel
 
 		# Cloning AnyKernel Repository
 		git clone --depth=1 -b caf/mido-kizuna-4.9 https://github.com/Nicklas373/AnyKernel3
@@ -233,14 +230,14 @@ if [ "$KERNEL_STATE" == "1" ];
 		FUSION_CODENAME="Empyrean_Psalms"
 		KERNEL_VERSION="r5"
 		KVERSION="${FUSION_CODENAME}-${KERNEL_VERSION}"
-		ZIP_NAME="${KERNEL_REL}-${KVERSION}-${CODENAME}-$(TZ=Asia/Jakarta date "+%H%M-%d%m%Y").zip"
+		ZIP_NAME="${KERNEL_REL}-${KVERSION}-${CODENAME}-$(date "+%H%M-%d%m%Y").zip"
 elif [ "$KERNEL_STATE" == "0" ];
 	then
 		KERNEL_RELEASE="BETA"
 		FUSION_CODENAME="Empyrean_Psalms"
 		KERNEL_VERSION="r5"
-		KVERSION="${FUSION_CODENAME}-$(git log --pretty=format:'%h' -1)-$(TZ=Asia/Jakarta date "+%H%M")"
-		ZIP_NAME="${KERNEL_REL}-${FUSION_CODENAME}-${CODENAME}-$(git log --pretty=format:'%h' -1)-$(TZ=Asia/Jakarta date "+%H%M").zip"
+		KVERSION="${FUSION_CODENAME}-$(git log --pretty=format:'%h' -1)-$(date "+%H%M")"
+		ZIP_NAME="${KERNEL_REL}-${FUSION_CODENAME}-${CODENAME}-$(git log --pretty=format:'%h' -1)-$(date "+%H%M").zip"
 
 		# Enable NLMK Patch Disabler
 		wget https://raw.githubusercontent.com/Nicklas373/CI/CI/nlmk.patch
@@ -261,7 +258,7 @@ function add_init() {
 
 # Declare global additional environment
 KERNEL_SUFFIX="Kernel"
-KERNEL_DATE="$(TZ=Asia/Jakarta date +%Y%m%d-%H%M)"
+KERNEL_DATE="$(date +%Y%m%d-%H%M)"
 
 # Declare Android Version
 if [ "$KERNEL_AND_VER" == "0" ];
@@ -289,28 +286,20 @@ function clang_init() {
 
 if [ "$KERNEL_COMPILER" == "0" ];
 	then
-		echo "Latest Proton Clang"
+		echo "Proton Clang 11"
 
 		# Clang environment
-		export CLANG_PATH=/root/proton-11/bin
+		export CLANG_PATH=/root/proton/bin
 		export PATH=${CLANG_PATH}:${PATH}
-		export LD_LIBRARY_PATH="/root/proton-11/bin/../lib:$PATH"
+		export LD_LIBRARY_PATH="/root/proton/bin/../lib:$PATH"
 elif [ "$KERNEL_COMPILER" == "1" ];
 	then
-		echo "Backup Proton Clang"
+		echo "Nusantara Clang 11"
 
 		# Clang environment
-		export CLANG_PATH=/root/p-clang/bin
-		export PATH=${CLANG_PATH}:${PATH}
-		export LD_LIBRARY_PATH="/root/p-clang/bin/../lib:$PATH"
-elif [ "$KERNEL_COMPILER" == "2" ];
-	then
-		echo "Azure Clang"
-
-		# Clang environment
-                export CLANG_PATH=/root/azure/bin
+                export CLANG_PATH=/root/nusantara/bin
                 export PATH=${CLANG_PATH}:${PATH}
-                export LD_LIBRARY_PATH="/root/azure/bin/../lib:$PATH"
+                export LD_LIBRARY_PATH="/root/nusantara/bin/../lib:$PATH"
 fi
 }
 
@@ -411,7 +400,7 @@ function compile_mido() {
 	cd ${KERNEL}
 	bot_first_compile
 	cd ..
-	START=$(TZ=Asia/Jakarta date +"%s")
+	START=$(date +"%s")
 if [ "$KERNEL_NAME" == "1" ];
 	then
 		sed -i -e 's/-perf/-Kizuna/g'  ${KERNEL}/arch/arm64/configs/mido_defconfig
@@ -419,13 +408,10 @@ fi
 	make -s -C ${KERNEL} ${CODENAME}_defconfig O=out
 if [ "$KERNEL_COMPILER" == "0" ];
 	then
-		CLANG_PATH="/root/proton-11/bin/:${PATH}"
+		CLANG_PATH="/root/proton/bin/:${PATH}"
 elif [ "$KERNEL_COMPILER" == "1" ];
 	then
-		CLANG_PATH="/root/p-clang/bin/:${PATH}"
-elif [ "$KERNEL_COMPILER" == "2" ];
-	then
-		CLANG_PATH="/root/azure/bin:${PATH}"
+		CLANG_PATH="/root/nusantara/bin:${PATH}"
 fi
 	PATH="$CLANG_PATH" \
 	make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
@@ -436,7 +422,7 @@ fi
 	if ! [ -a $IMAGE ];
 		then
 			echo "kernel not found"
-			END=$(TZ=Asia/Jakarta date +"%s")
+			END=$(date +"%s")
 			DIFF=$(($END - $START))
 			cd ${KERNEL}
 			bot_build_failed
@@ -445,7 +431,7 @@ fi
 			curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/compile.log"  https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
 			exit 1
 	fi
-	END=$(TZ=Asia/Jakarta date +"%s")
+	END=$(date +"%s")
 	DIFF=$(($END - $START))
 	cd ${KERNEL}
 	bot_build_success
@@ -458,7 +444,7 @@ fi
 
 # Compile Lavender Begin
 function compile_lave() {
-	START=$(TZ=Asia/Jakarta date +"%s")
+	START=$(date +"%s")
 if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
 	then
 		cd ${KERNEL}
@@ -469,13 +455,10 @@ elif [ "$KERNEL_CI_SERVICE" == "1" ];
 fi
 if [ "$KERNEL_COMPILER" == "0" ];
 	then
-		CLANG_PATH="/root/proton-11/bin/:${PATH}"
+		CLANG_PATH="/root/proton/bin/:${PATH}"
 elif [ "$KERNEL_COMPILER" == "1" ];
 	then
-		CLANG_PATH="/root/p-clang/bin/:${PATH}"
-elif [ "$KERNEL_COMPILER" == "2" ];
-	then
-		CLANG_PATH="/root/azure/bin:${PATH}"
+		CLANG_PATH="/root/nusantara/bin:${PATH}"
 fi
 	PATH="$CLANG_PATH"
 	make -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
@@ -486,14 +469,14 @@ fi
 	if ! [ -a $IMAGE ];
 		then
 			echo "kernel not found"
-			END=$(TZ=Asia/Jakarta date +"%s")
+			END=$(date +"%s")
 			DIFF=$(($END - $START))
 			bot_build_failed
 			sendStick "${TELEGRAM_FAIL}"
 			curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/compile.log"  https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
 			exit 1
 	fi
-	END=$(TZ=Asia/Jakarta date +"%s")
+	END=$(date +"%s")
 	DIFF=$(($END - $START))
 if [ "$KERNEL_CI" == "1" ];
 	then
@@ -535,8 +518,8 @@ wget https://raw.githubusercontent.com/alanndz/build_kernel/fusion/patches/02.pa
 RESET_COMMIT=$(git --no-pager log --pretty=format:'%h')
 
 # Declare specified kernel name for pie patch
-KVERSION="${FUSION_CODENAME}-New_CAM-$(git log --pretty=format:'%h' -1)-$(TZ=Asia/Jakarta date "+%H%M")"
-ZIP_NAME="${KERNEL_REL}-${FUSION_CODENAME}-${CODENAME}-New_CAM-$(git log --pretty=format:'%h' -1)-$(TZ=Asia/Jakarta date "+%H%M").zip"
+KVERSION="${FUSION_CODENAME}-New_CAM-$(git log --pretty=format:'%h' -1)-$(date "+%H%M")"
+ZIP_NAME="${KERNEL_REL}-${FUSION_CODENAME}-${CODENAME}-New_CAM-$(git log --pretty=format:'%h' -1)-$(date "+%H%M").zip"
 
 if [ "$KERNEL_CI" == "1" ];
 	then
