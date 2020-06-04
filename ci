@@ -28,7 +28,7 @@
 # 0 = Mido || 1 = Lavender
 #
 # Kernel Compiler
-# 0 = Proton Clang 11 || 1 = Nusantara Clang 11
+# 0 = Proton Clang 11 || 1 = Nusantara Clang 11 || 2 = Snapdragon LLVM Clang 8.0.6 (Test)
 #
 # CI Service
 # 0 = Drone CI || 1 = Circle CI || 2 = Semaphore CI
@@ -45,8 +45,8 @@ KERNEL_SCHED=1
 KERNEL_STATE=0
 KERNEL_AND_VER=1
 KERNEL_CODENAME=0
-KERNEL_COMPILER=0
-KERNEL_CI_SERVICE=1
+KERNEL_COMPILER=2
+KERNEL_CI_SERVICE=0
 KERNEL_NLMK=1
 
 # Make sure if new cam declare only for lavender
@@ -300,6 +300,17 @@ elif [ "$KERNEL_COMPILER" == "1" ];
                 export CLANG_PATH=/root/nusantara/bin
                 export PATH=${CLANG_PATH}:${PATH}
                 export LD_LIBRARY_PATH="/root/nusantara/bin/../lib:$PATH"
+elif [ "$KERNEL_COMPILER" == "2" ];
+	then
+		echo "Snapdragon LLVM Clang"
+
+		# Clone Clang
+		git clone --depth=1 https://github.com/pgjh/qcom-clang-8 -b 9.0 llvm
+
+		# Clang environment
+                export CLANG_PATH=/root/llvm/bin
+                export PATH=${CLANG_PATH}:${PATH}
+                export LD_LIBRARY_PATH="/root/llvm/bin/../lib:$PATH"
 fi
 }
 
@@ -412,6 +423,9 @@ if [ "$KERNEL_COMPILER" == "0" ];
 elif [ "$KERNEL_COMPILER" == "1" ];
 	then
 		CLANG_PATH="/root/nusantara/bin:${PATH}"
+elif [ "$KERNEL_COMPILER" == "2" ];
+	then
+		CLANG_PATH="/root/llvm/bin:${PATH}"
 fi
 	PATH="$CLANG_PATH" \
 	make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
@@ -459,6 +473,9 @@ if [ "$KERNEL_COMPILER" == "0" ];
 elif [ "$KERNEL_COMPILER" == "1" ];
 	then
 		CLANG_PATH="/root/nusantara/bin:${PATH}"
+elif [ "$KERNEL_COMPILER" == "2" ];
+	then
+		CLANG_PATH"/root/llvm/bin:${PATH}"
 fi
 	PATH="$CLANG_PATH"
 	make -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
