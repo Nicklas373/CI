@@ -307,10 +307,18 @@ elif [ "$KERNEL_COMPILER" == "2" ];
 		# Clone Clang
 		git clone --depth=1 https://github.com/pgjh/qcom-clang-8 -b 9.0 llvm
 
+		# Clone GCC
+		git clone --depth=1 https://github.com/HANA-CI-Build-Project/aarch64-linux-android-4.9 -b master gcc_64
+		git clone --depth=1 https://github.com/HANA-CI-Build-Project/arm-linux-androideabi-4.9 -b master gcc
+
 		# Clang environment
-                export CLANG_PATH=/root/llvm/bin
+                export CLANG_PATH=~/llvm/bin
                 export PATH=${CLANG_PATH}:${PATH}
-                export LD_LIBRARY_PATH="/root/llvm/bin/../lib:$PATH"
+                export LD_LIBRARY_PATH="~/llvm/bin/../lib:$PATH"
+		export CLANG_TRIPLE=aarch64-linux-gnu-
+                export CLANG_TRIPLE_ARM32=arm-linux-gnueabi-
+                export CROSS_COMPILE=~/gcc_64/bin/aarch64-linux-gnu-
+		export CROSS_COMPILE_ARM32=~/gcc/bin/arm-linux-gnueabi-
 fi
 }
 
@@ -425,14 +433,14 @@ elif [ "$KERNEL_COMPILER" == "1" ];
 		CLANG_PATH="/root/nusantara/bin:${PATH}"
 elif [ "$KERNEL_COMPILER" == "2" ];
 	then
-		CLANG_PATH="/root/llvm/bin:${PATH}"
+		CLANG_PATH="~/llvm/bin:${PATH}"
 fi
 	PATH="$CLANG_PATH" \
 	make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
 				CC=clang \
-				CLANG_TRIPLE=aarch64-linux-gnu- \
-				CROSS_COMPILE=aarch64-linux-gnu- \
-				CROSS_COMPILE_ARM32=arm-linux-gnueabi-
+				CLANG_TRIPLE=${CLANG_TRIPLE} \
+				CROSS_COMPILE=${CROSS_COMPILE} \
+				CROSS_COMPILE_ARM32=${CROSS_COMPILE_ARM32}
 	if ! [ -a $IMAGE ];
 		then
 			echo "kernel not found"
