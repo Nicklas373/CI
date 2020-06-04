@@ -439,6 +439,7 @@ fi
 	make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
 				CC=clang \
 				CLANG_TRIPLE=${CLANG_TRIPLE} \
+				CLANG_TRIPLE_ARM32=${CLANG_TRIPLE_ARM32} \
 				CROSS_COMPILE=${CROSS_COMPILE} \
 				CROSS_COMPILE_ARM32=${CROSS_COMPILE_ARM32}
 	if ! [ -a $IMAGE ];
