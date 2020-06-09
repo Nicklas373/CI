@@ -403,9 +403,9 @@ function compile_mido() {
 	START=$(date +"%s")
 if [ "$KERNEL_NAME" == "1" ];
 	then
-		sed -i -e 's/-perf/-Kizuna/g'  ${KERNEL}/arch/arm64/configs/moe_defconfig
+		sed -i -e 's/-perf/-Kizuna/g'  ${KERNEL}/arch/arm64/configs/mido_defconfig
 fi
-	make -s -C ${KERNEL} moe_defconfig O=out
+	make -s -C ${KERNEL} ${CODENAME}_defconfig O=out
 if [ "$KERNEL_COMPILER" == "0" ];
 	then
 		CLANG_PATH="/root/proton/bin/:${PATH}"
