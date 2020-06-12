@@ -40,19 +40,18 @@
 # 0 = Disable || 1 = Enable
 #
 # Declare Kernel Details
-KERNEL_NAME=0
+KERNEL_NAME=2
 KERNEL_SCHED=1
-KERNEL_STATE=0
+KERNEL_STATE=1
 KERNEL_AND_VER=1
-KERNEL_CODENAME=0
+KERNEL_CODENAME=1
 KERNEL_COMPILER=0
-KERNEL_CI_SERVICE=0
-KERNEL_NLMK=0
+KERNEL_CI_SERVICE=1
 
 # Make sure if new cam declare only for lavender
 if [ "$KERNEL_CODENAME" == "1" ];
 	then
-		KERNEL_NEW_CAM=0
+		KERNEL_NEW_CAM=1
 fi
 
 # Environment init
