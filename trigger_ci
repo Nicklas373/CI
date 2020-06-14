@@ -161,40 +161,40 @@ elif [ "$user" == "1" ];
 		echo "Configuring CI Script"
 		if [ "$decision" == "1" ];
 			then
-				sed -i -e 's/KERNEL_CI_SERVICE=0/KERNEL_CI_SERVICE=1/g'  ~/ci/ci
-				sed -i -e 's/KERNEL_CI_SERVICE=2/KERNEL_CI_SERVICE=1/g'  ~/ci/ci
+				sed -i -e 's/KERNEL_CI_SERVICE=0/KERNEL_CI_SERVICE=1/g'  ~/CI/ci
+				sed -i -e 's/KERNEL_CI_SERVICE=2/KERNEL_CI_SERVICE=1/g'  ~/CI/ci
 		elif [ "$decision" == "2" ];
 			then
-				sed -i -e 's/KERNEL_CI_SERVICE=0/KERNEL_CI_SERVICE=2/g'  ~/ci/ci
-				sed -i -e 's/KERNEL_CI_SERVICE=1/KERNEL_CI_SERVICE=2/g'  ~/ci/ci
+				sed -i -e 's/KERNEL_CI_SERVICE=0/KERNEL_CI_SERVICE=2/g'  ~/CI/ci
+				sed -i -e 's/KERNEL_CI_SERVICE=1/KERNEL_CI_SERVICE=2/g'  ~/CI/ci
 		elif [ "$decision" == "3" ];
 			then
-				sed -i -e 's/KERNEL_CI_SERVICE=2/KERNEL_CI_SERVICE=0/g'  ~/ci/ci
-				sed -i -e 's/KERNEL_CI_SERVICE=1/KERNEL_CI_SERVICE=0/g'  ~/ci/ci
+				sed -i -e 's/KERNEL_CI_SERVICE=2/KERNEL_CI_SERVICE=0/g'  ~/CI/ci
+				sed -i -e 's/KERNEL_CI_SERVICE=1/KERNEL_CI_SERVICE=0/g'  ~/CI/ci
 		fi
 		if [ "$kname" == "1" ];
 			then
-				sed -i -e 's/KERNEL_NAME=1/KERNEL_NAME=0/g'  ~/ci/ci
-				sed -i -e 's/KERNEL_NAME=2/KERNEL_NAME=0/g'  ~/ci/ci
-				sed -i -e 's/KERNEL_SCHED=0/KERNEL_SCHED=1/g'  ~/ci/ci
+				sed -i -e 's/KERNEL_NAME=1/KERNEL_NAME=0/g'  ~/CI/ci
+				sed -i -e 's/KERNEL_NAME=2/KERNEL_NAME=0/g'  ~/CI/ci
+				sed -i -e 's/KERNEL_SCHED=0/KERNEL_SCHED=1/g'  ~/CI/ci
 		elif [ "$kname" == "2" ];
 			then
-				sed -i -e 's/KERNEL_NAME=0/KERNEL_NAME=1/g'  ~/ci/ci
-				sed -i -e 's/KERNEL_NAME=2/KERNEL_NAME=1/g'  ~/ci/ci
-				sed -i -e 's/KERNEL_SCHED=0/KERNEL_SCHED=1/g'  ~/ci/ci
+				sed -i -e 's/KERNEL_NAME=0/KERNEL_NAME=1/g'  ~/CI/ci
+				sed -i -e 's/KERNEL_NAME=2/KERNEL_NAME=1/g'  ~/CI/ci
+				sed -i -e 's/KERNEL_SCHED=0/KERNEL_SCHED=1/g'  ~/CI/ci
 		elif [ "$kname" == "3" ];
 			then
-				sed -i -e 's/KERNEL_NAME=0/KERNEL_NAME=2/g'  ~/ci/ci
-				sed -i -e 's/KERNEL_NAME=1/KERNEL_NAME=2/g'  ~/ci/ci
-				sed -i -e 's/KERNEL_SCHED=0/KERNEL_SCHED=1/g'  ~/ci/ci
+				sed -i -e 's/KERNEL_NAME=0/KERNEL_NAME=2/g'  ~/CI/ci
+				sed -i -e 's/KERNEL_NAME=1/KERNEL_NAME=2/g'  ~/CI/ci
+				sed -i -e 's/KERNEL_SCHED=0/KERNEL_SCHED=1/g'  ~/CI/ci
 		fi
 		if [ "$kdev" == "1" ];
 			then
-				sed -i -e 's/KERNEL_CODENAME=1/KERNEL_CODENAME=0/g'  ~/ci/ci
+				sed -i -e 's/KERNEL_CODENAME=1/KERNEL_CODENAME=0/g'  ~/CI/ci
 				sed -i -e 's/git clone --depth=1 -b fusion-nothing https://Nicklas373:$git_token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 . /#git clone --depth=1 -b fusion-nothing https://Nicklas373:$git_token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 . /g' ~/build_kernel/.circleci/build.sh
 		elif [ "$kdev" == "2" ];
 			then
-				sed -i -e 's/KERNEL_CODENAME=0/KERNEL_CODENAME=1/g'  ~/ci/ci
+				sed -i -e 's/KERNEL_CODENAME=0/KERNEL_CODENAME=1/g'  ~/CI/ci
 				sed -i -e 's/#git clone --depth=1 -b fusion-nothing https://Nicklas373:$git_token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 . /git clone --depth=1 -b fusion-nothing https://Nicklas373:$git_token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 . /g' ~/build_kernel/.circleci/build.sh
 				echo ""
 				echo "Want to use custom cam ?"
@@ -204,38 +204,38 @@ elif [ "$user" == "1" ];
 				read -s cam
 				if [ "$cam" == "1" ];
 					then
-						sed -i -e 's/KERNEL_NEW_CAM=0/KERNEL_NEW_CAM=1/g'  ~/ci/ci
+						sed -i -e 's/KERNEL_NEW_CAM=0/KERNEL_NEW_CAM=1/g'  ~/CI/ci
 				elif [ "$cam" == "2" ];
 					then
-						sed -i -e 's/KERNEL_NEW_CAM=1/KERNEL_NEW_CAM=0/g'  ~/ci/ci
+						sed -i -e 's/KERNEL_NEW_CAM=1/KERNEL_NEW_CAM=0/g'  ~/CI/ci
 				fi
 		fi
 		if [ "$kversion" == "1" ];
 			then
-				sed -i -e 's/KERNEL_AND_VER=2/KERNEL_AND_VER=0/g'  ~/ci/ci
-				sed -i -e 's/KERNEL_AND_VER=1/KERNEL_AND_VER=0/g'  ~/ci/ci
+				sed -i -e 's/KERNEL_AND_VER=2/KERNEL_AND_VER=0/g'  ~/CI/ci
+				sed -i -e 's/KERNEL_AND_VER=1/KERNEL_AND_VER=0/g'  ~/CI/ci
 		elif [ "$kversion" == "2" ];
 			then
-				sed -i -e 's/KERNEL_AND_VER=2/KERNEL_AND_VER=1/g'  ~/ci/ci
-				sed -i -e 's/KERNEL_AND_VER=0/KERNEL_AND_VER=1/g'  ~/ci/ci
+				sed -i -e 's/KERNEL_AND_VER=2/KERNEL_AND_VER=1/g'  ~/CI/ci
+				sed -i -e 's/KERNEL_AND_VER=0/KERNEL_AND_VER=1/g'  ~/CI/ci
 		elif [ "$kversion" == "3" ];
 			then
-				sed -i -e 's/KERNEL_AND_VER=1/KERNEL_AND_VER=2/g'  ~/ci/ci
-				sed -i -e 's/KERNEL_AND_VER=0/KERNEL_AND_VER=2/g'  ~/ci/ci
+				sed -i -e 's/KERNEL_AND_VER=1/KERNEL_AND_VER=2/g'  ~/CI/ci
+				sed -i -e 's/KERNEL_AND_VER=0/KERNEL_AND_VER=2/g'  ~/CI/ci
 		fi
 		if [ "$krelease" == "1" ];
 			then
-				sed -i -e 's/KERNEL_STATE=0/KERNEL_STATE=1/g'  ~/ci/ci
+				sed -i -e 's/KERNEL_STATE=0/KERNEL_STATE=1/g'  ~/CI/ci
 		elif [ "$krelease" == "2" ];
 			then
-				sed -i -e 's/KERNEL_STATE=1/KERNEL_STATE=0/g'  ~/ci/ci
+				sed -i -e 's/KERNEL_STATE=1/KERNEL_STATE=0/g'  ~/CI/ci
 		fi
 		if [ "$comp" == "1" ];
 			then
-				sed -i -e 's/KERNEL_COMPILER=1/KERNEL_COMPILER=0/g'  ~/ci/ci
+				sed -i -e 's/KERNEL_COMPILER=1/KERNEL_COMPILER=0/g'  ~/CI/ci
 		elif [ "$comp" == "2" ];
 			then
-				sed -i -e 's/KERNEL_COMPILER=0/KERNEL_COMPILER=1/g'  ~/ci/ci
+				sed -i -e 's/KERNEL_COMPILER=0/KERNEL_COMPILER=1/g'  ~/CI/ci
 		fi
 
 		echo "Triggering CI"
