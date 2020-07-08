@@ -201,29 +201,30 @@ if [ "$KERNEL_CI_SERVICE" == "1" ];
 			then
 				TELEGRAM_GROUP_ID=${telegram_group_aln_id}
 		fi
-elif [ "$KERNEL_CI_SERVICE" == "0" ];
+else
 	then
 		KERNEL="$(pwd)/kernel"
 		IMAGE="$(pwd)/kernel/out/arch/arm64/boot/Image.gz-dtb"
-		TELEGRAM_BOT_ID=${tg_bot_id}
-		if [ "$KERNEL_STATE" == "0" ];
+		if [ "$KERNEL_CI_SERVICE" == "0" ];
 			then
-				TELEGRAM_GROUP_ID=${tg_group_id}
-		elif [ "$KERNEL_STATE" == "1" ];
+				TELEGRAM_BOT_ID=${tg_bot_id}
+				if [ "$KERNEL_STATE" == "0" ];
+					then
+						TELEGRAM_GROUP_ID=${tg_group_id}
+				elif [ "$KERNEL_STATE" == "1" ];
+					then
+						TELEGRAM_GROUP_ID=${tg_aln_id}
+				fi
+		elif [ "$KERNEL_CI_SERVICE" == "2" ];
 			then
-				TELEGRAM_GROUP_ID=${tg_aln_id}
-		fi
-elif [ "$KERNEL_CI_SERVICE" == "2" ];
-	then
-		KERNEL="$(pwd)/kernel"
-		IMAGE="$(pwd)/kernel/out/arch/arm64/boot/Image.gz-dtb"
-		TELEGRAM_BOT_ID=${telegram_bot_id}
-		if [ "$KERNEL_STATE" == "0" ];
-			then
-				TELEGRAM_GROUP_ID=${telegram_group_dev_id}
-		elif [ "$KERNEL_STATE" == "1" ];
-			then
-				TELEGRAM_GROUP_ID=${telegram_group_aln_id}
+				TELEGRAM_BOT_ID=${telegram_bot_id}
+				if [ "$KERNEL_STATE" == "0" ];
+					then
+						TELEGRAM_GROUP_ID=${telegram_group_dev_id}
+				elif [ "$KERNEL_STATE" == "1" ];
+					then
+						TELEGRAM_GROUP_ID=${telegram_group_aln_id}
+				fi
 		fi
 fi
 KERNEL_TEMP="$(pwd)/TEMP"
@@ -253,13 +254,7 @@ elif [ "$KERNEL_STATE" == "0" ];
 		wget https://raw.githubusercontent.com/Nicklas373/CI/CI/nlmk.patch
 
 		# Apply pie camera patch
-	if [ "$KERNEL_CI_SERVICE" == "1" ];
-		then
-			git apply nlmk.patch
-	else
-		cd ${KERNEL}
 		git apply nlmk.patch
-	fi
 fi
 }
 
@@ -549,7 +544,12 @@ compile_lave
 function anykernel() {
 	if [ "$KERNEL_CODENAME" == "1" ];
 		then
-			cd $(pwd)/AnyKernel3
+			if [ "$KERNEL_CI_SERVICE" == "1" ];
+				then
+					cd AnyKernel3
+			else
+				cd ~/AnyKernel3
+			fi
 			make -j4
 			mv *.zip ${KERNEL_TEMP}/$ZIP_NAME
 	elif [ "$KERNEL_CODENAME" == "0" ];
