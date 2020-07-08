@@ -201,29 +201,27 @@ if [ "$KERNEL_CI_SERVICE" == "1" ];
 			then
 				TELEGRAM_GROUP_ID=${telegram_group_aln_id}
 		fi
-else
+elif [ "$KERNEL_CI_SERVICE" == "0" ];
+	then
 		KERNEL="$(pwd)/kernel"
 		IMAGE="$(pwd)/kernel/out/arch/arm64/boot/Image.gz-dtb"
-		if [ "$KERNEL_CI_SERVICE" == "0" ];
+		TELEGRAM_BOT_ID=${tg_bot_id}
+		if [ "$KERNEL_STATE" == "0" ];
 			then
-				TELEGRAM_BOT_ID=${tg_bot_id}
-				if [ "$KERNEL_STATE" == "0" ];
-					then
-						TELEGRAM_GROUP_ID=${tg_group_id}
-				elif [ "$KERNEL_STATE" == "1" ];
-					then
-						TELEGRAM_GROUP_ID=${tg_aln_id}
-				fi
-		elif [ "$KERNEL_CI_SERVICE" == "2" ];
+				TELEGRAM_GROUP_ID=${tg_group_id}
+		elif [ "$KERNEL_STATE" == "1" ];
 			then
-				TELEGRAM_BOT_ID=${telegram_bot_id}
-				if [ "$KERNEL_STATE" == "0" ];
-					then
-						TELEGRAM_GROUP_ID=${telegram_group_dev_id}
-				elif [ "$KERNEL_STATE" == "1" ];
-					then
-						TELEGRAM_GROUP_ID=${telegram_group_aln_id}
-				fi
+				TELEGRAM_GROUP_ID=${tg_aln_id}
+		fi
+elif [ "$KERNEL_CI_SERVICE" == "2" ];
+	then
+		TELEGRAM_BOT_ID=${telegram_bot_id}
+		if [ "$KERNEL_STATE" == "0" ];
+			then
+				TELEGRAM_GROUP_ID=${telegram_group_dev_id}
+		elif [ "$KERNEL_STATE" == "1" ];
+			then
+				TELEGRAM_GROUP_ID=${telegram_group_aln_id}
 		fi
 fi
 KERNEL_TEMP="$(pwd)/TEMP"
