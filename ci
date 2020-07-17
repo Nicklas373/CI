@@ -46,7 +46,7 @@ KERNEL_STATE=0
 KERNEL_AND_VER=1
 KERNEL_CODENAME=0
 KERNEL_COMPILER=0
-KERNEL_CI_SERVICE=1
+KERNEL_CI_SERVICE=0
 
 # Make sure if new cam declare only for lavender
 if [ "$KERNEL_CODENAME" == "1" ];
@@ -99,7 +99,7 @@ if [ "$KERNEL_NAME" == "0" ];
 		KERNEL_SCHED="EAS"
 		if [ "$KERNEL_STATE" == "0" ];
 			then
-				KERNEL_BRANCH="staging/lineage-17.1"
+				KERNEL_BRANCH="test"
 		else
 			KERNEL_BRANCH="lineage-17.1"
 		fi
