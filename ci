@@ -46,7 +46,7 @@ KERNEL_STATE=0
 KERNEL_AND_VER=1
 KERNEL_CODENAME=0
 KERNEL_COMPILER=0
-KERNEL_CI_SERVICE=0
+KERNEL_CI_SERVICE=1
 
 # Make sure if new cam declare only for lavender
 if [ "$KERNEL_CODENAME" == "1" ];
@@ -86,7 +86,7 @@ if [ "$KERNEL_NAME" == "0" ];
 		if [ "$KERNEL_STATE" == "0" ];
 			then
 				# Clone kernel repositories earlier
-				git clone --depth=1 -b staging/lineage-17.1 https://github.com/Nicklas373/kernel_xiaomi_msm8953-4.9 kernel
+				git clone --depth=1 -b next/lineage-17.1 https://github.com/Nicklas373/kernel_xiaomi_msm8953-4.9 kernel
 		else
 			# Clone kernel repositories earlier
 			git clone --depth=1 -b lineage-17.1 https://github.com/Nicklas373/kernel_xiaomi_msm8953-4.9 kernel
@@ -99,7 +99,7 @@ if [ "$KERNEL_NAME" == "0" ];
 		KERNEL_SCHED="EAS"
 		if [ "$KERNEL_STATE" == "0" ];
 			then
-				KERNEL_BRANCH="staging/lineage-17.1"
+				KERNEL_BRANCH="next/lineage-17.1"
 		else
 			KERNEL_BRANCH="lineage-17.1"
 		fi
