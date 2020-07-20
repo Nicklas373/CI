@@ -40,7 +40,7 @@
 # 0 = Disable || 1 = Enable
 #
 # Declare Kernel Details
-KERNEL_NAME=0
+KERNEL_NAME=1
 KERNEL_SCHED=1
 KERNEL_STATE=0
 KERNEL_AND_VER=1
@@ -108,14 +108,14 @@ if [ "$KERNEL_NAME" == "0" ];
 elif [ "$KERNEL_NAME" == "1" ];
 	then
 		# Clone kernel repositories earlier
-		git clone --depth=1 -b staging/kizuna https://github.com/Nicklas373/kernel_xiaomi_msm8953-4.9 kernel
+		git clone --depth=1 -b sched/lineage-17.1 https://HANA-CI-Build-Project:$token@github.com/Nicklas373/kernel_xiaomi_msm8953 kernel
 
 		# Cloning AnyKernel Repository
 		git clone --depth=1 -b caf/mido-kizuna-4.9 https://github.com/Nicklas373/AnyKernel3
 
 		# Define Kernel Specific Environment
 		KERNEL_SCHED="EAS"
-		KERNEL_BRANCH="kizuna"
+		KERNEL_BRANCH="sched/lineage-17.1"
 		KERNEL_REV="r1"
 		KERNEL_REL="Kizuna"
 fi
