@@ -108,7 +108,7 @@ if [ "$KERNEL_NAME" == "0" ];
 elif [ "$KERNEL_NAME" == "1" ];
 	then
 		# Clone kernel repositories earlier
-		git clone --depth=1 -b sched/lineage-17.1 https://HANA-CI-Build-Project:$token@github.com/Nicklas373/kernel_xiaomi_msm8953 kernel
+		git clone --depth=1 -b sched/lineage-17.1 https://HANA-CI-Build-Project:$token@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
 
 		# Cloning AnyKernel Repository
 		git clone --depth=1 -b caf/mido-kizuna-4.9 https://github.com/Nicklas373/AnyKernel3
