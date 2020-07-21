@@ -107,11 +107,11 @@ if [ "$KERNEL_NAME" == "0" ];
 		KERNEL_REL="CAF"
 elif [ "$KERNEL_NAME" == "1" ];
 	then
-		if [ "$KERNEL_CI_SERVICE" == "0" ];
+		if [ "$KERNEL_CI_SERVICE" == "1" ];
 			then
 				# Clone kernel repositories earlier
 				git clone --depth=1 -b staging/sched https://HANA-CI-Build-Project:$git_token@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
-		elif [ "$KERNEL_CI_SERVICE" == "1" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
+		elif [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
 			then
 				# Clone kernel repositories earlier
 				git clone --depth=1 -b staging/sched https://HANA-CI-Build-Project:$token@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
@@ -176,7 +176,7 @@ fi
 function lave_init() {
 
 # Cloning Kernel Repository
-if [ "$KERNEL_CI_SERVICE" == "1" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
+if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
 	then
 		git clone --depth=1 -b fusion-nothing https://Nicklas373:$token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
 elif [ "$KERNEL_CI_SERVICE" == "1" ];
