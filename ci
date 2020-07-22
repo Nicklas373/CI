@@ -42,16 +42,16 @@
 # Declare Kernel Details
 KERNEL_NAME=2
 KERNEL_SCHED=1
-KERNEL_STATE=1
+KERNEL_STATE=0
 KERNEL_AND_VER=1
 KERNEL_CODENAME=1
 KERNEL_COMPILER=0
-KERNEL_CI_SERVICE=1
+KERNEL_CI_SERVICE=2
 
 # Make sure if new cam declare only for lavender
 if [ "$KERNEL_CODENAME" == "1" ];
 	then
-		KERNEL_NEW_CAM=1
+		KERNEL_NEW_CAM=0
 fi
 
 # Environment init
@@ -172,6 +172,16 @@ fi
 # Lavender init
 function lave_init() {
 
+if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
+	then
+		# Dirty Workaround // YES
+		TOKEN=${token}
+		echo $TOKEN
+
+		# Downloading kernel source
+		git clone --depth=1 -b fusion-nothing https://Nicklas373:$token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
+fi
+
 # Cloning AnyKernel Repository
 git clone --depth=1 -b fusion https://github.com/alanndz/AnyKernel3
 
@@ -187,8 +197,15 @@ export KBUILD_BUILD_USER=alanndz-nicklas373
 export KBUILD_BUILD_HOST=fusion_lavender-Dev
 
 # Define Lavender Specific Environment
-KERNEL="$(pwd)"
-IMAGE="$(pwd)/out/arch/arm64/boot/Image.gz-dtb"
+if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
+	then
+		KERNEL="$(pwd)/kernel"
+		IMAGE="$(pwd)/kernel/out/arch/arm64/boot/Image.gz-dtb"
+elif [ "$KERNEL_CI_SERVICE" == "1" ];
+	then
+		KERNEL="$(pwd)"
+		IMAGE="$(pwd)/out/arch/arm64/boot/Image.gz-dtb"
+fi
 KERNEL_TEMP="$(pwd)/TEMP"
 CODENAME="lavender"
 KERNEL_CODE="Lavender"
@@ -218,13 +235,6 @@ elif [ "$KERNEL_CI_SERVICE" == "0" ];
 				TELEGRAM_GROUP_ID=${tg_aln_id}
 		fi
 fi
-
-KERNEL_TEMP="$(pwd)/TEMP"
-CODENAME="lavender"
-KERNEL_CODE="Lavender"
-TELEGRAM_DEVICE="Xiaomi Redmi Note 7"
-KERNEL_REV="r5"
-KERNEL_REL="Fusion"
 
 # Declare Kernel Release State
 if [ "$KERNEL_STATE" == "1" ];
@@ -470,7 +480,13 @@ fi
 	bot_lave_compile
 	bot_build_success
 	sendStick "${TELEGRAM_SUCCESS}"
-	cp ${IMAGE} AnyKernel3
+if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
+	then
+		cp ${IMAGE} $(pwd)/AnyKernel3
+elif [ "$KERNEL_CI_SERVICE" == "1" ];
+	then
+		cp ${IMAGE} AnyKernel3
+fi
 	anykernel
 	kernel_upload
 	if [ "$KERNEL_NEW_CAM" == "0" ];
@@ -517,7 +533,13 @@ compile_lave
 function anykernel() {
 	if [ "$KERNEL_CODENAME" == "1" ];
 		then
-			cd AnyKernel3
+			if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
+				then
+					cd $(pwd)/AnyKernel3
+			elif  [ "$KERNEL_CI_SERVICE" == "1" ];
+				then
+					cd AnyKernel3
+			fi
 			make -j4
 			mv *.zip ${KERNEL_TEMP}/$ZIP_NAME
 	elif [ "$KERNEL_CODENAME" == "0" ];
