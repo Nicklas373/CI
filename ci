@@ -107,15 +107,11 @@ if [ "$KERNEL_NAME" == "0" ];
 		KERNEL_REL="CAF"
 elif [ "$KERNEL_NAME" == "1" ];
 	then
-		if [ "$KERNEL_CI_SERVICE" == "1" ];
+		if [ "$KERNEL_CI_SERVICE" == "1" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
 			then
-				export token=${git_token}
-
-				echo $token
-
 				# Clone kernel repositories earlier
-				git clone --depth=1 -b staging/checkout-4 https://HANA-CI-Build-Project:$token@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
-		elif [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
+				git clone --depth=1 -b staging/checkout-4 https://HANA-CI-Build-Project:$git_token@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
+		elif [ "$KERNEL_CI_SERVICE" == "0" ];
 			then
 				# Clone kernel repositories earlier
 				git clone --depth=1 -b staging/checkout-4 https://HANA-CI-Build-Project:$token@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
