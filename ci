@@ -40,13 +40,13 @@
 # 0 = Disable || 1 = Enable
 #
 # Declare Kernel Details
-KERNEL_NAME=1
+KERNEL_NAME=2
 KERNEL_SCHED=1
 KERNEL_STATE=0
 KERNEL_AND_VER=1
-KERNEL_CODENAME=0
+KERNEL_CODENAME=1
 KERNEL_COMPILER=0
-KERNEL_CI_SERVICE=0
+KERNEL_CI_SERVICE=2
 
 # Make sure if new cam declare only for lavender
 if [ "$KERNEL_CODENAME" == "1" ];
@@ -603,6 +603,8 @@ function kernel_upload() {
 function run() {
 if [ "$KERNEL_CODENAME" == "1" ];
 	then
+		echo "LAVENDER"
+
 		env_init
 		lave_init
 		clang_init
@@ -620,6 +622,8 @@ if [ "$KERNEL_CODENAME" == "1" ];
 		fi
 elif [ "$KERNEL_CODENAME" == "0" ];
 	then
+		echo "MIDO"
+
 		env_init
 		mido_init
 		clang_init
