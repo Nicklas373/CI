@@ -175,11 +175,11 @@ function lave_init() {
 if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
 	then
 		# Dirty Workaround // YES
-		TOKEN=${token}
-		echo $TOKEN
+		git_token=${git_token}
+		echo $git_token
 
 		# Downloading kernel source
-		git clone --depth=1 -b fusion-nothing https://Nicklas373:$token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
+		git clone --depth=1 -b fusion-nothing https://Nicklas373:$git_token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
 fi
 
 # Cloning AnyKernel Repository
