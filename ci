@@ -438,6 +438,8 @@ fi
 # Compile Lavender Begin
 function compile_lave() {
 	START=$(date +"%s")
+	cd ${KERNEL}
+	ls
 	make ${CODENAME}_defconfig O=out
 if [ "$KERNEL_COMPILER" == "0" ];
 	then
@@ -488,6 +490,8 @@ fi
 
 # Camera patch
 function init_patch() {
+
+cd ${KERNEL}
 
 # Download patch
 wget https://raw.githubusercontent.com/alanndz/build_kernel/fusion/patches/02.patch
