@@ -110,11 +110,11 @@ elif [ "$KERNEL_NAME" == "1" ];
 		if [ "$KERNEL_CI_SERVICE" == "1" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
 			then
 				# Clone kernel repositories earlier
-				git clone --depth=1 -b staging/checkout-3-rework https://HANA-CI-Build-Project:$git_token@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
+				git clone --depth=1 -b staging/checkout-2-rework https://HANA-CI-Build-Project:$git_token@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
 		elif [ "$KERNEL_CI_SERVICE" == "0" ];
 			then
 				# Clone kernel repositories earlier
-				git clone --depth=1 -b staging/checkout-3-rework https://HANA-CI-Build-Project:$token@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
+				git clone --depth=1 -b staging/checkout-2-rework https://HANA-CI-Build-Project:$token@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
 		fi
 
 		# Cloning AnyKernel Repository
@@ -122,7 +122,7 @@ elif [ "$KERNEL_NAME" == "1" ];
 
 		# Define Kernel Specific Environment
 		KERNEL_SCHED="EAS"
-		KERNEL_BRANCH="staging/checkout-3-rework"
+		KERNEL_BRANCH="staging/checkout-2-rework"
 		KERNEL_REV="r1"
 		KERNEL_REL="Kizuna"
 fi
