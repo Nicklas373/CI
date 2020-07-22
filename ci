@@ -40,13 +40,13 @@
 # 0 = Disable || 1 = Enable
 #
 # Declare Kernel Details
-KERNEL_NAME=0
+KERNEL_NAME=2
 KERNEL_SCHED=1
-KERNEL_STATE=0
+KERNEL_STATE=1
 KERNEL_AND_VER=1
-KERNEL_CODENAME=0
+KERNEL_CODENAME=1
 KERNEL_COMPILER=0
-KERNEL_CI_SERVICE=1
+KERNEL_CI_SERVICE=2
 
 # Make sure if new cam declare only for lavender
 if [ "$KERNEL_CODENAME" == "1" ];
@@ -107,23 +107,12 @@ if [ "$KERNEL_NAME" == "0" ];
 		KERNEL_REL="CAF"
 elif [ "$KERNEL_NAME" == "1" ];
 	then
-		if [ "$KERNEL_CI_SERVICE" == "1" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
-			then
-				# Dirty Workaround // YES
-				TOKEN=${token}
-				echo $TOKEN
+		# Dirty Workaround // YES
+		TOKEN=${token}
+		echo $TOKEN
 
-				# Clone kernel repositories earlier
-				git clone --depth=1 -b staging/checkout-3-rework https://HANA-CI-Build-Project:$token@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
-		elif [ "$KERNEL_CI_SERVICE" == "0" ];
-			then
-				# Dirty Workaround // YES
-				TOKEN=${token}
-				echo $TOKEN
-
-				# Clone kernel repositories earlier
-				git clone --depth=1 -b staging/checkout-3-rework https://HANA-CI-Build-Project:$token@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
-		fi
+		# Clone kernel repositories earlier
+		git clone --depth=1 -b staging/checkout-3-rework https://HANA-CI-Build-Project:$token@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
 
 		# Cloning AnyKernel Repository
 		git clone --depth=1 -b caf/mido-kizuna-4.9 https://github.com/Nicklas373/AnyKernel3
@@ -183,14 +172,12 @@ fi
 # Lavender init
 function lave_init() {
 
-# Cloning Kernel Repository
-if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
-	then
-		git clone --depth=1 -b fusion-nothing https://Nicklas373:$token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
-elif [ "$KERNEL_CI_SERVICE" == "1" ];
-	then
-		git clone --depth=1 -b fusion-nothing https://Nicklas373:$git_token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
-fi
+# Dirty Workaround // YES
+TOKEN=${token}
+echo $TOKEN
+
+# Downloading kernel source
+git clone --depth=1 -b fusion-nothing https://Nicklas373:$token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
 
 # Cloning AnyKernel Repository
 git clone --depth=1 -b fusion https://github.com/alanndz/AnyKernel3
