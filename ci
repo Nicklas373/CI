@@ -46,7 +46,7 @@ KERNEL_STATE=0
 KERNEL_AND_VER=1
 KERNEL_CODENAME=0
 KERNEL_COMPILER=0
-KERNEL_CI_SERVICE=0
+KERNEL_CI_SERVICE=1
 
 # Make sure if new cam declare only for lavender
 if [ "$KERNEL_CODENAME" == "1" ];
@@ -109,6 +109,8 @@ elif [ "$KERNEL_NAME" == "1" ];
 	then
 		if [ "$KERNEL_CI_SERVICE" == "1" ];
 			then
+				echo "Circle-CI"
+
 				# Clone kernel repositories earlier
 				git clone --depth=1 -b staging/checkout-4 https://HANA-CI-Build-Project:$git_token@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
 		elif [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
