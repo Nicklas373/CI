@@ -175,7 +175,7 @@ function lave_init() {
 if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
 	then
 		# Dirty Workaround // YES
-		TOKEN=${git_token}
+		TOKEN=${token}
 		echo $TOKEN
 
 		# Downloading kernel source
