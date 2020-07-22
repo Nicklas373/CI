@@ -8,7 +8,7 @@
 # Copyright 2016-2020, HANA-CI Build Project
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-# CI Script Revision = 20200709
+# CI Script Revision = 20200723
 
 # Build Information
 #
@@ -172,13 +172,6 @@ fi
 # Lavender init
 function lave_init() {
 
-# Dirty Workaround // YES
-TOKEN=${token}
-echo $TOKEN
-
-# Downloading kernel source
-git clone --depth=1 -b fusion-nothing https://Nicklas373:$token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
-
 # Cloning AnyKernel Repository
 git clone --depth=1 -b fusion https://github.com/alanndz/AnyKernel3
 
@@ -193,11 +186,19 @@ KERNEL_BRANCH="fusion-nothing"
 export KBUILD_BUILD_USER=alanndz-nicklas373
 export KBUILD_BUILD_HOST=fusion_lavender-Dev
 
-# Define Lavender Specific Environment && Telegram Channel Release
-if [ "$KERNEL_CI_SERVICE" == "1" ];
+# Define Lavender Specific Environment
+KERNEL="$(pwd)"
+IMAGE="$(pwd)/out/arch/arm64/boot/Image.gz-dtb"
+KERNEL_TEMP="$(pwd)/TEMP"
+CODENAME="lavender"
+KERNEL_CODE="Lavender"
+TELEGRAM_DEVICE="Xiaomi Redmi Note 7"
+KERNEL_REV="r5"
+KERNEL_REL="Fusion"
+
+# Define Telegram Channel Release Environment
+if [ "$KERNEL_CI_SERVICE" == "1" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
 	then
-		KERNEL="$(pwd)"
-		IMAGE="$(pwd)/out/arch/arm64/boot/Image.gz-dtb"
 		TELEGRAM_BOT_ID=${telegram_bot_id}
 		if [ "$KERNEL_STATE" == "0" ];
 			then
@@ -208,8 +209,6 @@ if [ "$KERNEL_CI_SERVICE" == "1" ];
 		fi
 elif [ "$KERNEL_CI_SERVICE" == "0" ];
 	then
-		KERNEL="$(pwd)/kernel"
-		IMAGE="$(pwd)/kernel/out/arch/arm64/boot/Image.gz-dtb"
 		TELEGRAM_BOT_ID=${tg_bot_id}
 		if [ "$KERNEL_STATE" == "0" ];
 			then
@@ -218,17 +217,8 @@ elif [ "$KERNEL_CI_SERVICE" == "0" ];
 			then
 				TELEGRAM_GROUP_ID=${tg_aln_id}
 		fi
-elif [ "$KERNEL_CI_SERVICE" == "2" ];
-	then
-		TELEGRAM_BOT_ID=${telegram_bot_id}
-		if [ "$KERNEL_STATE" == "0" ];
-			then
-				TELEGRAM_GROUP_ID=${telegram_group_dev_id}
-		elif [ "$KERNEL_STATE" == "1" ];
-			then
-				TELEGRAM_GROUP_ID=${telegram_group_aln_id}
-		fi
 fi
+
 KERNEL_TEMP="$(pwd)/TEMP"
 CODENAME="lavender"
 KERNEL_CODE="Lavender"
@@ -448,7 +438,6 @@ fi
 # Compile Lavender Begin
 function compile_lave() {
 	START=$(date +"%s")
-	cd ${KERNEL}
 	make ${CODENAME}_defconfig O=out
 if [ "$KERNEL_COMPILER" == "0" ];
 	then
@@ -475,19 +464,11 @@ fi
 	fi
 	END=$(date +"%s")
 	DIFF=$(($END - $START))
-if [ "$KERNEL_CI_SERVICE" == "1" ];
-	then
-		cd ${KERNEL}
-fi
+	cd ${KERNEL}
 	bot_lave_compile
 	bot_build_success
 	sendStick "${TELEGRAM_SUCCESS}"
-if [ "$KERNEL_CI_SERVICE" == "1" ];
-	then
-		cp ${IMAGE} AnyKernel3
-else
-	cp ${IMAGE} $(pwd)/AnyKernel3
-fi
+	cp ${IMAGE} AnyKernel3
 	anykernel
 	kernel_upload
 	if [ "$KERNEL_NEW_CAM" == "0" ];
@@ -518,16 +499,8 @@ RESET_COMMIT=$(git --no-pager log --pretty=format:'%h')
 KVERSION="${FUSION_CODENAME}-New_CAM-$(git log --pretty=format:'%h' -1)-$(date "+%H%M")"
 ZIP_NAME="${KERNEL_REL}-${FUSION_CODENAME}-${CODENAME}-New_CAM-$(git log --pretty=format:'%h' -1)-$(date "+%H%M").zip"
 
-if [ "$KERNEL_CI_SERVICE" == "1" ];
-	then
-		# Apply pie camera patch
-		git am 02.patch
-else
-	cd ${KERNEL}
-
-	# Apply pie camera patch
-	git am 02.patch
-fi
+# Apply pie camera patch
+git am 02.patch
 
 # Tell if new cam patch already executed
 NEW_PATCH_STATS="1"
@@ -540,12 +513,7 @@ compile_lave
 function anykernel() {
 	if [ "$KERNEL_CODENAME" == "1" ];
 		then
-			if [ "$KERNEL_CI_SERVICE" == "1" ];
-				then
-					cd AnyKernel3
-			else
-				cd ~/AnyKernel3
-			fi
+			cd AnyKernel3
 			make -j4
 			mv *.zip ${KERNEL_TEMP}/$ZIP_NAME
 	elif [ "$KERNEL_CODENAME" == "0" ];
