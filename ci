@@ -119,7 +119,7 @@ elif [ "$KERNEL_NAME" == "1" ];
 
 		# Define Kernel Specific Environment
 		KERNEL_SCHED="EAS"
-		KERNEL_BRANCH="staging/checkout-4-rework"
+		KERNEL_BRANCH="staging/checkout-5-rework"
 		KERNEL_REV="r1"
 		KERNEL_REL="Kizuna"
 fi
