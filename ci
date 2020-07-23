@@ -108,7 +108,8 @@ if [ "$KERNEL_NAME" == "0" ];
 elif [ "$KERNEL_NAME" == "1" ];
 	then
 
-		if [ "$KERNEL_CI_SERVICE" == "0" ] || "$KERNEL_CI_SERVICE" == "1" ];
+
+		if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "1" ];
 			then
 				# Dirty Workaround // YES
 				TOKEN=${token}
