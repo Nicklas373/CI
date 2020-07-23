@@ -116,7 +116,7 @@ elif [ "$KERNEL_NAME" == "1" ];
 		elif [ "$KERNEL_CI_SERVICE" == "2" ];
 			then
 				# Dirty Workaround // YES
-				TOKEN=${token}
+				TOKEN=${git_token}
 				echo $TOKEN
 		fi
 
