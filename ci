@@ -46,7 +46,7 @@ KERNEL_STATE=0
 KERNEL_AND_VER=1
 KERNEL_CODENAME=0
 KERNEL_COMPILER=0
-KERNEL_CI_SERVICE=2
+KERNEL_CI_SERVICE=1
 
 # Make sure if new cam declare only for lavender
 if [ "$KERNEL_CODENAME" == "1" ];
@@ -107,12 +107,21 @@ if [ "$KERNEL_NAME" == "0" ];
 		KERNEL_REL="CAF"
 elif [ "$KERNEL_NAME" == "1" ];
 	then
-		# Dirty Workaround // YES
-		TOKEN=${token}
-		echo $TOKEN
+
+		if [ "$KERNEL_CI_SERVICE" == "0" ] || "$KERNEL_CI_SERVICE" == "1" ];
+			then
+				# Dirty Workaround // YES
+				TOKEN=${token}
+				echo $TOKEN
+		elif [ "$KERNEL_CI_SERVICE" == "2" ];
+			then
+				# Dirty Workaround // YES
+				TOKEN=${token}
+				echo $TOKEN
+		fi
 
 		# Clone kernel repositories earlier
-		git clone --depth=1 -b staging/checkout-4-rework https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
+		git clone --depth=1 -b staging/checkout-5-rework https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
 
 		# Cloning AnyKernel Repository
 		git clone --depth=1 -b caf/mido-kizuna-4.9 https://github.com/Nicklas373/AnyKernel3
@@ -172,15 +181,19 @@ fi
 # Lavender init
 function lave_init() {
 
-if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
+if [ "$KERNEL_CI_SERVICE" == "0" ];
 	then
 		# Dirty Workaround // YES
 		git_token=${git_token}
 		echo $git_token
-
+elif [ "$KERNEL_CI_SERVICE" == "2" ];
+	then
+		# Dirty Workaround // YES
+		git_token=${token}
+		echo $git_token
+fi
 		# Downloading kernel source
 		git clone --depth=1 -b fusion-nothing https://Nicklas373:$git_token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
-fi
 
 # Cloning AnyKernel Repository
 git clone --depth=1 -b fusion https://github.com/alanndz/AnyKernel3
