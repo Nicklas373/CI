@@ -107,17 +107,9 @@ if [ "$KERNEL_NAME" == "0" ];
 		KERNEL_REL="CAF"
 elif [ "$KERNEL_NAME" == "1" ];
 	then
-		if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
-			then
-				# Dirty Workaround // YES
-				TOKEN=${git_token}
-				echo $TOKEN
-		elif [ "$KERNEL_CI_SERVICE" == "1" ];
-			then
-				# Dirty Workaround // YES
-				TOKEN=${token}
-				echo $TOKEN
-		fi
+		# Dirty Workaround // YES
+		TOKEN=${token}
+		echo $TOKEN
 
 		# Clone kernel repositories earlier
 		git clone --depth=1 -b staging/checkout-5 https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
