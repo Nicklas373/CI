@@ -46,7 +46,7 @@ KERNEL_STATE=0
 KERNEL_AND_VER=1
 KERNEL_CODENAME=0
 KERNEL_COMPILER=0
-KERNEL_CI_SERVICE=1
+KERNEL_CI_SERVICE=2
 
 # Make sure if new cam declare only for lavender
 if [ "$KERNEL_CODENAME" == "1" ];
@@ -121,15 +121,15 @@ elif [ "$KERNEL_NAME" == "1" ];
 		fi
 
 		# Clone kernel repositories earlier
-		#git clone --depth=1 -b staging/checkout-4-impl https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
-		git clone --depth=1 -b kizuna-patch https://Avarice12:$TOKEN@github.com/Avarice12/platform_kernel_xiaomi_msm8953-4.9 kernel
+		git clone --depth=1 -b staging/checkout-5 https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
+		#git clone --depth=1 -b kizuna-patch https://Avarice12:$TOKEN@github.com/Avarice12/platform_kernel_xiaomi_msm8953-4.9 kernel
 
 		# Cloning AnyKernel Repository
 		git clone --depth=1 -b caf/mido-kizuna-4.9 https://github.com/Nicklas373/AnyKernel3
 
 		# Define Kernel Specific Environment
 		KERNEL_SCHED="EAS"
-		KERNEL_BRANCH="kizuna-patch"
+		KERNEL_BRANCH="staging/checkout-5"
 		KERNEL_REV="r1"
 		KERNEL_REL="Kizuna"
 fi
