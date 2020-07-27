@@ -40,19 +40,14 @@
 # 0 = Disable || 1 = Enable
 #
 # Declare Kernel Details
-KERNEL_NAME=2
+KERNEL_NAME=1
 KERNEL_SCHED=1
 KERNEL_STATE=0
 KERNEL_AND_VER=1
-KERNEL_CODENAME=1
+KERNEL_CODENAME=0
 KERNEL_COMPILER=0
-KERNEL_CI_SERVICE=1
-
-# Make sure if new cam declare only for lavender
-if [ "$KERNEL_CODENAME" == "1" ];
-	then
-		KERNEL_NEW_CAM=0
-fi
+KERNEL_CI_SERVICE=0
+KERNEL_NEW_CAM=0
 
 # Environment init
 function env_init() {
@@ -181,24 +176,18 @@ fi
 # Lavender init
 function lave_init() {
 
-
 if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "1" ];
 	then
 		# Dirty Workaround // YES
 		TOKEN=${token}
 		echo $TOKEN
-elif [ "$KERNEL_CI_SERVICE" == "2" ];
-	then
-		# Dirty Workaround // YES
-		TOKEN=${git_token}
-		echo $TOKEN
+
+		# Downloading kernel source
+		git clone --depth=1 -b fusion-nothing https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_lavender-4.4 kernel
 fi
 
-# Downloading kernel source
-git clone --depth=1 -b fusion-nothing https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_lavender-4.4 kernel
-
 # Cloning AnyKernel Repository
-git clone --depth=1 -b fusion https://github.com/alanndz/AnyKernel3
+git clone --depth=1 -b fusion https://github.com/alanndz/AnyKernel3 AnyKernel3
 
 # Create Temporary Folder
 mkdir TEMP
@@ -216,12 +205,15 @@ if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
 	then
 		KERNEL="$(pwd)/kernel"
 		IMAGE="$(pwd)/kernel/out/arch/arm64/boot/Image.gz-dtb"
+		ANYKERNEL="$(pwd)/AnyKernel3"
+		KERNEL_TEMP="$(pwd)/TEMP"
 elif [ "$KERNEL_CI_SERVICE" == "1" ];
 	then
 		KERNEL="$(pwd)"
 		IMAGE="$(pwd)/out/arch/arm64/boot/Image.gz-dtb"
+		ANYKERNEL="AnyKernel3"
+		KERNEL_TEMP="TEMP"
 fi
-KERNEL_TEMP="$(pwd)/TEMP"
 CODENAME="lavender"
 KERNEL_CODE="Lavender"
 TELEGRAM_DEVICE="Xiaomi Redmi Note 7"
@@ -270,7 +262,10 @@ elif [ "$KERNEL_STATE" == "0" ];
 		# Enable NLMK Patch Disabler
 		wget https://raw.githubusercontent.com/Nicklas373/CI/CI/nlmk.patch
 
-		# Apply pie camera patch
+		# Move NLMK Patch to correct directory
+		cp nlmk.patch ${KERNEL}
+
+		# Apply NLMK Patch Disabler
 		git apply nlmk.patch
 fi
 }
@@ -464,7 +459,6 @@ fi
 function compile_lave() {
 	START=$(date +"%s")
 	cd ${KERNEL}
-	ls
 	make ${CODENAME}_defconfig O=out
 if [ "$KERNEL_COMPILER" == "0" ];
 	then
@@ -495,13 +489,7 @@ fi
 	bot_lave_compile
 	bot_build_success
 	sendStick "${TELEGRAM_SUCCESS}"
-if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
-	then
-		cp ${IMAGE} $(pwd)/AnyKernel3
-elif [ "$KERNEL_CI_SERVICE" == "1" ];
-	then
-		cp ${IMAGE} AnyKernel3
-fi
+	cp ${IMAGE} ${ANYKERNEL}
 	anykernel
 	kernel_upload
 	if [ "$KERNEL_NEW_CAM" == "0" ];
@@ -548,13 +536,7 @@ compile_lave
 function anykernel() {
 	if [ "$KERNEL_CODENAME" == "1" ];
 		then
-			if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
-				then
-					cd $(pwd)/AnyKernel3
-			elif  [ "$KERNEL_CI_SERVICE" == "1" ];
-				then
-					cd AnyKernel3
-			fi
+			cd ${ANYKERNEL}
 			make -j4
 			mv *.zip ${KERNEL_TEMP}/$ZIP_NAME
 	elif [ "$KERNEL_CODENAME" == "0" ];
@@ -589,7 +571,7 @@ function kernel_upload() {
 					echo "Upload log..."
 					curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/compile.log"  https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
 			else
-				# Switch to root
+				# Switch to root directory
 				cd ..
 
 				# Upload kernel file
@@ -598,7 +580,6 @@ function kernel_upload() {
 			fi
 	elif [ "$KERNEL_CODENAME" == "1" ];
 		then
-			cd ${KERNEL}
 			if [ "$KERNEL_STATE" == "0" ];
 				then
 					# Upload kernel file
