@@ -40,13 +40,13 @@
 # 0 = Disable || 1 = Enable
 #
 # Declare Kernel Details
-KERNEL_NAME=2
+KERNEL_NAME=1
 KERNEL_SCHED=1
 KERNEL_STATE=0
 KERNEL_AND_VER=1
-KERNEL_CODENAME=1
+KERNEL_CODENAME=0
 KERNEL_COMPILER=0
-KERNEL_CI_SERVICE=0
+KERNEL_CI_SERVICE=2
 KERNEL_NEW_CAM=0
 
 # Environment init
@@ -116,14 +116,14 @@ elif [ "$KERNEL_NAME" == "1" ];
 		fi
 
 		# Clone kernel repositories earlier
-		git clone --depth=1 -b staging/checkout-3-rework https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
+		git clone --depth=1 -b staging/kizuna https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
 
 		# Cloning AnyKernel Repository
 		git clone --depth=1 -b caf/mido-kizuna-4.9 https://github.com/Nicklas373/AnyKernel3
 
 		# Define Kernel Specific Environment
 		KERNEL_SCHED="EAS"
-		KERNEL_BRANCH="staging/checkout-3-rework"
+		KERNEL_BRANCH="staging/kizuna"
 		KERNEL_REV="r1"
 		KERNEL_REL="Kizuna"
 fi
@@ -267,8 +267,15 @@ elif [ "$KERNEL_STATE" == "0" ];
 		KVERSION="${FUSION_CODENAME}-$(git log --pretty=format:'%h' -1)-$(date "+%H%M")"
 		ZIP_NAME="${KERNEL_REL}-${FUSION_CODENAME}-${CODENAME}-$(git log --pretty=format:'%h' -1)-$(date "+%H%M").zip"
 
+if [ "$KERNEL_CI_SERVICE" == "2" ];
+	then
 		# Switch to root directory
 		cd /root/kernel
+elif [ "$KERNEL_CI_SERVICE" == "0" ];
+	then
+		# Switch to kernel directory
+		cd ${KERNEL}
+fi
 
 		# Enable NLMK Patch Disabler
 		wget https://raw.githubusercontent.com/Nicklas373/CI/CI/nlmk.patch
