@@ -8,7 +8,7 @@
 # Copyright 2016-2020, HANA-CI Build Project
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-# CI Script Revision = 20200723
+# CI Script Revision = 20200728
 
 # Build Information
 #
@@ -40,7 +40,7 @@
 # 0 = Disable || 1 = Enable
 #
 # Declare Kernel Details
-KERNEL_NAME=0
+KERNEL_NAME=1
 KERNEL_SCHED=1
 KERNEL_STATE=0
 KERNEL_AND_VER=1
@@ -105,12 +105,12 @@ elif [ "$KERNEL_NAME" == "1" ];
 
 		if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "1" ];
 			then
-				# Dirty Workaround // YES
+				# Import github token
 				TOKEN=${token}
 				echo $TOKEN
 		elif [ "$KERNEL_CI_SERVICE" == "2" ];
 			then
-				# Dirty Workaround // YES
+				# Import github token
 				TOKEN=${git_token}
 				echo $TOKEN
 		fi
@@ -175,10 +175,9 @@ fi
 
 # Lavender init
 function lave_init() {
-
 if [ "$KERNEL_CI_SERVICE" == "0" ];
 	then
-		# Dirty Workaround // YES
+		# Import github token
 		TOKEN=${token}
 		echo $TOKEN
 
@@ -186,7 +185,7 @@ if [ "$KERNEL_CI_SERVICE" == "0" ];
 		git clone --depth=1 -b fusion-nothing https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_lavender-4.4 kernel
 elif [ "$KERNEL_CI_SERVICE" == "2" ];
 	then
-		# Dirty Workaround // YES
+		# Import github token
 		TOKEN=${git_token}
 		echo $TOKEN
 
@@ -267,20 +266,21 @@ elif [ "$KERNEL_STATE" == "0" ];
 		KVERSION="${FUSION_CODENAME}-$(git log --pretty=format:'%h' -1)-$(date "+%H%M")"
 		ZIP_NAME="${KERNEL_REL}-${FUSION_CODENAME}-${CODENAME}-$(git log --pretty=format:'%h' -1)-$(date "+%H%M").zip"
 
-if [ "$KERNEL_CI_SERVICE" == "2" ];
-	then
-		# Switch to root directory
-		cd /root/kernel
-elif [ "$KERNEL_CI_SERVICE" == "0" ];
-	then
-		# Switch to kernel directory
-		cd kernel
-fi
-		# Enable NLMK Patch Disabler
-		wget https://raw.githubusercontent.com/Nicklas373/CI/CI/nlmk.patch
+		if [ "$KERNEL_CI_SERVICE" == "2" ];
+			then
+				# Switch to root directory
+				cd /root/kernel
+		elif [ "$KERNEL_CI_SERVICE" == "0" ];
+			then
+				# Switch to kernel directory
+				cd kernel
+		fi
 
-		# Apply NLMK Patch Disabler
-		git apply nlmk.patch
+# Enable NLMK Patch Disabler
+wget https://raw.githubusercontent.com/Nicklas373/CI/CI/nlmk.patch
+
+# Apply NLMK Patch Disabler
+git apply nlmk.patch
 fi
 }
 

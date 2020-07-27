@@ -7,7 +7,7 @@
 # Copyright 2016-2020, HANA-CI Build Project
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-function main() {
+function init() {
 # Begin decision
 echo "Which CI services that you want to use ?"
 echo ""
@@ -29,6 +29,11 @@ elif [ "$decision" == "3" ];
 		bot="Drone-CI"
 fi
 
+# Run next step
+kdev
+}
+
+function kdev() {
 echo ""
 echo "Which devices that you want to compile ?"
 echo ""
@@ -46,27 +51,41 @@ elif [ "$kdev" == "2" ];
 		devices="Xiaomi Redmi Note 7"
 fi
 
-echo ""
-echo "Which kernel that you want to compile ?"
-echo ""
-echo "1. CAF Kernel"
-echo "2. Kizuna Kernel"
-echo "3. Fusion Kernel"
-echo ""
-echo "NOTE: Write number only!"
-read -s kname
+# Run next step
+kname
+}
 
-if [ "$kname" == "1" ];
+function kname() {
+if [ "$kdev" == "1" ];
 	then
-		name="CAF Kernel"
-elif [ "$kname" == "2" ];
+		echo ""
+		echo "Which kernel that you want to compile ?"
+		echo ""
+		echo "1. CAF Kernel"
+		echo "2. Kizuna Kernel"
+		echo ""
+		echo "NOTE: Write number only!"
+		read -s kname
+
+		if [ "$kname" == "1" ];
+			then
+				name="CAF Kernel"
+		elif [ "$kname" == "2" ];
+			then
+				name="Kizuna Kernel"
+		fi
+elif [ "$kdev" == "2" ];
 	then
-		name="Kizuna Kernel"
-elif [ "$kname" == "3" ];
-	then
-		name="Fusion Kernel"
+		echo ""
+		echo "Fusion Kernel (@Alanndz & Nicklas373)"
+		echo ""
 fi
 
+# Run next step
+krelease
+}
+
+function krelease() {
 echo ""
 echo "Which release type that you want to compile ?"
 echo ""
@@ -84,33 +103,20 @@ elif [ "$krelease" == "2" ];
 		release="BETA"
 fi
 
-if [ "$kname" == "3" ];
-	then
-		echo ""
-		echo "Which android version that you want to compile ?"
-		echo ""
-		echo "1. Pie"
-		echo "2. Ten"
-		echo "3. Pie - Ten"
-		echo ""
-		echo "NOTE: Write number only!"
-		read -s kversion
+# Run next step
+kversion
+}
 
-		if [ "$kversion" == "1" ];
-			then
-				version="9.0"
-		elif [ "$kversion" == "2" ];
-			then
-				version="10.0"
-		elif [ "$kversion" == "3" ];
-			then
-				version="9.0 - 10.0"
-		fi
-else
-	echo "Mido Kernel only for Android 10"
-	version="10.0"
-fi
+function kversion() {
+# This is a dummy initialition
+# My kernel for temporary only for Android 10.0 / Q
+version="10.0"
 
+# Run next step
+clang
+}
+
+function clang() {
 echo ""
 echo "Select your compiler :3"
 echo ""
@@ -130,6 +136,11 @@ elif [ "$clang" == "2" ];
 		ext_clang="Nusantara Clang 11"
 fi
 
+# Run next step
+main
+}
+
+function main() {
 # Show user option
 echo ""
 echo "========================================="
@@ -140,7 +151,7 @@ echo "| Devices	: $devices	|"
 echo "| Kernel	: $name		|"
 echo "| Release	: $release			|"
 echo "| Android Ver	: $version			|"
-echo "| Ext Clang	: $ext_clang			|"
+echo "| Ext Clang	: $ext_clang	|"
 echo "|					|"
 echo "| is this right option ?		|"
 echo "|					|"
@@ -191,11 +202,11 @@ elif [ "$user" == "1" ];
 		if [ "$kdev" == "1" ];
 			then
 				sed -i -e 's/KERNEL_CODENAME=1/KERNEL_CODENAME=0/g'  ~/CI/ci
-				sed -i -e 's/git clone --depth=1 -b fusion-nothing https://Nicklas373:$git_token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 . /#git clone --depth=1 -b fusion-nothing https://Nicklas373:$git_token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 . /g' ~/build_kernel/.circleci/build.sh
+				sed -i -e 's/git clone --depth=1 -b fusion-nothing https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_lavender-4.4 . /#git clone --depth=1 -b fusion-nothing https://Nicklas373:$git_token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 . /g' ~/build_kernel/.circleci/build.sh
 		elif [ "$kdev" == "2" ];
 			then
 				sed -i -e 's/KERNEL_CODENAME=0/KERNEL_CODENAME=1/g'  ~/CI/ci
-				sed -i -e 's/#git clone --depth=1 -b fusion-nothing https://Nicklas373:$git_token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 . /git clone --depth=1 -b fusion-nothing https://Nicklas373:$git_token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 . /g' ~/build_kernel/.circleci/build.sh
+				sed -i -e 's/#git clone --depth=1 -b fusion-nothing https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_lavender-4.4 . /git clone --depth=1 -b fusion-nothing https://Nicklas373:$git_token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 . /g' ~/build_kernel/.circleci/build.sh
 				echo ""
 				echo "Want to use custom cam ?"
 				echo "1. yes"
@@ -210,19 +221,8 @@ elif [ "$user" == "1" ];
 						sed -i -e 's/KERNEL_NEW_CAM=1/KERNEL_NEW_CAM=0/g'  ~/CI/ci
 				fi
 		fi
-		if [ "$kversion" == "1" ];
-			then
-				sed -i -e 's/KERNEL_AND_VER=2/KERNEL_AND_VER=0/g'  ~/CI/ci
-				sed -i -e 's/KERNEL_AND_VER=1/KERNEL_AND_VER=0/g'  ~/CI/ci
-		elif [ "$kversion" == "2" ];
-			then
-				sed -i -e 's/KERNEL_AND_VER=2/KERNEL_AND_VER=1/g'  ~/CI/ci
-				sed -i -e 's/KERNEL_AND_VER=0/KERNEL_AND_VER=1/g'  ~/CI/ci
-		elif [ "$kversion" == "3" ];
-			then
-				sed -i -e 's/KERNEL_AND_VER=1/KERNEL_AND_VER=2/g'  ~/CI/ci
-				sed -i -e 's/KERNEL_AND_VER=0/KERNEL_AND_VER=2/g'  ~/CI/ci
-		fi
+		sed -i -e 's/KERNEL_AND_VER=2/KERNEL_AND_VER=1/g'  ~/CI/ci
+		sed -i -e 's/KERNEL_AND_VER=0/KERNEL_AND_VER=1/g'  ~/CI/ci
 		if [ "$krelease" == "1" ];
 			then
 				sed -i -e 's/KERNEL_STATE=0/KERNEL_STATE=1/g'  ~/CI/ci
@@ -274,4 +274,4 @@ git push -f
 }
 
 # run main
-main
+init
