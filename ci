@@ -267,14 +267,13 @@ elif [ "$KERNEL_STATE" == "0" ];
 		KVERSION="${FUSION_CODENAME}-$(git log --pretty=format:'%h' -1)-$(date "+%H%M")"
 		ZIP_NAME="${KERNEL_REL}-${FUSION_CODENAME}-${CODENAME}-$(git log --pretty=format:'%h' -1)-$(date "+%H%M").zip"
 
+		cd ${KERNEL}
+
 		# Enable NLMK Patch Disabler
 		wget https://raw.githubusercontent.com/Nicklas373/CI/CI/nlmk.patch
 
-		# Move NLMK Patch to correct directory
-		cp nlmk.patch ${KERNEL}
-
 		# Apply NLMK Patch Disabler
-		git apply ${KERNEL}/nlmk.patch
+		git apply nlmk.patch
 fi
 }
 
