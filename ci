@@ -268,7 +268,7 @@ elif [ "$KERNEL_STATE" == "0" ];
 		ZIP_NAME="${KERNEL_REL}-${FUSION_CODENAME}-${CODENAME}-$(git log --pretty=format:'%h' -1)-$(date "+%H%M").zip"
 
 		# Switch to root directory
-		cd ..
+		cd /root/kernel
 
 		# Enable NLMK Patch Disabler
 		wget https://raw.githubusercontent.com/Nicklas373/CI/CI/nlmk.patch
