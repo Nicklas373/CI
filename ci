@@ -274,7 +274,7 @@ elif [ "$KERNEL_STATE" == "0" ];
 		cp nlmk.patch ${KERNEL}
 
 		# Apply NLMK Patch Disabler
-		git apply nlmk.patch
+		git apply ${KERNEL}/nlmk.patch
 fi
 }
 
