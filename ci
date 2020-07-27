@@ -28,7 +28,7 @@
 # 0 = Mido || 1 = Lavender
 #
 # Kernel Compiler
-# 0 = Proton Clang 11 || 1 = Nusantara Clang 11
+# 0 = Proton Clang 12 || 1 = Nusantara Clang 11
 #
 # CI Service
 # 0 = Drone CI || 1 = Circle CI || 2 = Semaphore CI
@@ -201,19 +201,10 @@ export KBUILD_BUILD_USER=alanndz-nicklas373
 export KBUILD_BUILD_HOST=fusion_lavender-Dev
 
 # Define Lavender Specific Environment
-if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
-	then
-		KERNEL="$(pwd)/kernel"
-		IMAGE="$(pwd)/kernel/out/arch/arm64/boot/Image.gz-dtb"
-		ANYKERNEL="$(pwd)/AnyKernel3"
-		KERNEL_TEMP="$(pwd)/TEMP"
-elif [ "$KERNEL_CI_SERVICE" == "1" ];
-	then
-		KERNEL="$(pwd)"
-		IMAGE="$(pwd)/out/arch/arm64/boot/Image.gz-dtb"
-		ANYKERNEL="AnyKernel3"
-		KERNEL_TEMP="TEMP"
-fi
+KERNEL="$(pwd)"
+IMAGE="$(pwd)/out/arch/arm64/boot/Image.gz-dtb"
+ANYKERNEL="AnyKernel3"
+KERNEL_TEMP="TEMP"
 CODENAME="lavender"
 KERNEL_CODE="Lavender"
 TELEGRAM_DEVICE="Xiaomi Redmi Note 7"

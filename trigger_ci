@@ -114,7 +114,7 @@ fi
 echo ""
 echo "Select your compiler :3"
 echo ""
-echo "1. Proton Clang 11"
+echo "1. Proton Clang 12"
 echo "2. Nusantara Clang 11"
 echo ""
 echo "NOTE: Write number only !"
@@ -123,7 +123,7 @@ read -s clang
 if [ "$clang" == "1" ];
 	then
 		comp="1"
-		ext_clang="Proton Clang 11"
+		ext_clang="Proton Clang 12"
 elif [ "$clang" == "2" ];
 	then
 		comp="2"
