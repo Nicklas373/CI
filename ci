@@ -122,7 +122,6 @@ elif [ "$KERNEL_NAME" == "1" ];
 
 		# Clone kernel repositories earlier
 		git clone --depth=1 -b staging/checkout-4-thermal https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
-		#git clone --depth=1 -b kizuna-patch https://Avarice12:$TOKEN@github.com/Avarice12/platform_kernel_xiaomi_msm8953-4.9 kernel
 
 		# Cloning AnyKernel Repository
 		git clone --depth=1 -b caf/mido-kizuna-4.9 https://github.com/Nicklas373/AnyKernel3
@@ -182,19 +181,21 @@ fi
 # Lavender init
 function lave_init() {
 
-if [ "$KERNEL_CI_SERVICE" == "0" ];
+
+if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "1" ];
 	then
 		# Dirty Workaround // YES
-		git_token=${git_token}
-		echo $git_token
+		TOKEN=${token}
+		echo $TOKEN
 elif [ "$KERNEL_CI_SERVICE" == "2" ];
 	then
 		# Dirty Workaround // YES
-		git_token=${token}
-		echo $git_token
+		TOKEN=${git_token}
+		echo $TOKEN
 fi
-		# Downloading kernel source
-		git clone --depth=1 -b fusion-nothing https://Nicklas373:$git_token@github.com/Nicklas373/kernel_xiaomi_lavender-4.4 kernel
+
+# Downloading kernel source
+git clone --depth=1 -b fusion-nothing https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_lavender-4.4 kernel
 
 # Cloning AnyKernel Repository
 git clone --depth=1 -b fusion https://github.com/alanndz/AnyKernel3
