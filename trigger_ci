@@ -77,6 +77,7 @@ if [ "$kdev" == "1" ];
 elif [ "$kdev" == "2" ];
 	then
 		echo ""
+		name="Fusion Kernel"
 		echo "Fusion Kernel (@Alanndz & Nicklas373)"
 		echo ""
 fi
