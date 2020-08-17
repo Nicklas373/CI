@@ -47,7 +47,7 @@ KERNEL_AND_VER=1
 KERNEL_CODENAME=1
 KERNEL_COMPILER=0
 KERNEL_CI_SERVICE=1
-KERNEL_NEW_CAM=1
+KERNEL_NEW_CAM=0
 
 # Environment init
 function env_init() {
@@ -473,7 +473,7 @@ fi
 function compile_lave() {
 	START=$(date +"%s")
 	cd ${KERNEL}
-	make ${CODENAME}_defconfig O=out
+	make /vendor/${CODENAME}_defconfig O=out
 if [ "$KERNEL_COMPILER" == "0" ];
 	then
 		CLANG_PATH="/root/proton/bin/:${PATH}"
