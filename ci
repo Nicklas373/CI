@@ -42,9 +42,9 @@
 # Declare Kernel Details
 KERNEL_NAME=1
 KERNEL_SCHED=1
-KERNEL_STATE=1
+KERNEL_STATE=0
 KERNEL_AND_VER=1
-KERNEL_CODENAME=1
+KERNEL_CODENAME=0
 KERNEL_COMPILER=0
 KERNEL_CI_SERVICE=1
 KERNEL_NEW_CAM=1
@@ -426,7 +426,7 @@ function compile_mido() {
 	bot_first_compile
 	cd ..
 	START=$(date +"%s")
-	make -s -C ${KERNEL} ${CODENAME}_defconfig O=out
+	make -s -C ${KERNEL} vendor/${CODENAME}_defconfig O=out
 if [ "$KERNEL_COMPILER" == "0" ];
 	then
 		CLANG_PATH="/root/proton/bin/:${PATH}"
@@ -467,7 +467,7 @@ fi
 function compile_lave() {
 	START=$(date +"%s")
 	cd ${KERNEL}
-	make /vendor/${CODENAME}_defconfig O=out
+	make vendor/${CODENAME}_defconfig O=out
 if [ "$KERNEL_COMPILER" == "0" ];
 	then
 		CLANG_PATH="/root/proton/bin/:${PATH}"
