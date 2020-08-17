@@ -212,15 +212,13 @@ if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
 	then
 		KERNEL="$(pwd)/kernel"
 		IMAGE="$(pwd)/kernel/out/arch/arm64/boot/Image.gz-dtb"
-		ANYKERNEL="$(pwd)/AnyKernel3"
-		KERNEL_TEMP="$(pwd)/TEMP"
 elif [ "$KERNEL_CI_SERVICE" == "1" ];
 	then
 		KERNEL="$(pwd)"
 		IMAGE="$(pwd)/out/arch/arm64/boot/Image.gz-dtb"
-		ANYKERNEL="AnyKernel3"
-		KERNEL_TEMP="TEMP"
 fi
+ANYKERNEL="$(pwd)/AnyKernel3"
+KERNEL_TEMP="$(pwd)/TEMP"
 CODENAME="lavender"
 KERNEL_CODE="Lavender"
 TELEGRAM_DEVICE="Xiaomi Redmi Note 7"
@@ -428,10 +426,6 @@ function compile_mido() {
 	bot_first_compile
 	cd ..
 	START=$(date +"%s")
-if [ "$KERNEL_NAME" == "1" ];
-	then
-		sed -i -e 's/-perf/-キズナ/g'  ${KERNEL}/localversion
-fi
 	make -s -C ${KERNEL} ${CODENAME}_defconfig O=out
 if [ "$KERNEL_COMPILER" == "0" ];
 	then
@@ -503,6 +497,7 @@ fi
 	bot_lave_compile
 	bot_build_success
 	sendStick "${TELEGRAM_SUCCESS}"
+	cd ..
 	cp ${IMAGE} ${ANYKERNEL}
 	anykernel
 	kernel_upload
