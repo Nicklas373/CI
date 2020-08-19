@@ -426,6 +426,10 @@ function compile_mido() {
 	bot_first_compile
 	cd ..
 	START=$(date +"%s")
+if [ "$KERNEL_NAME" == "1" ];
+	then
+		sed -i -e 's/-perf/-キズナ/g'  ${KERNEL}/localversion
+fi
 	make -s -C ${KERNEL} vendor/${CODENAME}_defconfig O=out
 if [ "$KERNEL_COMPILER" == "0" ];
 	then
