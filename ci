@@ -222,7 +222,7 @@ KERNEL_TEMP="$(pwd)/TEMP"
 CODENAME="lavender"
 KERNEL_CODE="Lavender"
 TELEGRAM_DEVICE="Xiaomi Redmi Note 7"
-KERNEL_REV="r5"
+KERNEL_REV="r6"
 KERNEL_REL="Fusion"
 
 # Define Telegram Channel Release Environment
@@ -252,15 +252,15 @@ fi
 if [ "$KERNEL_STATE" == "1" ];
 	then
 		KERNEL_RELEASE="Stable"
-		FUSION_CODENAME="Empyrean_Psalms"
-		KERNEL_VERSION="r5"
+		FUSION_CODENAME="Fallen_Rosemary"
+		KERNEL_VERSION="r6"
 		KVERSION="${FUSION_CODENAME}-${KERNEL_VERSION}"
 		ZIP_NAME="${KERNEL_REL}-${KVERSION}-${CODENAME}-$(date "+%H%M-%d%m%Y").zip"
 elif [ "$KERNEL_STATE" == "0" ];
 	then
 		KERNEL_RELEASE="BETA"
-		FUSION_CODENAME="Empyrean_Psalms"
-		KERNEL_VERSION="r5"
+		FUSION_CODENAME="Fallen_Rosemary"
+		KERNEL_VERSION="r6"
 		KVERSION="${FUSION_CODENAME}-$(git log --pretty=format:'%h' -1)-$(date "+%H%M")"
 		ZIP_NAME="${KERNEL_REL}-${FUSION_CODENAME}-${CODENAME}-$(git log --pretty=format:'%h' -1)-$(date "+%H%M").zip"
 
