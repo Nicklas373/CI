@@ -28,7 +28,7 @@
 # 0 = Mido || 1 = Lavender
 #
 # Kernel Compiler
-# 0 = Proton Clang 12 || 1 = Nusantara Clang 11
+# 0 = Proton Clang 12 || 1 = Nusantara Clang 11 || 2 = Snapdragon LLVM 4.0.2
 #
 # CI Service
 # 0 = Drone CI || 1 = Circle CI || 2 = Semaphore CI
@@ -40,12 +40,12 @@
 # 0 = Disable || 1 = Enable
 #
 # Declare Kernel Details
-KERNEL_NAME=0
+KERNEL_NAME=1
 KERNEL_SCHED=1
 KERNEL_STATE=0
 KERNEL_AND_VER=1
-KERNEL_CODENAME=1
-KERNEL_COMPILER=0
+KERNEL_CODENAME=0
+KERNEL_COMPILER=2
 KERNEL_CI_SERVICE=1
 KERNEL_NEW_CAM=0
 
@@ -325,6 +325,15 @@ elif [ "$KERNEL_COMPILER" == "1" ];
                 export CLANG_PATH=/root/nusantara/bin
                 export PATH=${CLANG_PATH}:${PATH}
                 export LD_LIBRARY_PATH="/root/nusantara/bin/../lib:$PATH"
+elif [ "$KERNEL_COMPILER" == "2" ];
+	then
+		# Download proprietary clang
+		git clone https://github.com/menghang/prebuilts_clang_linux-x86_host_sdclang -b cm-14.1 sdclang
+
+		# Clang environment
+		export CLANG_PATH=~/sdclang/bin
+		export PATH=${CLANG_PATH}:${PATH}
+		export LD_LIBRARY_PATH="~/sdclang/bin/../lib:$PATH"
 fi
 }
 
@@ -437,6 +446,9 @@ if [ "$KERNEL_COMPILER" == "0" ];
 elif [ "$KERNEL_COMPILER" == "1" ];
 	then
 		CLANG_PATH="/root/nusantara/bin:${PATH}"
+elif [ "$KERNEL_COMPILER" == "2" ];
+	then
+		CLANG_PATH="~/sdclang/bin/:${PATH}"
 fi
 	PATH="$CLANG_PATH" \
 	make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
