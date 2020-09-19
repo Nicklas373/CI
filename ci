@@ -40,14 +40,14 @@
 # 0 = Disable || 1 = Enable
 #
 # Declare Kernel Details
-KERNEL_NAME=1
+KERNEL_NAME=0
 KERNEL_SCHED=1
 KERNEL_STATE=0
 KERNEL_AND_VER=1
 KERNEL_AVR=1
 KERNEL_CODENAME=0
 KERNEL_COMPILER=0
-KERNEL_CI_SERVICE=0
+KERNEL_CI_SERVICE=1
 KERNEL_NEW_CAM=1
 
 # Environment init
@@ -396,7 +396,7 @@ curl -s -X POST https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendMessage -d ch
 
 # Telegram Bot Service || Compiling Message
 function bot_first_compile() {
-	bot_template	"<b>|| ${KERNEL_BOT} Build Bot ||</b>" \
+	bot_template	"<b>|| HANA-CI Build Bot ||</b>" \
 			"" \
 			"<b>${KERNEL_REL} Kernel build Start!</b>" \
 			"" \
@@ -414,7 +414,7 @@ function bot_first_compile() {
 # Telegram bot message || complete compile notification
 function bot_complete_compile() {
 	telegram_init
-	bot_template	"<b>|| ${KERNEL_BOT} Build Bot ||</b>" \
+	bot_template	"<b>|| HANA-CI Build Bot ||</b>" \
 			"" \
 			"<b>New ${KERNEL_REL} Kernel Build Is Available!</b>" \
 			"" \
@@ -436,6 +436,7 @@ function bot_complete_compile() {
 			"" \
 			"=========== Misc Information ==================" \
 			"<b>Kernel Commit :</b><code> $(git --no-pager log --pretty=format:'"%h - %s (%an)"' -1)</code>" \
+			"<b>CI Service :</b><code> ${KERNEL_BOT} </code>" \
 			"<b>Compile Time :</b><code> $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) second(s)</code>" \
 			"" \
 			"<b>                         HANA-CI Build Project | 2016-2020                            </b>"
