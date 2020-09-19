@@ -40,7 +40,7 @@
 # 0 = Disable || 1 = Enable
 #
 # Declare Kernel Details
-KERNEL_NAME=1
+KERNEL_NAME=0
 KERNEL_SCHED=1
 KERNEL_STATE=0
 KERNEL_AND_VER=1
@@ -408,8 +408,7 @@ function bot_first_compile() {
 			" =========== Kernel Information ================" \
 			"<b>Kernel Scheduler :</b><code> ${KERNEL_SCHED} </code>" \
 			"<b>Kernel Tag : </b><code> ${KERNEL_CAF_TAG} </code>" \
-			"<b>Kernel Linux Version : </b><code> ${TELEGRAM_KERNEL_VER} </code>" \
-			"<b>Latest commit :</b><code> $(git --no-pager log --pretty=format:'"%h - %s (%an)"' -1) </code>"
+			"<b>Kernel Commit :</b><code> $(git --no-pager log --pretty=format:'"%h - %s (%an)"' -1) </code>"
 }
 
 # Telegram bot message || complete compile notification
@@ -436,7 +435,7 @@ function bot_complete_compile() {
 			"<b>Kernel Build Date :</b><code> ${TELEGRAM_UTS_VER}</code>" \
 			"" \
 			"=========== Misc Information ==================" \
-			"<b>Latest commit :</b><code> $(git --no-pager log --pretty=format:'"%h - %s (%an)"' -1)</code>" \
+			"<b>Kernel Commit :</b><code> $(git --no-pager log --pretty=format:'"%h - %s (%an)"' -1)</code>" \
 			"<b>Compile Time :</b><code> $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) second(s)</code>" \
 			"" \
 			"<b>                         HANA-CI Build Project | 2016-2020                            </b>"
