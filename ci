@@ -85,14 +85,14 @@ if [ "$KERNEL_NAME" == "0" ];
 				git clone --depth=1 -b lineage-17.1 https://github.com/HANA-CI-Build-Project/kernel_msm8953-4.9 kernel
 
 				# Define Kernel Specific Tag
-				KERNEL_TAG="LA.UM.9.6.2.r1-02100-89xx.0"
+				KERNEL_CAF_TAG="LA.UM.9.6.2.r1-02100-89xx.0"
 		elif [ "$KERNEL_STATE" == "1" ];
 			then
 				 # Clone kernel repositories earlier
 				git clone --depth=1 -b lineage-17.1 https://github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
 
 				# Define Kernel Specific Tag
-                                KERNEL_TAG="LA.UM.8.6.2.r1-08100-89xx.0"
+				KERNEL_CAF_TAG="LA.UM.8.6.2.r1-08100-89xx.0"
 		fi
 
 		# Cloning AnyKernel Repository
@@ -121,20 +121,20 @@ elif [ "$KERNEL_NAME" == "1" ];
 
 		if [ "$KERNEL_STATE" == "0" ];
 			then
-				if [ "$KERNEL_AVR" == "0" ];
+				if [ "$KERNEL_AVR" == "1" ];
 					then
 						# Clone kernel repositories earlier
 						git clone --depth=1 -b next/kizuna https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
 
 						# Define Kernel Specific Tag
-						KERNEL_TAG="LA.UM.9.6.2.r1-02100-89xx.0"
-				elif [ "$KERNEL_AVR" == "1" ];
+						KERNEL_CAF_TAG="LA.UM.9.6.2.r1-02100-89xx.0"
+				elif [ "$KERNEL_AVR" == "0" ];
 					then
 						# Clone kernel repositories earlier
 						git clone --depth=1 -b staging/kizuna https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
 
 						# Define Kernel Specific Tag
-						KERNEL_TAG="LA.UM.8.6.2.r1-08100-89xx.0"
+						KERNEL_CAF_TAG="LA.UM.8.6.2.r1-08100-89xx.0"
 				fi
 		elif [ "$KERNEL_STATE" == "1" ];
 			then
@@ -142,7 +142,7 @@ elif [ "$KERNEL_NAME" == "1" ];
                                 git clone --depth=1 -b kizuna https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
 
 				# Define Kernel Specific Tag
-                                KERNEL_TAG="LA.UM.8.6.2.r1-08100-89xx.0"
+                                KERNEL_CAF_TAG="LA.UM.8.6.2.r1-08100-89xx.0"
 		fi
 
 		# Cloning AnyKernel Repository
@@ -336,8 +336,15 @@ if [ "$KERNEL_AND_VER" == "0" ];
 		KERNEL_TAG="P"
 elif [ "$KERNEL_AND_VER" == "1" ];
 	then
-		KERNEL_ANDROID_VER="10"
-		KERNEL_TAG="Q"
+		if [ "$KERNEL_AVR" == "0" ];
+			then
+				KERNEL_ANDROID_VER="10"
+				KERNEL_TAG="Q"
+		elif [ "$KERNEL_AVR" == "1" ];
+			then
+				KERNEL_ANDROID_VER="11"
+				KERNEL_TAG="R"
+		fi
 elif [ "$KERNEL_AND_VER" == "2" ];
 	then
 		KERNEL_ANDROID_VER="9-10"
@@ -400,7 +407,7 @@ function bot_first_compile() {
 			"" \
 			" =========== Kernel Information ================" \
 			"<b>Kernel Scheduler :</b><code> ${KERNEL_SCHED} </code>" \
-			"<b>Kernel Tag : </b><code> ${KERNEL_TAG} </code>" \
+			"<b>Kernel Tag : </b><code> ${KERNEL_CAF_TAG} </code>" \
 			"<b>Kernel Linux Version : </b><code> ${TELEGRAM_KERNEL_VER} </code>" \
 			"<b>Latest commit :</b><code> $(git --no-pager log --pretty=format:'"%h - %s (%an)"' -1) </code>"
 }
@@ -420,6 +427,7 @@ function bot_complete_compile() {
 			"" \
 			"=========== Kernel Information ================" \
 			"<b>Kernel Scheduler :</b><code> ${KERNEL_SCHED} </code>" \
+			"<b>Kernel Tag : </b><code> ${KERNEL_CAF_TAG} </code>" \
 			"<b>Kernel Linux Version:</b><code> Linux ${TELEGRAM_KERNEL_VER}</code>" \
 			"<b>Kernel Release Ver :</b><code> ${KERNEL_REV} </code>" \
 			"<b>Kernel Codename :</b><code> ${KERNEL_RELEASE_NAME} </code>" \
