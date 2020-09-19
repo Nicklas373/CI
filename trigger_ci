@@ -109,9 +109,23 @@ kversion
 }
 
 function kversion() {
-# This is a dummy initialition
-# My kernel for temporary only for Android 10.0 / Q
-version="10.0"
+echo ""
+echo "Select your android version"
+echo "1. 10"
+echo "2. 11"
+echo ""
+echo "NOTE: Write number only !"
+read -s version_avr
+
+if [ "$version_avr" == "1" ];
+	then
+		avr="1"
+		avr_str="Android 10.0"
+elif [ "$version_avr" == "2" ];
+	then
+		avr="2"
+		avr_str="Android 11.0"
+fi
 
 # Run next step
 clang
@@ -151,7 +165,7 @@ echo "| CI Services	: $bot		|"
 echo "| Devices	: $devices	|"
 echo "| Kernel	: $name		|"
 echo "| Release	: $release			|"
-echo "| Android Ver	: $version			|"
+echo "| Android Ver	: $avr_str			|"
 echo "| Ext Clang	: $ext_clang	|"
 echo "|					|"
 echo "| is this right option ?		|"
@@ -199,6 +213,13 @@ elif [ "$user" == "1" ];
 				sed -i -e 's/KERNEL_NAME=0/KERNEL_NAME=2/g'  ~/CI/ci
 				sed -i -e 's/KERNEL_NAME=1/KERNEL_NAME=2/g'  ~/CI/ci
 				sed -i -e 's/KERNEL_SCHED=0/KERNEL_SCHED=1/g'  ~/CI/ci
+		fi
+		if [ "$avr" == "1" ];
+			then
+				sed -i -e 's/KERNEL_AVR=1/KERNEL_AVR=0/g' ~/CI/ci
+		elif [ "$avr" == "2" ];
+			then
+				sed -i -e 's/KERNEL_AVR=0/KERNEL_AVR=1/g' ~/CI/ci
 		fi
 		if [ "$kdev" == "1" ];
 			then

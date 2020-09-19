@@ -8,7 +8,7 @@
 # Copyright 2016-2020, HANA-CI Build Project
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-# CI Script Revision = 20200917
+# CI Script Revision = 20200919
 
 # Build Information
 #
@@ -21,8 +21,8 @@
 # Kernel State
 # 0 = BETA || 1 = Stable
 #
-# Android Version
-# 0 = 9.0 || 1 = 10.0 || 2 = 9.0 - 10.0
+# Android Version // AVR
+# 0 = 9.0 || 1 = 10.0 || 2 = 9.0 - 10.0 // 0 = LA.UM.8.6.2.XX || 1 = LA.UM.9.6.2.XX
 #
 # Kernel Codename
 # 0 = Mido || 1 = Lavender
@@ -40,13 +40,14 @@
 # 0 = Disable || 1 = Enable
 #
 # Declare Kernel Details
-KERNEL_NAME=0
+KERNEL_NAME=1
 KERNEL_SCHED=1
 KERNEL_STATE=0
 KERNEL_AND_VER=1
+KERNEL_AVR=1
 KERNEL_CODENAME=0
 KERNEL_COMPILER=0
-KERNEL_CI_SERVICE=1
+KERNEL_CI_SERVICE=0
 KERNEL_NEW_CAM=1
 
 # Environment init
@@ -82,10 +83,16 @@ if [ "$KERNEL_NAME" == "0" ];
                         then
 				# Clone kernel repositories earlier
 				git clone --depth=1 -b lineage-17.1 https://github.com/HANA-CI-Build-Project/kernel_msm8953-4.9 kernel
+
+				# Define Kernel Specific Tag
+				KERNEL_TAG="LA.UM.9.6.2.r1-02100-89xx.0"
 		elif [ "$KERNEL_STATE" == "1" ];
 			then
 				 # Clone kernel repositories earlier
 				git clone --depth=1 -b lineage-17.1 https://github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
+
+				# Define Kernel Specific Tag
+                                KERNEL_TAG="LA.UM.8.6.2.r1-08100-89xx.0"
 		fi
 
 		# Cloning AnyKernel Repository
@@ -114,12 +121,28 @@ elif [ "$KERNEL_NAME" == "1" ];
 
 		if [ "$KERNEL_STATE" == "0" ];
 			then
-				# Clone kernel repositories earlier
-				git clone --depth=1 -b staging/kizuna https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
+				if [ "$KERNEL_AVR" == "0" ];
+					then
+						# Clone kernel repositories earlier
+						git clone --depth=1 -b next/kizuna https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
+
+						# Define Kernel Specific Tag
+						KERNEL_TAG="LA.UM.9.6.2.r1-02100-89xx.0"
+				elif [ "$KERNEL_AVR" == "1" ];
+					then
+						# Clone kernel repositories earlier
+						git clone --depth=1 -b staging/kizuna https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_>
+
+						# Define Kernel Specific Tag
+						KERNEL_TAG="LA.UM.8.6.2.r1-08100-89xx.0"
+				fi
 		elif [ "$KERNEL_STATE" == "1" ];
 			then
 				# Clone kernel repositories earlier
                                 git clone --depth=1 -b kizuna https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
+
+				# Define Kernel Specific Tag
+                                KERNEL_TAG="LA.UM.8.6.2.r1-08100-89xx.0"
 		fi
 
 		# Cloning AnyKernel Repository
@@ -129,7 +152,13 @@ elif [ "$KERNEL_NAME" == "1" ];
 		KERNEL_SCHED="EAS"
 		if [ "$KERNEL_STATE" == "0" ];
 			then
-				KERNEL_BRANCH="staging/kizuna"
+				if  [ "$KERNEL_AVR" == "0" ];
+					then
+						KERNEL_BRANCH="next/kizuna"
+				elif [ "$KERNEL_AVR" == "1" ];
+					then
+						KERNEL_BRANCH="staging/kizuna"
+				fi
 		elif [ "$KERNEL_STATE" == "1" ];
 			then
 				KERNEL_BRANCH="kizuna"
