@@ -40,7 +40,7 @@
 # 0 = Disable || 1 = Enable
 #
 # Declare Kernel Details
-KERNEL_NAME=1
+KERNEL_NAME=0
 KERNEL_SCHED=1
 KERNEL_STATE=0
 KERNEL_AND_VER=1
@@ -78,8 +78,15 @@ mkdir TEMP
 # Clone source for specific kernel name
 if [ "$KERNEL_NAME" == "0" ];
 	then
-		# Clone kernel repositories earlier
-		git clone --depth=1 -b lineage-17.1 https://github.com/Nicklas373/kernel_xiaomi_msm8953-4.9 kernel
+		if [ "$KERNEL_STATE" == "0" ];
+                        then
+				# Clone kernel repositories earlier
+				git clone --depth=1 -b lineage-17.1 https://github.com/HANA-CI-Build-Project/kernel_msm8953-4.9 kernel
+		elif [ "$KERNEL_STATE" == "1" ];
+			then
+				 # Clone kernel repositories earlier
+				git clone --depth=1 -b lineage-17.1 https://github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
+		fi
 
 		# Cloning AnyKernel Repository
 		git clone --depth=1 -b caf/mido-4.9 https://github.com/Nicklas373/AnyKernel3
@@ -364,7 +371,7 @@ function bot_first_compile() {
 			"<b>Kernel Scheduler :</b><code> ${KERNEL_SCHED} </code>" \
 			"<b>Kernel Branch :</b><code> ${KERNEL_BRANCH} </code>" \
 			"<b>Kernel Codename : </b><code> ${KERNEL_RELEASE_NAME} </code>" \
-			"<b>Kernel Release Ver : </b><code> ${KERNEL_REL} </code>" \
+			"<b>Kernel Release Ver : </b><code> ${KERNEL_REV} </code>" \
 			"<b>Latest commit :</b><code> $(git --no-pager log --pretty=format:'"%h - %s (%an)"' -1) </code>"
 }
 
@@ -382,7 +389,7 @@ function bot_complete_compile() {
 			"" \
 			"<b>Kernel Scheduler :</b><code> ${KERNEL_SCHED} </code>" \
 			"<b>Kernel Codename : </b><code> ${KERNEL_RELEASE_NAME} </code>" \
-			"<b>Kernel Release Ver : </b><code> ${KERNEL_REL} </code>" \
+			"<b>Kernel Release Ver : </b><code> ${KERNEL_REV} </code>" \
 			"<b>Kernel Linux Version:</b><code> Linux ${TELEGRAM_KERNEL_VER}</code>" \
 			"<b>Kernel Host:</b><code> ${TELEGRAM_COMPILER_NAME}@${TELEGRAM_COMPILER_HOST}</code>" \
 			"<b>Kernel Toolchain :</b><code> ${TELEGRAM_TOOLCHAIN_VER}</code>" \
