@@ -47,7 +47,7 @@ KERNEL_AND_VER=1
 KERNEL_AVR=1
 KERNEL_CODENAME=0
 KERNEL_COMPILER=0
-KERNEL_CI_SERVICE=0
+KERNEL_CI_SERVICE=1
 KERNEL_NEW_CAM=1
 
 # Environment init
@@ -393,14 +393,15 @@ function bot_first_compile() {
 			"" \
 			"<b>${KERNEL_REL} Kernel build Start!</b>" \
 			"" \
+			"============= Build Information ================" \
 			"<b>Build Status :</b><code> ${KERNEL_RELEASE} </code>" \
 			"<b>Device :</b><code> ${TELEGRAM_DEVICE} </code>" \
 			"<b>Android Version :</b><code> ${KERNEL_ANDROID_VER} </code>" \
 			"" \
+			" =========== Kernel Information ================" \
 			"<b>Kernel Scheduler :</b><code> ${KERNEL_SCHED} </code>" \
-			"<b>Kernel Branch :</b><code> ${KERNEL_BRANCH} </code>" \
-			"<b>Kernel Codename : </b><code> ${KERNEL_RELEASE_NAME} </code>" \
-			"<b>Kernel Release Ver : </b><code> ${KERNEL_REV} </code>" \
+			"<b>Kernel Tag : </b><code> ${KERNEL_TAG} </code>" \
+			"<b>Kernel Linux Version : </b><code> ${TELEGRAM_KERNEL_VER} </code>" \
 			"<b>Latest commit :</b><code> $(git --no-pager log --pretty=format:'"%h - %s (%an)"' -1) </code>"
 }
 
@@ -411,19 +412,22 @@ function bot_complete_compile() {
 			"" \
 			"<b>New ${KERNEL_REL} Kernel Build Is Available!</b>" \
 			"" \
+			"============ Build Information ================" \
 			"<b>Build Status :</b><code> ${KERNEL_RELEASE} </code>" \
 			"<b>Device :</b><code> ${TELEGRAM_DEVICE} </code>" \
 			"<b>Android Version :</b><code> ${KERNEL_ANDROID_VER} </code>" \
    			"<b>Filename :</b><code> ${TELEGRAM_FILENAME}</code>" \
 			"" \
+			"=========== Kernel Information ================" \
 			"<b>Kernel Scheduler :</b><code> ${KERNEL_SCHED} </code>" \
-			"<b>Kernel Codename : </b><code> ${KERNEL_RELEASE_NAME} </code>" \
-			"<b>Kernel Release Ver : </b><code> ${KERNEL_REV} </code>" \
 			"<b>Kernel Linux Version:</b><code> Linux ${TELEGRAM_KERNEL_VER}</code>" \
-			"<b>Kernel Host:</b><code> ${TELEGRAM_COMPILER_NAME}@${TELEGRAM_COMPILER_HOST}</code>" \
+			"<b>Kernel Release Ver :</b><code> ${KERNEL_REV} </code>" \
+			"<b>Kernel Codename :</b><code> ${KERNEL_RELEASE_NAME} </code>" \
+			"<b>Kernel Builder :</b><code> ${TELEGRAM_COMPILER_NAME}@${TELEGRAM_COMPILER_HOST}</code>" \
 			"<b>Kernel Toolchain :</b><code> ${TELEGRAM_TOOLCHAIN_VER}</code>" \
-			"<b>UTS Version :</b><code> ${TELEGRAM_UTS_VER}</code>" \
+			"<b>Kernel Build Date :</b><code> ${TELEGRAM_UTS_VER}</code>" \
 			"" \
+			"=========== Misc Information ==================" \
 			"<b>Latest commit :</b><code> $(git --no-pager log --pretty=format:'"%h - %s (%an)"' -1)</code>" \
 			"<b>Compile Time :</b><code> $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) second(s)</code>" \
 			"" \
