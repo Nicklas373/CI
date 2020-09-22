@@ -174,7 +174,7 @@ elif [ "$KERNEL_NAME" == "1" ];
 			then
 				if  [ "$KERNEL_AVR" == "0" ];
 					then
-						KERNEL_BRANCH="next/kizuna"
+						KERNEL_BRANCH="staging/kizuna"
 				elif [ "$KERNEL_AVR" == "1" ];
 					then
 						KERNEL_BRANCH="staging/kizuna"
