@@ -8,7 +8,7 @@
 # Copyright 2016-2020, HANA-CI Build Project
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-# CI Script Revision = 20200919
+# CI Script Revision = 20200924
 
 # Build Information
 #
@@ -183,7 +183,7 @@ elif [ "$KERNEL_NAME" == "1" ];
 			then
 				KERNEL_BRANCH="kizuna"
 		fi
-		KERNEL_RELEASE_NAME="キズナ～"
+		KERNEL_RELEASE_NAME="彼方"
 		KERNEL_REV="r3"
 		KERNEL_REL="Kizuna"
 fi
@@ -362,8 +362,8 @@ elif [ "$KERNEL_AND_VER" == "1" ];
 				KERNEL_TAG="Q"
 		elif [ "$KERNEL_AVR" == "1" ];
 			then
-				KERNEL_ANDROID_VER="11"
-				KERNEL_TAG="R"
+				KERNEL_ANDROID_VER="10"
+				KERNEL_TAG="Q"
 		fi
 elif [ "$KERNEL_AND_VER" == "2" ];
 	then
@@ -426,9 +426,10 @@ function bot_first_compile() {
 			"<b>Android Version :</b><code> ${KERNEL_ANDROID_VER} </code>" \
 			"" \
 			" =========== Kernel Information ================" \
-			"<b>Kernel Scheduler :</b><code> ${KERNEL_SCHED} </code>" \
+			"<b>Kernel Scheduler : </b><code> ${KERNEL_SCHED} </code>" \
 			"<b>Kernel Tag : </b><code> ${KERNEL_CAF_TAG} </code>" \
-			"<b>Kernel Commit :</b><code> $(git --no-pager log --pretty=format:'"%h - %s (%an)"' -1) </code>"
+			"<b>Kernel Branch : </b><code> ${KERNEL_BRANCH} </code>" \
+			"<b>Kernel Commit : </b><code> $(git --no-pager log --pretty=format:'"%h - %s (%an)"' -1) </code>"
 }
 
 # Telegram bot message || complete compile notification
@@ -477,14 +478,14 @@ function bot_lave_compile() {
 
 # Telegram bot message || success notification
 function bot_build_success() {
-	bot_template	"<b>|| ${KERNEL_BOT} Build Bot ||</b>" \
+	bot_template	"<b>|| HANA-CI Build Bot ||</b>" \
 			"" \
 			"<b>${KERNEL_REL} Kernel build Success!</b>"
 }
 
 # Telegram bot message || failed notification
 function bot_build_failed() {
-	bot_template	"<b>|| ${KERNEL_BOT} Build Bot ||</b>" \
+	bot_template	"<b>|| HANA-CI Build Bot ||</b>" \
 			"" \
 			"<b>${KERNEL_REL} Kernel build Failed!</b>" \
 			"" \
