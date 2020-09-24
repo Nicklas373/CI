@@ -47,7 +47,7 @@ KERNEL_AND_VER=1
 KERNEL_AVR=1
 KERNEL_CODENAME=0
 KERNEL_COMPILER=0
-KERNEL_CI_SERVICE=1
+KERNEL_CI_SERVICE=0
 KERNEL_NEW_CAM=1
 
 # Environment init
@@ -518,6 +518,13 @@ fi
 	PATH="$CLANG_PATH" \
 	make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
 				CC=clang \
+				AR=llvm-ar \
+				NM=llvm-nm \
+				LD=ld.lld \
+				HOSTCC=clang \
+				HOSTCXX=clang++ \
+				HOSTAR=llvm-ar \
+				HOSTLD=ld.lld \
 				CLANG_TRIPLE=aarch64-linux-gnu- \
 				CROSS_COMPILE=aarch64-linux-gnu- \
 				CROSS_COMPILE_ARM32=arm-linux-gnueabi-
