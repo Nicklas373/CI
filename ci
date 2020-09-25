@@ -144,7 +144,7 @@ elif [ "$KERNEL_NAME" == "1" ];
 				if [ "$KERNEL_AVR" == "1" ];
 					then
 						# Clone kernel repositories earlier
-						git clone --depth=1 -b staging/lld-test https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
+						git clone --depth=1 -b staging/kizuna https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
 
 						# Define Kernel Specific Tag
 						KERNEL_CAF_TAG="LA.UM.9.6.2.r1-02100-89xx.0"
@@ -177,7 +177,7 @@ elif [ "$KERNEL_NAME" == "1" ];
 						KERNEL_BRANCH="kizuna"
 				elif [ "$KERNEL_AVR" == "1" ];
 					then
-						KERNEL_BRANCH="staging/lld-test"
+						KERNEL_BRANCH="staging/kizuna"
 				fi
 		elif [ "$KERNEL_STATE" == "1" ];
 			then
@@ -518,10 +518,6 @@ fi
 	PATH="$CLANG_PATH" \
 	make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
 				CC=clang \
-				LD=ld.lld \
-				HOSTCC=clang \
-				HOSTCXX=clang++ \
-				HOSTLD=ld.lld \
 				CLANG_TRIPLE=aarch64-linux-gnu- \
 				CROSS_COMPILE=aarch64-linux-gnu- \
 				CROSS_COMPILE_ARM32=arm-linux-gnueabi-
