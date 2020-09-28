@@ -42,12 +42,12 @@
 # Declare Kernel Details
 KERNEL_NAME=1
 KERNEL_SCHED=1
-KERNEL_STATE=1
+KERNEL_STATE=0
 KERNEL_AND_VER=1
-KERNEL_AVR=0
-KERNEL_CODENAME=1
+KERNEL_AVR=1
+KERNEL_CODENAME=0
 KERNEL_COMPILER=0
-KERNEL_CI_SERVICE=1
+KERNEL_CI_SERVICE=0
 KERNEL_NEW_CAM=1
 
 # Environment init
@@ -144,7 +144,7 @@ elif [ "$KERNEL_NAME" == "1" ];
 				if [ "$KERNEL_AVR" == "1" ];
 					then
 						# Clone kernel repositories earlier
-						git clone --depth=1 -b staging/kizuna https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
+						git clone --depth=1 -b kizuna https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
 
 						# Define Kernel Specific Tag
 						KERNEL_CAF_TAG="LA.UM.9.6.2.r1-02100-89xx.0"
@@ -154,7 +154,7 @@ elif [ "$KERNEL_NAME" == "1" ];
 						git clone --depth=1 -b kizuna https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
 
 						# Define Kernel Specific Tag
-						KERNEL_CAF_TAG="LA.UM.8.6.2.r1-08100-89xx.0"
+						KERNEL_CAF_TAG="LA.UM.9.6.2.r1-08100-89xx.0"
 				fi
 		elif [ "$KERNEL_STATE" == "1" ];
 			then
@@ -162,7 +162,7 @@ elif [ "$KERNEL_NAME" == "1" ];
                                 git clone --depth=1 -b kizuna https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
 
 				# Define Kernel Specific Tag
-                                KERNEL_CAF_TAG="LA.UM.8.6.2.r1-08100-89xx.0"
+                                KERNEL_CAF_TAG="LA.UM.9.6.2.r1-02100-89xx.0"
 		fi
 
 		# Cloning AnyKernel Repository
@@ -518,6 +518,16 @@ fi
 	PATH="$CLANG_PATH" \
 	make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
 				CC=clang \
+				AR=llvm-ar \
+				NM=llvm-nm \
+				STRIP=llvm-strip \
+				OBJCOPY=llvm-objcopy \
+				OBJDUMP=llvm-objdump \
+				OBJSIZE=llvm-size \
+				READELF=llvm-readelf \
+				HOSTCC=clang \
+				HOSTCXX=clang++ \
+				HOSTAR=llvm-ar \
 				CLANG_TRIPLE=aarch64-linux-gnu- \
 				CROSS_COMPILE=aarch64-linux-gnu- \
 				CROSS_COMPILE_ARM32=arm-linux-gnueabi-
