@@ -80,6 +80,20 @@ elif [ "$kdev" == "2" ];
 		name="Fusion Kernel"
 		echo "Fusion Kernel (@Alanndz & Nicklas373)"
 		echo ""
+		echo "Overclock Version ?"
+		echo "1. Yes"
+		echo "2. No"
+		echo ""
+		echo "NOTE: Write number only!"
+		read -s oc
+
+		if [ "$oc" == "1" ];
+			then
+				overclock="1"
+		elif [ "$oc" == "2" ];
+			then
+				overclock="0"
+		fi
 fi
 
 # Run next step
@@ -258,6 +272,13 @@ elif [ "$user" == "1" ];
 		elif [ "$comp" == "2" ];
 			then
 				sed -i -e 's/KERNEL_COMPILER=0/KERNEL_COMPILER=1/g'  ~/CI/ci
+		fi
+		if [ "$overclock" == "1" ];
+			then
+				sed -i -e 's/KERNEL_OVERCLOCK=0/KERNEL_OVERCLOCK=1/g'	~/CI/ci
+		elif [ "$overclock" == "2" ];
+			then
+				sed -i -e 's/KERNEL_OVERCLOCK=1/KERNEL_OVERCLOCK=0/g'	~/CI/ci
 		fi
 
 		echo "Triggering CI"
