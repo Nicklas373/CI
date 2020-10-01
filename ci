@@ -105,7 +105,7 @@ if [ "$KERNEL_NAME" == "0" ];
 		# Define Kernel Specific Environment
 		KERNEL_SCHED="EAS"
 		KERNEL_BRANCH="lineage-17.1"
-		KERNEL_REV="r4"
+		KERNEL_REV="r5"
 		KERNEL_REL="CAF"
 		KERNEL_RELEASE_NAME="キズナ～"
 elif [ "$KERNEL_NAME" == "1" ];
