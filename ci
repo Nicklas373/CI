@@ -45,12 +45,12 @@
 # Declare Kernel Details
 KERNEL_NAME=1
 KERNEL_SCHED=1
-KERNEL_STATE=1
+KERNEL_STATE=0
 KERNEL_AND_VER=1
 KERNEL_AVR=0
-KERNEL_CODENAME=1
+KERNEL_CODENAME=0
 KERNEL_COMPILER=0
-KERNEL_CI_SERVICE=1
+KERNEL_CI_SERVICE=0
 KERNEL_NEW_CAM=1
 KERNEL_OVERCLOCK=1
 
@@ -508,6 +508,7 @@ fi
 				CC=clang \
 				AR=llvm-ar \
 				NM=llvm-nm \
+				LD=ld.lld \
 				STRIP=llvm-strip \
 				OBJCOPY=llvm-objcopy \
 				OBJDUMP=llvm-objdump \
@@ -516,6 +517,7 @@ fi
 				HOSTCC=clang \
 				HOSTCXX=clang++ \
 				HOSTAR=llvm-ar \
+				HOSTLD=ld.lld \
 				CLANG_TRIPLE=aarch64-linux-gnu- \
 				CROSS_COMPILE=aarch64-linux-gnu- \
 				CROSS_COMPILE_ARM32=arm-linux-gnueabi-
