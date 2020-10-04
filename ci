@@ -503,9 +503,9 @@ elif [ "$KERNEL_COMPILER" == "1" ];
 	then
 		CLANG_PATH="/root/nusantara/bin:${PATH}"
 fi
-	PATH="$CLANG_PATH" \
 if [ "$KERNEL_NAME" == "1" ];
 	then
+		PATH="$CLANG_PATH" \
 		make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
 					CC=clang \
 					AR=llvm-ar \
@@ -525,6 +525,7 @@ if [ "$KERNEL_NAME" == "1" ];
 					CROSS_COMPILE_ARM32=arm-linux-gnueabi-
 elif [ "$KERNEL_NAME" == "0" ];
 	then
+		PATH="$CLANG_PATH" \
 		make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
 					CC=clang \
 					AR=llvm-ar \
