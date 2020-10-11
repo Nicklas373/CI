@@ -146,7 +146,7 @@ elif [ "$KERNEL_NAME" == "1" ];
 		KERNEL_SCHED="EAS"
 		if [ "$KERNEL_STATE" == "0" ];
 			then
-				KERNEL_BRANCH="staging/kizuna"
+				KERNEL_BRANCH="staging/kizuna-2"
 		elif [ "$KERNEL_STATE" == "1" ];
 			then
 				KERNEL_BRANCH="kizuna"
@@ -493,7 +493,7 @@ function compile_mido() {
 	START=$(date +"%s")
 if [ "$KERNEL_NAME" == "1" ];
 	then
-		sed -i -e 's/-perf/-キズナ-r3/g'  ${KERNEL}/localversion
+		sed -i -e 's/-perf/-キズナ-r4/g'  ${KERNEL}/localversion
 fi
 	make -s -C ${KERNEL} ${CODENAME}_defconfig O=out
 if [ "$KERNEL_COMPILER" == "0" ];
