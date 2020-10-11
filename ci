@@ -50,7 +50,7 @@ KERNEL_AND_VER=1
 KERNEL_AVR=1
 KERNEL_CODENAME=0
 KERNEL_COMPILER=0
-KERNEL_CI_SERVICE=0
+KERNEL_CI_SERVICE=1
 KERNEL_NEW_CAM=0
 KERNEL_OVERCLOCK=1
 
@@ -126,7 +126,7 @@ elif [ "$KERNEL_NAME" == "1" ];
 		if [ "$KERNEL_STATE" == "0" ];
 			then
 				# Clone kernel repositories earlier
-				git clone --depth=1 -b rework/kizuna https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
+				git clone --depth=1 -b staging/kizuna-2 https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
 
 				# Define Kernel Specific Tag
 				KERNEL_CAF_TAG="LA.UM.9.6.2.r1-02100-89xx.0"
