@@ -43,14 +43,14 @@
 # 0 = Disable || 1 = Enable
 #
 # Declare Kernel Details
-KERNEL_NAME=1
+KERNEL_NAME=0
 KERNEL_SCHED=1
 KERNEL_STATE=0
 KERNEL_AND_VER=1
-KERNEL_AVR=0
+KERNEL_AVR=1
 KERNEL_CODENAME=0
 KERNEL_COMPILER=0
-KERNEL_CI_SERVICE=0
+KERNEL_CI_SERVICE=1
 KERNEL_NEW_CAM=1
 KERNEL_OVERCLOCK=1
 
@@ -89,14 +89,14 @@ if [ "$KERNEL_NAME" == "0" ];
 				git clone --depth=1 -b lineage-17.1 https://github.com/Nicklas373/kernel_xiaomi_msm8953-4.9 kernel
 
 				# Define Kernel Specific Tag
-				KERNEL_CAF_TAG="LA.UM.9.6.2.r1-02100-89xx.0"
+				KERNEL_CAF_TAG="LA.UM.9.6.2.r1-02500-89xx.0"
 		elif [ "$KERNEL_STATE" == "1" ];
 			then
 				# Clone kernel repositories earlier
 				git clone --depth=1 -b lineage-17.1 https://github.com/Nicklas373/kernel_xiaomi_msm8953-4.9 kernel
 
 				# Define Kernel Specific Tag
-				KERNEL_CAF_TAG="LA.UM.9.6.2.r1-02100-89xx.0"
+				KERNEL_CAF_TAG="LA.UM.9.6.2.r1-02500-89xx.0"
 		fi
 
 		# Cloning AnyKernel Repository
