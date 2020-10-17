@@ -231,9 +231,11 @@ elif [ "$user" == "1" ];
 		if [ "$avr" == "1" ];
 			then
 				sed -i -e 's/KERNEL_AVR=1/KERNEL_AVR=0/g' ~/CI/ci
+				sed -i -e 's/KERNEL_AVR=2/KERNEL_AVR=0/g' ~/CI/ci
 		elif [ "$avr" == "2" ];
 			then
-				sed -i -e 's/KERNEL_AVR=0/KERNEL_AVR=1/g' ~/CI/ci
+				sed -i -e 's/KERNEL_AVR=0/KERNEL_AVR=2/g' ~/CI/ci
+				sed -i -e 's/KERNEL_AVR=1/KERNEL_AVR=2/g' ~/CI/ci
 		fi
 		if [ "$kdev" == "1" ];
 			then

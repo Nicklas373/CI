@@ -8,7 +8,7 @@
 # Copyright 2016-2020, HANA-CI Build Project
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-# CI Script Revision = 20200929
+# CI Script Revision = 20201017
 
 # Build Information
 #
@@ -22,7 +22,7 @@
 # 0 = BETA || 1 = Stable
 #
 # Android Version // AVR
-# 0 = 9.0 || 1 = 10.0 || 2 = 9.0 - 10.0
+# 0 = 10.0 || 1 = 11.0 || 2 = 9.0 - 10.0
 #
 # Kernel Codename
 # 0 = Mido || 1 = Lavender
@@ -43,11 +43,11 @@
 # 0 = Disable || 1 = Enable
 #
 # Declare Kernel Details
-KERNEL_NAME=0
+KERNEL_NAME=1
 KERNEL_SCHED=1
 KERNEL_STATE=0
 KERNEL_AND_VER=1
-KERNEL_AVR=1
+KERNEL_AVR=2
 KERNEL_CODENAME=0
 KERNEL_COMPILER=0
 KERNEL_CI_SERVICE=1
@@ -216,7 +216,7 @@ if [ "$KERNEL_CI_SERVICE" == "0" ];
 		elif [ "$KERNEL_OVERCLOCK" == "1" ];
 			then
 				# Downloading kernel source
-				git clone --depth=1 -b fusion/rework https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_lavender-4.4 kernel
+				git clone --depth=1 -b fusion/nodebug-oc https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_lavender-4.4 kernel
 		fi
 elif [ "$KERNEL_CI_SERVICE" == "2" ];
 	then
@@ -231,7 +231,7 @@ elif [ "$KERNEL_CI_SERVICE" == "2" ];
 		elif [ "$KERNEL_OVERCLOCK" == "1" ];
 			then
 				# Downloading kernel source
-				 git clone --depth=1 -b fusion/rework https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_lavender-4.4 kernel
+				 git clone --depth=1 -b fusion/nodebug-oc https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_lavender-4.4 kernel
 		fi
 fi
 
@@ -264,7 +264,7 @@ KERNEL_TEMP="$(pwd)/TEMP"
 CODENAME="lavender"
 KERNEL_CODE="Lavender"
 TELEGRAM_DEVICE="Xiaomi Redmi Note 7"
-KERNEL_REV="r6"
+KERNEL_REV="r7"
 if [ "$KERNEL_OVERCLOCK" == "0" ];
 	then
 		KERNEL_REL="Fusion"
@@ -300,15 +300,15 @@ fi
 if [ "$KERNEL_STATE" == "1" ];
 	then
 		KERNEL_RELEASE="Stable"
-		FUSION_CODENAME="Fallen_Rosemary"
-		KERNEL_VERSION="r6"
+		FUSION_CODENAME="Unknown"
+		KERNEL_VERSION="r7"
 		KVERSION="${FUSION_CODENAME}-${KERNEL_VERSION}"
 		ZIP_NAME="${KERNEL_REL}-${KVERSION}-${CODENAME}-$(date "+%H%M-%d%m%Y").zip"
 elif [ "$KERNEL_STATE" == "0" ];
 	then
 		KERNEL_RELEASE="BETA"
-		FUSION_CODENAME="Fallen_Rosemary"
-		KERNEL_VERSION="r6"
+		FUSION_CODENAME="Unknown"
+		KERNEL_VERSION="r7"
 		KVERSION="${FUSION_CODENAME}-$(git log --pretty=format:'%h' -1)-$(date "+%H%M")"
 		ZIP_NAME="${KERNEL_REL}-${FUSION_CODENAME}-${CODENAME}-$(git log --pretty=format:'%h' -1)-$(date "+%H%M").zip"
 
@@ -350,8 +350,8 @@ elif [ "$KERNEL_AND_VER" == "1" ];
 				KERNEL_TAG="Q"
 		elif [ "$KERNEL_AVR" == "1" ];
 			then
-				KERNEL_ANDROID_VER="10"
-				KERNEL_TAG="Q"
+				KERNEL_ANDROID_VER="11"
+				KERNEL_TAG="R"
 		fi
 elif [ "$KERNEL_AND_VER" == "2" ];
 	then
@@ -436,6 +436,7 @@ function bot_complete_compile() {
 			"=========== Kernel Information ================" \
 			"<b>Kernel Scheduler :</b><code> ${KERNEL_SCHED} </code>" \
 			"<b>Kernel Tag : </b><code> ${KERNEL_CAF_TAG} </code>" \
+			"<b>Kernel Branch : </b><code> ${KERNEL_BRANCH} </code>" \
 			"<b>Kernel Linux Version:</b><code> Linux ${TELEGRAM_KERNEL_VER}</code>" \
 			"<b>Kernel Release Ver :</b><code> ${KERNEL_REV} </code>" \
 			"<b>Kernel Codename :</b><code> ${KERNEL_RELEASE_NAME} </code>" \
