@@ -133,11 +133,11 @@ read -s version_avr
 
 if [ "$version_avr" == "1" ];
 	then
-		avr="1"
+		avr="0"
 		avr_str="Android 10.0"
 elif [ "$version_avr" == "2" ];
 	then
-		avr="2"
+		avr="1"
 		avr_str="Android 11.0"
 fi
 
@@ -234,8 +234,8 @@ elif [ "$user" == "1" ];
 				sed -i -e 's/KERNEL_AVR=2/KERNEL_AVR=0/g' ~/CI/ci
 		elif [ "$avr" == "2" ];
 			then
-				sed -i -e 's/KERNEL_AVR=0/KERNEL_AVR=2/g' ~/CI/ci
-				sed -i -e 's/KERNEL_AVR=1/KERNEL_AVR=2/g' ~/CI/ci
+				sed -i -e 's/KERNEL_AVR=0/KERNEL_AVR=1/g' ~/CI/ci
+				sed -i -e 's/KERNEL_AVR=2/KERNEL_AVR=1/g' ~/CI/ci
 		fi
 		if [ "$kdev" == "1" ];
 			then
