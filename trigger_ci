@@ -228,11 +228,11 @@ elif [ "$user" == "1" ];
 				sed -i -e 's/KERNEL_NAME=1/KERNEL_NAME=2/g'  ~/CI/ci
 				sed -i -e 's/KERNEL_SCHED=0/KERNEL_SCHED=1/g'  ~/CI/ci
 		fi
-		if [ "$avr" == "1" ];
+		if [ "$avr" == "0" ];
 			then
 				sed -i -e 's/KERNEL_AVR=1/KERNEL_AVR=0/g' ~/CI/ci
 				sed -i -e 's/KERNEL_AVR=2/KERNEL_AVR=0/g' ~/CI/ci
-		elif [ "$avr" == "2" ];
+		elif [ "$avr" == "1" ];
 			then
 				sed -i -e 's/KERNEL_AVR=0/KERNEL_AVR=1/g' ~/CI/ci
 				sed -i -e 's/KERNEL_AVR=2/KERNEL_AVR=1/g' ~/CI/ci
