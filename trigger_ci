@@ -278,7 +278,7 @@ elif [ "$user" == "1" ];
 		if [ "$overclock" == "1" ];
 			then
 				sed -i -e 's/KERNEL_OVERCLOCK=0/KERNEL_OVERCLOCK=1/g'	~/CI/ci
-		elif [ "$overclock" == "2" ];
+		elif [ "$overclock" == "0" ];
 			then
 				sed -i -e 's/KERNEL_OVERCLOCK=1/KERNEL_OVERCLOCK=0/g'	~/CI/ci
 		fi
