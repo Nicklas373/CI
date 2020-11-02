@@ -83,6 +83,18 @@ mkdir TEMP
 # Clone source for specific kernel name
 if [ "$KERNEL_NAME" == "0" ];
 	then
+		if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "1" ];
+                        then
+                                # Import github token
+                                TOKEN=${token}
+                                echo $TOKEN
+                elif [ "$KERNEL_CI_SERVICE" == "2" ];
+                        then
+                                # Import github token
+                                TOKEN=${git_token}
+                                echo $TOKEN
+                fi
+
 		if [ "$KERNEL_STATE" == "0" ];
                         then
 				# Clone kernel repositories earlier
