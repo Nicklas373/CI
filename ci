@@ -524,7 +524,6 @@ if [ "$KERNEL_NAME" == "1" ];
 					CC=clang \
 					AR=llvm-ar \
 					NM=llvm-nm \
-					# LD=ld.lld \
 					STRIP=llvm-strip \
 					OBJCOPY=llvm-objcopy \
 					OBJDUMP=llvm-objdump \
@@ -533,7 +532,6 @@ if [ "$KERNEL_NAME" == "1" ];
 					HOSTCC=clang \
 					HOSTCXX=clang++ \
 					HOSTAR=llvm-ar \
-					# HOSTLD=ld.lld \
 					CLANG_TRIPLE=aarch64-linux-gnu- \
 					CROSS_COMPILE=aarch64-linux-gnu- \
 					CROSS_COMPILE_ARM32=arm-linux-gnueabi-
