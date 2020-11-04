@@ -8,7 +8,7 @@
 # Copyright 2016-2020, HANA-CI Build Project
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-# CI Script Revision = 20201030
+# CI Script Revision = 20201104
 
 # Build Information
 #
@@ -138,7 +138,6 @@ elif [ "$KERNEL_NAME" == "1" ];
 		if [ "$KERNEL_STATE" == "0" ];
 			then
 				# Clone kernel repositories earlier
-				# git clone --depth=1 -b staging/kizuna https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_msm8953 kernel
 				git clone --depth=1 -b staging/op-eas https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/msm-4.9 kernel
 
 				# Define Kernel Specific Tag
@@ -505,10 +504,6 @@ function compile_mido() {
 	bot_first_compile
 	cd ..
 	START=$(date +"%s")
-if [ "$KERNEL_NAME" == "1" ];
-	then
-		sed -i -e 's/-perf/-キズナ-r4/g'  ${KERNEL}/localversion
-fi
 	make -s -C ${KERNEL} ${CODENAME}_defconfig O=out
 if [ "$KERNEL_COMPILER" == "0" ];
 	then
@@ -517,26 +512,6 @@ elif [ "$KERNEL_COMPILER" == "1" ];
 	then
 		CLANG_PATH="/root/nusantara/bin:${PATH}"
 fi
-if [ "$KERNEL_NAME" == "1" ];
-	then
-		PATH="$CLANG_PATH" \
-		make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
-					CC=clang \
-					AR=llvm-ar \
-					NM=llvm-nm \
-					STRIP=llvm-strip \
-					OBJCOPY=llvm-objcopy \
-					OBJDUMP=llvm-objdump \
-					OBJSIZE=llvm-size \
-					READELF=llvm-readelf \
-					HOSTCC=clang \
-					HOSTCXX=clang++ \
-					HOSTAR=llvm-ar \
-					CLANG_TRIPLE=aarch64-linux-gnu- \
-					CROSS_COMPILE=aarch64-linux-gnu- \
-					CROSS_COMPILE_ARM32=arm-linux-gnueabi-
-elif [ "$KERNEL_NAME" == "0" ];
-	then
 		PATH="$CLANG_PATH" \
 		make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
 					CC=clang \
