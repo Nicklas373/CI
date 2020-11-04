@@ -138,7 +138,7 @@ elif [ "$KERNEL_NAME" == "1" ];
 		if [ "$KERNEL_STATE" == "0" ];
 			then
 				# Clone kernel repositories earlier
-				git clone --depth=1 -b staging/op-eas https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/msm-4.9 kernel
+				git clone --depth=1 -b staging/kizuna https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/msm-4.9 kernel
 
 				# Define Kernel Specific Tag
 				KERNEL_CAF_TAG="LA.UM.9.6.2.r1-02800-89xx.0"
@@ -158,7 +158,7 @@ elif [ "$KERNEL_NAME" == "1" ];
 		KERNEL_SCHED="EAS"
 		if [ "$KERNEL_STATE" == "0" ];
 			then
-				KERNEL_BRANCH="staging/op-eas"
+				KERNEL_BRANCH="staging/kizuna"
 		elif [ "$KERNEL_STATE" == "1" ];
 			then
 				KERNEL_BRANCH="kizuna"
@@ -373,8 +373,8 @@ fi
 
 # Declare Telegram File Environment
 TELEGRAM_FILENAME="${KERNEL_REL}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip"
-export TELEGRAM_SUCCESS="CAACAgUAAx0CSp9MtQABAepjXq6Y3170L09A2CJZRN8gNFvbl1MAAmgAA-DTQRkRDMJTDT98URkE"
-export TELEGRAM_FAIL="CAACAgUAAx0CSp9MtQABAeprXq6ZZGVszX6u48DHZu0saobZ2kwAAmkAA-DTQRniCWJZ9E5eWRkE"
+export TELEGRAM_SUCCESS="CAACAgQAAx0CSp9MtQABA8L1X6IfyGVqgPr7iEkF0fMI\_f-GxvUAAh4BAAJgp-cE7OE7pauMixIeBA"
+export TELEGRAM_FAIL="CAACAgQAAx0CSp9MtQABA8LvX6IfqsYqouiFN-9oufWSyV4k\_5EAAiABAAJgp-cEwWEvFVozIK4eBA"
 }
 
 # Cloning Clang
