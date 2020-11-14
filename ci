@@ -193,6 +193,10 @@ export KBUILD_BUILD_HOST=${KERNEL_BOT}
 IMAGE="$(pwd)/kernel/out/arch/arm64/boot/Image.gz-dtb"
 KERNEL="$(pwd)/kernel"
 KERNEL_TEMP="$(pwd)/TEMP"
+if [ "$KERNEL_OVERCLOCK" == "1" ];
+	then
+		KERNEL_OVERCLOCK="OC"
+fi
 CODENAME="mido"
 KERNEL_CODE="Mido"
 TELEGRAM_DEVICE="Xiaomi Redmi Note 4x"
@@ -677,7 +681,7 @@ function anykernel() {
 							mv Kizuna-Kernel-4.9-${KERNEL_CODE}-signed.zip ${KERNEL_TEMP}/${KERNEL_REL}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip
 					elif [ "$KERNEL_OVERCLOCK" == "1" ];
 						then
-							mv Kizuna-Kernel-4.9-${KERNEL_CODE}-signed.zip ${KERNEL_TEMP}/${KERNEL_REL}-${KERNEL_SUFFIX}-${KERNEL_CODE}-OC-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip
+							mv Kizuna-Kernel-4.9-${KERNEL_CODE}-signed.zip ${KERNEL_TEMP}/${KERNEL_REL}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_OVERCLOCK}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip
 					fi
 			fi
 	fi
