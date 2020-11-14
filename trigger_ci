@@ -73,6 +73,23 @@ if [ "$kdev" == "1" ];
 		elif [ "$kname" == "2" ];
 			then
 				name="Kizuna Kernel"
+				echo ""
+				echo "Overclock Version ?"
+				echo "1. Yes"
+				echo "2. No"
+				echo ""
+				echo "NOTE: Write number only!"
+				read -s oc
+
+				if [ "$oc" == "1" ];
+					then
+						overclock="1"
+						clock="true"
+				elif [ "$oc" == "2" ];
+					then
+						overclock="0"
+						clock="false"
+				fi
 		fi
 elif [ "$kdev" == "2" ];
 	then
@@ -90,9 +107,11 @@ elif [ "$kdev" == "2" ];
 		if [ "$oc" == "1" ];
 			then
 				overclock="1"
+				clock="true"
 		elif [ "$oc" == "2" ];
 			then
 				overclock="0"
+				clock="false"
 		fi
 fi
 
@@ -181,6 +200,7 @@ echo "| Kernel	: $name		|"
 echo "| Release	: $release			|"
 echo "| Android Ver	: $avr_str		|"
 echo "| Ext Clang	: $ext_clang	|"
+echo "| Overclock	: $clock			|"
 echo "|					|"
 echo "| is this right option ?		|"
 echo "|					|"
