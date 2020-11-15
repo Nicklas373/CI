@@ -8,7 +8,7 @@
 # Copyright 2016-2020, HANA-CI Build Project
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-# CI Script Revision = 20201115
+# CI Script Revision = 20201116
 
 # Build Information
 #
@@ -48,11 +48,11 @@ KERNEL_SCHED=1
 KERNEL_STATE=0
 KERNEL_AND_VER=1
 KERNEL_AVR=1
-KERNEL_CODENAME=0
+KERNEL_CODENAME=1
 KERNEL_COMPILER=0
 KERNEL_CI_SERVICE=0
 KERNEL_NEW_CAM=0
-KERNEL_OVERCLOCK=0
+KERNEL_OVERCLOCK=1
 
 # Environment init
 function env_init() {
@@ -249,7 +249,7 @@ if [ "$KERNEL_CI_SERVICE" == "0" ];
 		elif [ "$KERNEL_OVERCLOCK" == "1" ];
 			then
 				# Downloading kernel source
-				git clone --depth=1 -b fusion-nodebug-oc https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_lavender-4.4 kernel
+				git clone --depth=1 -b bak https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_lavender-4.4 kernel
 		fi
 elif [ "$KERNEL_CI_SERVICE" == "2" ];
 	then
@@ -356,10 +356,10 @@ elif [ "$KERNEL_STATE" == "0" ];
 		fi
 
 # Enable NLMK Patch Disabler
-wget https://raw.githubusercontent.com/Nicklas373/CI/CI/nlmk.patch
+# wget https://raw.githubusercontent.com/Nicklas373/CI/CI/nlmk.patch
 
 # Apply NLMK Patch Disabler
-git apply nlmk.patch
+# git apply nlmk.patch
 fi
 }
 
