@@ -356,10 +356,10 @@ elif [ "$KERNEL_STATE" == "0" ];
 		fi
 
 # Enable NLMK Patch Disabler
-# wget https://raw.githubusercontent.com/Nicklas373/CI/CI/nlmk.patch
+wget https://raw.githubusercontent.com/Nicklas373/CI/CI/nlmk.patch
 
 # Apply NLMK Patch Disabler
-# git apply nlmk.patch
+git apply nlmk.patch
 fi
 }
 
