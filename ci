@@ -576,7 +576,7 @@ fi
 function compile_lave() {
 	START=$(date +"%s")
 	cd ${KERNEL}
-	make vendor/${CODENAME}_defconfig O=out
+	make ${CODENAME}_defconfig O=out
 if [ "$KERNEL_COMPILER" == "0" ];
 	then
 		CLANG_PATH="/root/proton/bin/:${PATH}"
