@@ -538,7 +538,7 @@ elif [ "$KERNEL_COMPILER" == "1" ];
 		CLANG_PATH="/root/nusantara/bin:${PATH}"
 fi
 		PATH="$CLANG_PATH" \
-		make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
+		make -C ${KERNEL} -j$(nproc --all) O=out \
 					CC=clang \
 					AR=llvm-ar \
 					NM=llvm-nm \
