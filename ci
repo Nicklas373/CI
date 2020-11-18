@@ -580,7 +580,7 @@ fi
 function compile_lave() {
 	START=$(date +"%s")
 	cd ${KERNEL}
-	make vendor/${CODENAME}_defconfig O=out
+	make CONFIG_DEBUG_SECTION_MISMATCH=y vendor/${CODENAME}_defconfig O=out
 if [ "$KERNEL_COMPILER" == "0" ];
 	then
 		CLANG_PATH="/root/proton/bin/:${PATH}"
