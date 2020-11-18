@@ -195,7 +195,7 @@ KERNEL="$(pwd)/kernel"
 KERNEL_TEMP="$(pwd)/TEMP"
 if [ "$KERNEL_OVERCLOCK" == "1" ];
 	then
-		KERNEL_OVERCLOCK="OC"
+		KERNEL_CLOCK="OC"
 fi
 CODENAME="mido"
 KERNEL_CODE="Mido"
@@ -296,6 +296,10 @@ ANYKERNEL="$(pwd)/AnyKernel3"
 KERNEL_TEMP="$(pwd)/TEMP"
 CODENAME="lavender"
 KERNEL_CODE="Lavender"
+if [ "$KERNEL_OVERCLOCK" == "1" ];
+	then
+		KERNEL_CLOCK="OC"
+fi
 TELEGRAM_DEVICE="Xiaomi Redmi Note 7"
 KERNEL_REV="r7"
 if [ "$KERNEL_OVERCLOCK" == "0" ];
@@ -681,7 +685,7 @@ function anykernel() {
 							mv Kizuna-Kernel-4.9-${KERNEL_CODE}-signed.zip ${KERNEL_TEMP}/${KERNEL_REL}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip
 					elif [ "$KERNEL_OVERCLOCK" == "1" ];
 						then
-							mv Kizuna-Kernel-4.9-${KERNEL_CODE}-signed.zip ${KERNEL_TEMP}/${KERNEL_REL}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_OVERCLOCK}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip
+							mv Kizuna-Kernel-4.9-${KERNEL_CODE}-signed.zip ${KERNEL_TEMP}/${KERNEL_REL}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_CLOCK}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip
 					fi
 			fi
 	fi
