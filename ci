@@ -48,7 +48,7 @@ KERNEL_SCHED=1
 KERNEL_STATE=0
 KERNEL_AND_VER=1
 KERNEL_AVR=1
-KERNEL_CODENAME=1
+KERNEL_CODENAME=0
 KERNEL_COMPILER=0
 KERNEL_CI_SERVICE=0
 KERNEL_NEW_CAM=0
@@ -528,6 +528,10 @@ function compile_mido() {
 	cd ${KERNEL}
 	bot_first_compile
 	cd ..
+if [ "$KERNEL_OVERCLOCK" == "1" ];
+	then
+		sed -i -e 's/-キズナ/-キズナ-OC/g' ${KERNEL}/localversion
+fi
 	START=$(date +"%s")
 	make -s -C ${KERNEL} vendor/${CODENAME}_defconfig O=out
 if [ "$KERNEL_COMPILER" == "0" ];
