@@ -8,7 +8,7 @@
 # Copyright 2016-2020, HANA-CI Build Project
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-# CI Script Revision = 20201116
+# CI Script Revision = 20201119
 
 # Build Information
 #
@@ -542,7 +542,7 @@ elif [ "$KERNEL_COMPILER" == "1" ];
 		CLANG_PATH="/root/nusantara/bin:${PATH}"
 fi
 		PATH="$CLANG_PATH" \
-		make -C ${KERNEL} -j$(nproc --all) O=out \
+		make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
 					CC=clang \
 					AR=llvm-ar \
 					NM=llvm-nm \
