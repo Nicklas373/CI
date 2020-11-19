@@ -169,7 +169,7 @@ echo ""
 echo "Select your compiler :3"
 echo ""
 echo "1. Proton Clang 12"
-echo "2. Nusantara Clang 11"
+echo "2. AOSP Clang + GCC 4.9 (Non-elf)"
 echo ""
 echo "NOTE: Write number only !"
 read -s clang
@@ -181,7 +181,7 @@ if [ "$clang" == "1" ];
 elif [ "$clang" == "2" ];
 	then
 		comp="2"
-		ext_clang="Nusantara Clang 11"
+		ext_clang="AOSP Clang + GCC 4.9 (Non-elf)"
 fi
 
 # Run next step
