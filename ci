@@ -49,7 +49,7 @@ KERNEL_STATE=0
 KERNEL_AND_VER=1
 KERNEL_AVR=1
 KERNEL_CODENAME=1
-KERNEL_COMPILER=0
+KERNEL_COMPILER=1
 KERNEL_CI_SERVICE=0
 KERNEL_NEW_CAM=0
 KERNEL_OVERCLOCK=1
@@ -249,7 +249,7 @@ if [ "$KERNEL_CI_SERVICE" == "0" ];
 		elif [ "$KERNEL_OVERCLOCK" == "1" ];
 			then
 				# Downloading kernel source
-				git clone --depth=1 -b staging/nothing https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_lavender-4.4 kernel
+				git clone --depth=1 -b staging/nothing-eas https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_lavender-4.4 kernel
 		fi
 elif [ "$KERNEL_CI_SERVICE" == "2" ];
 	then
@@ -264,7 +264,7 @@ elif [ "$KERNEL_CI_SERVICE" == "2" ];
 		elif [ "$KERNEL_OVERCLOCK" == "1" ];
 			then
 				# Downloading kernel source
-				git clone --depth=1 -b staging/nothing https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_lavender-4.4 kernel
+				git clone --depth=1 -b staging/nothing-eas https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_lavender-4.4 kernel
 		fi
 fi
 
