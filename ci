@@ -48,7 +48,7 @@ KERNEL_SCHED=1
 KERNEL_STATE=0
 KERNEL_AND_VER=1
 KERNEL_AVR=1
-KERNEL_CODENAME=1
+KERNEL_CODENAME=0
 KERNEL_COMPILER=1
 KERNEL_CI_SERVICE=0
 KERNEL_NEW_CAM=0
@@ -84,32 +84,22 @@ mkdir TEMP
 if [ "$KERNEL_NAME" == "0" ];
 	then
 		if [ "$KERNEL_CI_SERVICE" == "0" ] || [ "$KERNEL_CI_SERVICE" == "1" ];
-                        then
-                                # Import github token
-                                TOKEN=${token}
-                                echo $TOKEN
-                elif [ "$KERNEL_CI_SERVICE" == "2" ];
-                        then
-                                # Import github token
-                                TOKEN=${git_token}
-                                echo $TOKEN
-                fi
-
-		if [ "$KERNEL_STATE" == "0" ];
-                        then
-				# Clone kernel repositories earlier
-				git clone --depth=1 -b lineage-17.1 https://github.com/Nicklas373/kernel_xiaomi_msm8953-4.9 kernel
-
-				# Define Kernel Specific Tag
-				KERNEL_CAF_TAG="LA.UM.9.6.2.r1-02800-89xx.0"
-		elif [ "$KERNEL_STATE" == "1" ];
 			then
-				# Clone kernel repositories earlier
-				git clone --depth=1 -b lineage-17.1 https://github.com/Nicklas373/kernel_xiaomi_msm8953-4.9 kernel
-
-				# Define Kernel Specific Tag
-				KERNEL_CAF_TAG="LA.UM.9.6.2.r1-02800-89xx.0"
+				# Import github token
+				TOKEN=${token}
+				echo $TOKEN
+		elif [ "$KERNEL_CI_SERVICE" == "2" ];
+			then
+				# Import github token
+				TOKEN=${git_token}
+				echo $TOKEN
 		fi
+
+		# Clone kernel repositories earlier
+		git clone --depth=1 -b lineage-17.1 https://github.com/Nicklas373/kernel_xiaomi_msm8953-4.9 kernel
+
+		# Define Kernel Specific Tag
+		KERNEL_CAF_TAG="LA.UM.9.6.2.r1-02800-89xx.0"
 
 		# Cloning AnyKernel Repository
 		git clone --depth=1 -b caf/mido-4.9 https://github.com/Nicklas373/AnyKernel3
@@ -137,22 +127,12 @@ elif [ "$KERNEL_NAME" == "1" ];
 
 		if [ "$KERNEL_STATE" == "0" ];
 			then
-				if [ "$KERNEL_OVERCLOCK" == "0" ];
-					then
-						# Clone kernel repositories earlier
-						git clone --depth=1 -b staging/kizuna https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/msm-4.9 kernel
+				# Clone kernel repositories earlier
+				git clone --depth=1 -b staging/kizuna https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/msm-4.9 kernel
 
-						# Define Kernel Specific Tag
-						KERNEL_CAF_TAG="LA.UM.9.6.2.r1-02800-89xx.0"
+				# Define Kernel Specific Tag
+				KERNEL_CAF_TAG="LA.UM.9.6.2.r1-02800-89xx.0"
 
-				elif [ "$KERNEL_OVERCLOCK" == "1" ];
-					then
-						# Clone kernel repositories earlier
-						git clone --depth=1 -b staging/kizuna-oc https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/msm-4.9 kernel
-
-						# Define Kernel Specific Tag
-						KERNEL_CAF_TAG="LA.UM.9.6.2.r1-02800-89xx.0"
-				fi
 		elif [ "$KERNEL_STATE" == "1" ];
 			then
 				# Clone kernel repositories earlier
@@ -169,13 +149,7 @@ elif [ "$KERNEL_NAME" == "1" ];
 		KERNEL_SCHED="EAS"
 		if [ "$KERNEL_STATE" == "0" ];
 			then
-				if [ "$KERNEL_OVERCLOCK" == "0" ];
-					then
-						KERNEL_BRANCH="staging/kizuna"
-				elif [ "$KERNEL_OVERCLOCK" == "1" ];
-					then
-						KERNEL_BRANCH="staging/kizuna-oc"
-				fi
+				KERNEL_BRANCH="staging/kizuna"
 		elif [ "$KERNEL_STATE" == "1" ];
 			then
 				KERNEL_BRANCH="kizuna"
@@ -534,6 +508,10 @@ function compile_mido() {
 if [ "$KERNEL_OVERCLOCK" == "1" ];
 	then
 		sed -i -e 's/-キズナ/-キズナ-OC/g' ${KERNEL}/localversion
+		sed -i -e 's/# CONFIG_MACH_XIAOMI_C6_OVERCLOCKED is not set/CONFIG_MACH_XIAOMI_C6_OVERCLOCKED=y/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
+elif [ "$KERNEL_OVERCLOCK" == "0" ];
+	then
+		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_OVERCLOCKED=y/# CONFIG_MACH_XIAOMI_C6_OVERCLOCKED is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 fi
 	START=$(date +"%s")
 	make -s -C ${KERNEL} vendor/${CODENAME}_defconfig O=out
