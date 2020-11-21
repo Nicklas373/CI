@@ -1,0 +1,26 @@
+From 280eefb7bd13c3320a9db604da5c3079f20e1f85 Mon Sep 17 00:00:00 2001
+From: Dicky Herlambang <herlambangdicky5@gmail.com>
+Date: Sat, 21 Nov 2020 10:47:00 +0700
+Subject: [PATCH] ARM64/configs: lavender: Disable NLMK
+
+Signed-off-by: Dicky Herlambang <herlambangdicky5@gmail.com>
+---
+ arch/arm64/configs/lavender_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/configs/lavender_defconfig b/arch/arm64/configs/lavender_defconfig
+index 7afeb1e7090b..3c36114b0131 100644
+--- a/arch/arm64/configs/lavender_defconfig
++++ b/arch/arm64/configs/lavender_defconfig
+@@ -4663,7 +4663,7 @@ CONFIG_ANDROID=y
+ CONFIG_ANDROID_BINDER_IPC=y
+ CONFIG_ANDROID_BINDER_DEVICES="binder,hwbinder,vndbinder"
+ CONFIG_ANDROID_SIMPLE_LMK=y
+-CONFIG_ANDROID_NLMK=y
++# CONFIG_ANDROID_NLMK is not set
+ CONFIG_ANDROID_SIMPLE_LMK_MINFREE=128
+ CONFIG_ANDROID_SIMPLE_LMK_TIMEOUT_MSEC=200
+ # CONFIG_LIBNVDIMM is not set
+-- 
+2.25.1
+
