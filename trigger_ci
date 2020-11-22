@@ -131,6 +131,9 @@ elif [ "$kdev" == "2" ];
 				cpu_overclock="0"
 				cpu_oc_clock="false"
 		fi
+
+		gpu_overclock="0"
+		gpu_oc_clock="false"
 fi
 
 # Run next step
@@ -218,7 +221,8 @@ echo "| Kernel	: $name		|"
 echo "| Release	: $release			|"
 echo "| Android Ver	: $avr_str		|"
 echo "| Ext Clang	: $ext_clang	|"
-echo "| Overclock	: $cpu_oc_clock			|"
+echo "| CPU Overclock	: $cpu_oc_clock			|"
+echo "| GPU Overclock	: $gpu_oc_clock			|"
 echo "|					|"
 echo "| is this right option ?		|"
 echo "|					|"
