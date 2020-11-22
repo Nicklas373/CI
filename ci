@@ -320,8 +320,8 @@ elif [ "$KERNEL_STATE" == "0" ];
 		KERNEL_RELEASE="BETA"
 		FUSION_CODENAME="Emerald_of_Alfheim"
 		KERNEL_VERSION="r8"
-		KVERSION="${FUSION_CODENAME}-$(KERNEL_VERSION}"
-		ZIP_NAME="${KERNEL_REL}-${KVERSION}-${CODENAME}-$(date "+%H%M").zip"
+		KVERSION="${FUSION_CODENAME}-${KERNEL_VERSION}"
+		ZIP_NAME="${KERNEL_REL}-${KVERSION}-${CODENAME}-$(date "+%H%M-%d%m%Y").zip"
 
 		if [ "$KERNEL_CI_SERVICE" == "2" ];
 			then
