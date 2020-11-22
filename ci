@@ -55,8 +55,8 @@ KERNEL_CODENAME=0
 KERNEL_COMPILER=1
 KERNEL_CI_SERVICE=0
 KERNEL_NEW_CAM=0
-KERNEL_CPU_OVERCLOCK=0
-KERNEL_GPU_OVERCLOCK=0
+KERNEL_CPU_OVERCLOCK=1
+KERNEL_GPU_OVERCLOCK=1
 
 # Environment init
 function env_init() {
@@ -512,20 +512,20 @@ function compile_mido() {
 if [ "$KERNEL_CPU_OVERCLOCK" == "1" ];
 	then
 		sed -i -e 's/-キズナ/-キズナ-OC/g' ${KERNEL}/localversion
-		sed -i -e 's/# CONFIG_MACH_XIAOMI_C6_CPU_OVERCLOCKED is not set/CONFIG_MACH_XIAOMI_C6_CPU_OVERCLOCKED=y/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
+		sed -i -e 's/# CONFIG_MACH_XIAOMI_C6_CLOCK_CPU_OVERCLOCKED is not set/CONFIG_MACH_XIAOMI_C6_CLOCK_CPU_OVERCLOCKED=y/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_CPU_DEFAULT=y/# CONFIG_MACH_XIAOMI_C6_CPU_DEFAULT is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 elif [ "$KERNEL_OVERCLOCK" == "0" ];
 	then
-		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_CPU_OVERCLOCKED=y/# CONFIG_MACH_XIAOMI_C6_CPU_OVERCLOCKED is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
+		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_CLOCK_CPU_OVERCLOCKED=y/# CONFIG_MACH_XIAOMI_C6_CLOCK_CPU_OVERCLOCKED is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 		sed -i -e 's/# CONFIG_MACH_XIAOMI_C6_CPU_DEFAULT is not set/CONFIG_MACH_XIAOMI_C6_CPU_DEFAULT=y/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 fi
 if [ "$KERNEL_GPU_OVERCLOCK" == "1" ];
 	then
-		sed -i -e 's/# CONFIG_MACH_XIAOMI_C6_GPU_OVERCLOCKED is not set/CONFIG_MACH_XIAOMI_C6_GPU_OVERCLOCKED=y/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
+		sed -i -e 's/# CONFIG_MACH_XIAOMI_C6_CLOCK_GPU_OVERCLOCKED is not set/CONFIG_MACH_XIAOMI_C6_CLOCK_GPU_OVERCLOCKED=y/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_GPU_DEFAULT=y/# CONFIG_MACH_XIAOMI_C6_GPU_DEFAULT is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 elif [ "$KERNEL_GPU_OVERCLOCK" == "0" ];
 	then
-		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_GPU_OVERCLOCKED=y/# CONFIG_MACH_XIAOMI_C6_GPU_OVERCLOCKED is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
+		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_CLOCK_GPU_OVERCLOCKED=y/# CONFIG_MACH_XIAOMI_C6_CLOCK_GPU_OVERCLOCKED is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 		sed -i -e 's/# CONFIG_MACH_XIAOMI_C6_GPU_DEFAULT is not set/CONFIG_MACH_XIAOMI_C6_GPU_DEFAULT=y/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 fi
 	START=$(date +"%s")
