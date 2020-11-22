@@ -103,10 +103,10 @@ if [ "$kdev" == "1" ];
 					then
 						gpu_overclock="1"
 						gpu_oc_clock="true"
-				elif [ "$gpu_oc" == "0" ];
+				elif [ "$gpu_oc" == "2" ];
 					then
 						gpu_overclock="0"
-						gpu_oc_clock="true"
+						gpu_oc_clock="false"
 				fi
 		fi
 elif [ "$kdev" == "2" ];
