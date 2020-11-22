@@ -85,10 +85,30 @@ if [ "$kdev" == "1" ];
 					then
 						overclock="1"
 						clock="true"
+
+						echo ""
+						echo "Undervolt Version ?"
+						echo "1. Yes"
+						echo "2. No"
+						echo ""
+						echo "NOTE: Write number only!"
+						read -s uv
+
+						if [ "$uv" == "1" ];
+							then
+								undervolt="1"
+								s_uv="false"
+						elif [ "$uv" == "2" ];
+							then
+								undervolt="0"
+								s_uv="false"
+						fi
 				elif [ "$oc" == "2" ];
 					then
 						overclock="0"
 						clock="false"
+						undervolt="0"
+						s_uv="false"
 				fi
 		fi
 elif [ "$kdev" == "2" ];
@@ -113,6 +133,9 @@ elif [ "$kdev" == "2" ];
 				overclock="0"
 				clock="false"
 		fi
+
+		undervolt="0"
+		s_uv="false"
 fi
 
 # Run next step
@@ -201,6 +224,7 @@ echo "| Release	: $release			|"
 echo "| Android Ver	: $avr_str		|"
 echo "| Ext Clang	: $ext_clang	|"
 echo "| Overclock	: $clock			|"
+echo "| Undervolt	: $s_uv				|"
 echo "|					|"
 echo "| is this right option ?		|"
 echo "|					|"
@@ -298,9 +322,16 @@ elif [ "$user" == "1" ];
 		if [ "$overclock" == "1" ];
 			then
 				sed -i -e 's/KERNEL_OVERCLOCK=0/KERNEL_OVERCLOCK=1/g'	~/CI/ci
-		elif [ "$overclock" == "0" ];
+		elif [ "$overclock" == "2" ];
 			then
 				sed -i -e 's/KERNEL_OVERCLOCK=1/KERNEL_OVERCLOCK=0/g'	~/CI/ci
+		fi
+		if [ "$undervolt" == "1" ];
+			then
+				sed -i -e 's/KERNEL_UNDERVOLT=0/KERNEL_UNDERVOLT=1/g'	~/CI/ci
+		elif [ "$undervolt" == "2" ];
+			then
+				sed -i -e 's/KERNEL_UNDERVOLT=1/KERNEL_UNDERVOLT=0/g'   ~/CI/ci
 		fi
 
 		echo "Triggering CI"
