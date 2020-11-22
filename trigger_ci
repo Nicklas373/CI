@@ -97,7 +97,7 @@ if [ "$kdev" == "1" ];
 						if [ "$uv" == "1" ];
 							then
 								undervolt="1"
-								s_uv="false"
+								s_uv="true"
 						elif [ "$uv" == "2" ];
 							then
 								undervolt="0"
