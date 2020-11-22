@@ -74,39 +74,21 @@ if [ "$kdev" == "1" ];
 			then
 				name="Kizuna Kernel"
 				echo ""
-				echo "CPU Overclock Version ?"
+				echo "Overclock Version ?"
 				echo "1. Yes"
 				echo "2. No"
 				echo ""
 				echo "NOTE: Write number only!"
-				read -s cpu_oc
+				read -s oc
 
-				if [ "$cpu_oc" == "1" ];
+				if [ "$oc" == "1" ];
 					then
-						cpu_overclock="1"
-						cpu_oc_clock="true"
-				elif [ "$cpu_oc" == "2" ];
+						overclock="1"
+						clock="true"
+				elif [ "$oc" == "2" ];
 					then
-						cpu_overclock="0"
-						cpu_oc_clock="false"
-				fi
-
-				echo ""
-				echo "GPU Overclock Version ?"
-				echo "1. Yes"
-				echo "2. No"
-				echo ""
-				echo "NOTE: Write number only!"
-				read -s gpu_oc
-
-				if [ "$gpu_oc" == "1" ];
-					then
-						gpu_overclock="1"
-						gpu_oc_clock="true"
-				elif [ "$gpu_oc" == "2" ];
-					then
-						gpu_overclock="0"
-						gpu_oc_clock="false"
+						overclock="0"
+						clock="false"
 				fi
 		fi
 elif [ "$kdev" == "2" ];
@@ -115,25 +97,22 @@ elif [ "$kdev" == "2" ];
 		name="Fusion Kernel"
 		echo "Fusion Kernel (@Alanndz & Nicklas373)"
 		echo ""
-		echo "CPU Overclock Version ?"
+		echo "Overclock Version ?"
 		echo "1. Yes"
 		echo "2. No"
 		echo ""
 		echo "NOTE: Write number only!"
-		read -s cpu_oc
+		read -s oc
 
-		if [ "$cpu_oc" == "1" ];
+		if [ "$oc" == "1" ];
 			then
-				cpu_overclock="1"
-				cpu_oc_clock="true"
-		elif [ "$cpu_oc" == "2" ];
+				overclock="1"
+				clock="true"
+		elif [ "$oc" == "2" ];
 			then
-				cpu_overclock="0"
-				cpu_oc_clock="false"
+				overclock="0"
+				clock="false"
 		fi
-
-		gpu_overclock="0"
-		gpu_oc_clock="false"
 fi
 
 # Run next step
@@ -221,8 +200,7 @@ echo "| Kernel	: $name		|"
 echo "| Release	: $release			|"
 echo "| Android Ver	: $avr_str		|"
 echo "| Ext Clang	: $ext_clang	|"
-echo "| CPU Overclock	: $cpu_oc_clock			|"
-echo "| GPU Overclock	: $gpu_oc_clock			|"
+echo "| Overclock	: $clock			|"
 echo "|					|"
 echo "| is this right option ?		|"
 echo "|					|"
@@ -317,19 +295,12 @@ elif [ "$user" == "1" ];
 			then
 				sed -i -e 's/KERNEL_COMPILER=0/KERNEL_COMPILER=1/g'  ~/CI/ci
 		fi
-		if [ "$cpu_overclock" == "1" ];
+		if [ "$overclock" == "1" ];
 			then
-				sed -i -e 's/KERNEL_CPU_OVERCLOCK=0/KERNEL_CPU_OVERCLOCK=1/g'	~/CI/ci
-		elif [ "$cpu_overclock" == "0" ];
+				sed -i -e 's/KERNEL_OVERCLOCK=0/KERNEL_OVERCLOCK=1/g'	~/CI/ci
+		elif [ "$overclock" == "0" ];
 			then
-				sed -i -e 's/KERNEL_CPU_OVERCLOCK=1/KERNEL_CPU_OVERCLOCK=0/g'	~/CI/ci
-		fi
-		if [ "$cpu_overclock" == "1" ];
-			then
-				sed -i -e 's/KERNEL_GPU_OVERCLOCK=0/KERNEL_GPU_OVERCLOCK=1/g'   ~/CI/ci
-		elif [ "$cpu_overclock" == "0" ];
-			then
-				sed -i -e 's/KERNEL_GPU_OVERCLOCK=1/KERNEL_GPU_OVERCLOCK=0/g'   ~/CI/ci
+				sed -i -e 's/KERNEL_OVERCLOCK=1/KERNEL_OVERCLOCK=0/g'	~/CI/ci
 		fi
 
 		echo "Triggering CI"
