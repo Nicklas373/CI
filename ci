@@ -171,9 +171,12 @@ export KBUILD_BUILD_HOST=${KERNEL_BOT}
 IMAGE="$(pwd)/kernel/out/arch/arm64/boot/Image.gz-dtb"
 KERNEL="$(pwd)/kernel"
 KERNEL_TEMP="$(pwd)/TEMP"
-if [ "$KERNEL_OVERCLOCK" == "1" ];
+if [ "$KERNEL_OVERCLOCK" == "1" ] || [ "$KERNEL_UNDERVOLT" == "0" ];
 	then
 		KERNEL_CLOCK="OC"
+elif [ "$KERNEL_OVERCLOCK" == "1" ] || [ "$KERNEL_UNDERVOLT" == "1" ];
+	then
+		KERNEL_CLOCK="UV";
 fi
 CODENAME="mido"
 KERNEL_CODE="Mido"
@@ -707,7 +710,7 @@ function kernel_upload() {
 					if [ "$KERNEL_OVERCLOCK" == "0" ];
 						then
 							curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/${KERNEL_REL}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip"  https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
-					elif [ "$KERNEL_OVERCLOCK" == "1" ];
+					elif [ "$KERNEL_OVERCLOCK" == "1" ] ||
 						then
 							curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/${KERNEL_REL}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_CLOCK}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip"  https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
 					fi
