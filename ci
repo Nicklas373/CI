@@ -174,7 +174,7 @@ KERNEL_TEMP="$(pwd)/TEMP"
 if [ "$KERNEL_OVERCLOCK" == "0" ] || [ "$KERNEL_UNDERVOLT" == "0" ];
 	then
 		KERNEL_CLOCK=""
-if [ "$KERNEL_OVERCLOCK" == "1" ] || [ "$KERNEL_UNDERVOLT" == "0" ];
+elif [ "$KERNEL_OVERCLOCK" == "1" ] || [ "$KERNEL_UNDERVOLT" == "0" ];
 	then
 		KERNEL_CLOCK="OC"
 elif [ "$KERNEL_OVERCLOCK" == "1" ] || [ "$KERNEL_UNDERVOLT" == "1" ];
