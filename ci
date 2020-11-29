@@ -173,7 +173,7 @@ KERNEL="$(pwd)/kernel"
 KERNEL_TEMP="$(pwd)/TEMP"
 if [ "$KERNEL_OVERCLOCK" == "0" ] || [ "$KERNEL_UNDERVOLT" == "0" ];
 	then
-		KERNEL_CLOCK=""
+		KERNEL_CLOCK="+"
 elif [ "$KERNEL_OVERCLOCK" == "1" ] || [ "$KERNEL_UNDERVOLT" == "0" ];
 	then
 		KERNEL_CLOCK="OC"
