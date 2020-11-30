@@ -70,6 +70,10 @@ if [ "$kdev" == "1" ];
 		if [ "$kname" == "1" ];
 			then
 				name="CAF Kernel"
+				overclock="0"
+				clock="false"
+				undervolt="0"
+				s_uv="false"
 		elif [ "$kname" == "2" ];
 			then
 				name="Kizuna Kernel"
