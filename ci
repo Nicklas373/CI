@@ -171,15 +171,14 @@ export KBUILD_BUILD_HOST=${KERNEL_BOT}
 IMAGE="$(pwd)/kernel/out/arch/arm64/boot/Image.gz-dtb"
 KERNEL="$(pwd)/kernel"
 KERNEL_TEMP="$(pwd)/TEMP"
-if [ "$KERNEL_OVERCLOCK" == "0" ] || [ "$KERNEL_UNDERVOLT" == "0" ];
-	then
-		KERNEL_CLOCK="+"
-elif [ "$KERNEL_OVERCLOCK" == "1" ] || [ "$KERNEL_UNDERVOLT" == "0" ];
+if [ "$KERNEL_OVERCLOCK" == "1" ] || [ "$KERNEL_UNDERVOLT" == "0" ];
 	then
 		KERNEL_CLOCK="OC"
 elif [ "$KERNEL_OVERCLOCK" == "1" ] || [ "$KERNEL_UNDERVOLT" == "1" ];
 	then
 		KERNEL_CLOCK="UV"
+else
+	KERNEL_CLOCK=""
 fi
 CODENAME="mido"
 KERNEL_CODE="Mido"
