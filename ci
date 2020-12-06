@@ -174,18 +174,18 @@ KERNEL_TEMP="$(pwd)/TEMP"
 if [ "$KERNEL_OVERCLOCK" == "1" ] && [ "$KERNEL_UNDERVOLT" == "0" ];
 	then
 		KERNEL_CLOCK="OC"
-		KERNEL_STATE="Overclock"
+		KERNEL_CLK_STR="Overclock"
 elif [ "$KERNEL_OVERCLOCK" == "0" ] && [ "$KERNEL_UNDERVOLT" == "1" ];
 	then
 		KERNEL_CLOCK="UV"
-		KERNEL_STATE="Undervolt"
+		KERNEL_CLK_STR="Undervolt"
 elif [ "$KERNEL_OVERCLOCK" == "1" ] && [ "$KERNEL_UNDERVOLT" == "1" ];
 	then
 		KERNEL_CLOCK="OC-UV"
-		KERNEL_CLOCK="Overclock + Undervolt"
+		KERNEL_CLK_STR="Overclock + Undervolt"
 else
 	KERNEL_CLOCK=""
-	KERNEL_STATE="Default"
+	KERNEL_CLK_STR="Default"
 fi
 CODENAME="mido"
 KERNEL_CODE="Mido"
@@ -425,7 +425,7 @@ function bot_first_compile() {
 			"" \
 			" =========== Kernel Information ================" \
 			"<b>Kernel Scheduler : </b><code> ${KERNEL_SCHED} </code>" \
-			"<b>Kernel Clock : </b><code> ${KERNEL_STATE} </code>" \
+			"<b>Kernel Clock : </b><code> ${KERNEL_CLK_STR} </code>" \
 			"<b>Kernel Tag : </b><code> ${KERNEL_CAF_TAG} </code>" \
 			"<b>Kernel Branch : </b><code> ${KERNEL_BRANCH} </code>" \
 			"<b>Kernel Commit : </b><code> $(git --no-pager log --pretty=format:'"%h - %s (%an)"' -1) </code>"
@@ -446,7 +446,7 @@ function bot_complete_compile() {
 			"" \
 			"=========== Kernel Information ================" \
 			"<b>Kernel Scheduler : </b><code> ${KERNEL_SCHED} </code>" \
-			"<b>Kernel Clock : </b><code> ${KERNEL_STATE} </code>" \
+			"<b>Kernel Clock : </b><code> ${KERNEL_CLK_STR} </code>" \
 			"<b>Kernel Tag : </b><code> ${KERNEL_CAF_TAG} </code>" \
 			"<b>Kernel Branch : </b><code> ${KERNEL_BRANCH} </code>" \
 			"<b>Kernel Linux Version:</b><code> Linux ${TELEGRAM_KERNEL_VER}</code>" \
