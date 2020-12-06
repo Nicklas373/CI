@@ -8,7 +8,7 @@
 # Copyright 2016-2020, HANA-CI Build Project
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-# CI Script Revision = 20201129
+# CI Script Revision = 20201206
 
 # Build Information
 #
@@ -171,14 +171,21 @@ export KBUILD_BUILD_HOST=${KERNEL_BOT}
 IMAGE="$(pwd)/kernel/out/arch/arm64/boot/Image.gz-dtb"
 KERNEL="$(pwd)/kernel"
 KERNEL_TEMP="$(pwd)/TEMP"
-if [ "$KERNEL_OVERCLOCK" == "1" ] || [ "$KERNEL_UNDERVOLT" == "0" ];
+if [ "$KERNEL_OVERCLOCK" == "1" ] && [ "$KERNEL_UNDERVOLT" == "0" ];
 	then
 		KERNEL_CLOCK="OC"
-elif [ "$KERNEL_OVERCLOCK" == "1" ] || [ "$KERNEL_UNDERVOLT" == "1" ];
+		KERNEL_STATE="Overclock"
+elif [ "$KERNEL_OVERCLOCK" == "0" ] && [ "$KERNEL_UNDERVOLT" == "1" ];
 	then
 		KERNEL_CLOCK="UV"
+		KERNEL_STATE="Undervolt"
+elif [ "$KERNEL_OVERCLOCK" == "1" ] && [ "$KERNEL_UNDERVOLT" == "1" ];
+	then
+		KERNEL_CLOCK="OC-UV"
+		KERNEL_CLOCK="Overclock + Undervolt"
 else
 	KERNEL_CLOCK=""
+	KERNEL_STATE="Default"
 fi
 CODENAME="mido"
 KERNEL_CODE="Mido"
@@ -409,7 +416,7 @@ curl -s -X POST https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendMessage -d ch
 function bot_first_compile() {
 	bot_template	"<b>|| HANA-CI Build Bot ||</b>" \
 			"" \
-			"<b>${KERNEL_REL} Kernel build Start!</b>" \
+			"<b>${KERNEL_REL} ${KERNEL_CLOCK} Kernel build Start!</b>" \
 			"" \
 			"============= Build Information ================" \
 			"<b>Build Status :</b><code> ${KERNEL_RELEASE} </code>" \
@@ -418,6 +425,7 @@ function bot_first_compile() {
 			"" \
 			" =========== Kernel Information ================" \
 			"<b>Kernel Scheduler : </b><code> ${KERNEL_SCHED} </code>" \
+			"<b>Kernel Clock : </b><code> ${KERNEL_STATE} </code>" \
 			"<b>Kernel Tag : </b><code> ${KERNEL_CAF_TAG} </code>" \
 			"<b>Kernel Branch : </b><code> ${KERNEL_BRANCH} </code>" \
 			"<b>Kernel Commit : </b><code> $(git --no-pager log --pretty=format:'"%h - %s (%an)"' -1) </code>"
@@ -428,7 +436,7 @@ function bot_complete_compile() {
 	telegram_init
 	bot_template	"<b>|| HANA-CI Build Bot ||</b>" \
 			"" \
-			"<b>New ${KERNEL_REL} Kernel Build Is Available!</b>" \
+			"<b>New ${KERNEL_REL} ${KERNEL_CLOCK} Kernel Build Is Available!</b>" \
 			"" \
 			"============ Build Information ================" \
 			"<b>Build Status :</b><code> ${KERNEL_RELEASE} </code>" \
@@ -437,7 +445,8 @@ function bot_complete_compile() {
    			"<b>Filename :</b><code> ${TELEGRAM_FILENAME}</code>" \
 			"" \
 			"=========== Kernel Information ================" \
-			"<b>Kernel Scheduler :</b><code> ${KERNEL_SCHED} </code>" \
+			"<b>Kernel Scheduler : </b><code> ${KERNEL_SCHED} </code>" \
+			"<b>Kernel Clock : </b><code> ${KERNEL_STATE} </code>" \
 			"<b>Kernel Tag : </b><code> ${KERNEL_CAF_TAG} </code>" \
 			"<b>Kernel Branch : </b><code> ${KERNEL_BRANCH} </code>" \
 			"<b>Kernel Linux Version:</b><code> Linux ${TELEGRAM_KERNEL_VER}</code>" \
@@ -479,7 +488,7 @@ function bot_build_success() {
 function bot_build_failed() {
 	bot_template	"<b>|| HANA-CI Build Bot ||</b>" \
 			"" \
-			"<b>${KERNEL_REL} Kernel build Failed!</b>" \
+			"<b>${KERNEL_REL} ${KERNEL_CLOCK} Kernel build Failed!</b>" \
 			"" \
 			"<b>Compile Time :</b><code> $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) second(s)</code>"
 }
@@ -494,23 +503,34 @@ function compile_mido() {
 	cd ${KERNEL}
 	bot_first_compile
 	cd ..
-if [ "$KERNEL_UNDERVOLT" == "1" ];
+if [ "$KERNEL_OVERCLOCK" == "1" ] && [ "$KERNEL_UNDERVOLT" == "1" ];
 	then
-		sed -i -e 's/-キズナ/-キズナ-OC-UV/g' ${KERNEL}/localversion
+		sed -i -e 's/-キズナ/-キズナ-OC-UV-r5/g' ${KERNEL}/localversion
 		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_OVERCLOCKED=y/# CONFIG_MACH_XIAOMI_C6_OVERCLOCKED is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_DEFAULT=y/# CONFIG_MACH_XIAOMI_C6_DEFAULT is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
-		sed -i -e 's/# CONFIG_MACH_XIAOMI_C6_UNDERVOLT is not set/CONFIG_MACH_XIAOMI_C6_UNDERVOLT=y/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
-elif [ "$KERNEL_OVERCLOCK" == "1" ];
+		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_UNDERVOLT=y/# CONFIG_MACH_XIAOMI_C6_UNDERVOLT is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
+		sed -i -e 's/# CONFIG_MACH_XIAOMI_C6_OC_UV is not set/CONFIG_MACH_XIAOMI_C6_OC_UV=y/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
+elif [ "$KERNEL_OVERCLOCK" == "1" ] && [ "$KERNEL_UNDERVOLT" == "0" ];
 	then
-		sed -i -e 's/-キズナ/-キズナ-OC/g' ${KERNEL}/localversion
+		sed -i -e 's/-キズナ/-キズナ-OC-r5/g' ${KERNEL}/localversion
 		sed -i -e 's/# CONFIG_MACH_XIAOMI_C6_OVERCLOCKED is not set/CONFIG_MACH_XIAOMI_C6_OVERCLOCKED=y/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_DEFAULT=y/# CONFIG_MACH_XIAOMI_C6_DEFAULT is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_UNDERVOLT=y/# CONFIG_MACH_XIAOMI_C6_UNDERVOLT is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
-elif [ "$KERNEL_OVERCLOCK" == "0" ];
+		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_OC_UV=y/# CONFIG_MACH_XIAOMI_C6_OC_UV is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
+elif [ "$KERNEL_OVERCLOCK" == "0" ] && [ "$KERNEL_UNDERVOLT" == "1" ];
 	then
+		sed -i -e 's/-キズナ/-キズナ-UV-r5/g' ${KERNEL}/localversion
+		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_OVERCLOCKED=y/# CONFIG_MACH_XIAOMI_C6_OVERCLOCKED is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
+		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_DEFAULT=y/# CONFIG_MACH_XIAOMI_C6_DEFAULT is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
+		sed -i -e 's/# CONFIG_MACH_XIAOMI_C6_UNDERVOLT is not set/CONFIG_MACH_XIAOMI_C6_UNDERVOLT=y/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
+		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_OC_UV=y/# CONFIG_MACH_XIAOMI_C6_OC_UV is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
+elif [ "$KERNEL_OVERCLOCK" == "0" ] && [ "$KERNEL_UNDERVOLT" == "0" ];
+	then
+		sed -i -e 's/-キズナ/-キズナ-r5/g' ${KERNEL}/localversion
 		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_UNDERVOLT=y/# CONFIG_MACH_XIAOMI_C6_UNDERVOLT is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 		sed -i -e 's/# CONFIG_MACH_XIAOMI_C6_DEFAULT is not set/CONFIG_MACH_XIAOMI_C6_DEFAULT=y/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_UNDERVOLT=y/# CONFIG_MACH_XIAOMI_C6_UNDERVOLT is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
+		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_OC_UV=y/# CONFIG_MACH_XIAOMI_C6_OC_UV is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 fi
 	cat ${KERNEL}/localversion
 	START=$(date +"%s")
