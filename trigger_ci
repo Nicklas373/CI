@@ -348,7 +348,7 @@ elif [ "$user" == "1" ];
 				elif [ "$overclock" == "0" ] && [ "$undervolt" == "0" ];
 					then
 						sed -i -e 's/KERNEL_OVERCLOCK=1/KERNEL_OVERCLOCK=0/g'   ~/CI/ci
-						sed -i -e 's/KERNEL_UNDERVOLT=0/KERNEL_UNDERVOLT=0/g'   ~/CI/ci
+						sed -i -e 's/KERNEL_UNDERVOLT=1/KERNEL_UNDERVOLT=0/g'   ~/CI/ci
 				elif [ "$overclock" == "0" ] && [ "$undervolt" == "1" ];
 					then
 						sed -i -e 's/KERNEL_OVERCLOCK=1/KERNEL_OVERCLOCK=0/g'	~/CI/ci
