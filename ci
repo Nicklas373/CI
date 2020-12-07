@@ -55,7 +55,7 @@ KERNEL_CODENAME=0
 KERNEL_COMPILER=0
 KERNEL_CI_SERVICE=0
 KERNEL_NEW_CAM=0
-KERNEL_OVERCLOCK=1
+KERNEL_OVERCLOCK=0
 KERNEL_UNDERVOLT=0
 
 # Environment init
@@ -175,7 +175,7 @@ if [ "$KERNEL_OVERCLOCK" == "1" ] && [ "$KERNEL_UNDERVOLT" == "0" ];
 	then
 		KERNEL_CLOCK="OC"
 		KERNEL_CLK_STR="Overclock"
-		KERNEL_DEVICE="CPU + GPU"
+		KERNEL_DEVICE="CPU & GPU"
 elif [ "$KERNEL_OVERCLOCK" == "0" ] && [ "$KERNEL_UNDERVOLT" == "1" ];
 	then
 		KERNEL_CLOCK="UV"
@@ -184,7 +184,7 @@ elif [ "$KERNEL_OVERCLOCK" == "0" ] && [ "$KERNEL_UNDERVOLT" == "1" ];
 elif [ "$KERNEL_OVERCLOCK" == "1" ] && [ "$KERNEL_UNDERVOLT" == "1" ];
 	then
 		KERNEL_CLOCK="OC-UV"
-		KERNEL_CLK_STR="Overclock + Undervolt"
+		KERNEL_CLK_STR="Overclock & Undervolt"
 		KERNEL_DEVICE="CPU"
 else
 	KERNEL_CLOCK=""
