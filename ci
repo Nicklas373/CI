@@ -175,17 +175,21 @@ if [ "$KERNEL_OVERCLOCK" == "1" ] && [ "$KERNEL_UNDERVOLT" == "0" ];
 	then
 		KERNEL_CLOCK="OC"
 		KERNEL_CLK_STR="Overclock"
+		KERNEL_DEVICE="CPU + GPU"
 elif [ "$KERNEL_OVERCLOCK" == "0" ] && [ "$KERNEL_UNDERVOLT" == "1" ];
 	then
 		KERNEL_CLOCK="UV"
 		KERNEL_CLK_STR="Undervolt"
+		KERNEL_DEVICE="CPU"
 elif [ "$KERNEL_OVERCLOCK" == "1" ] && [ "$KERNEL_UNDERVOLT" == "1" ];
 	then
 		KERNEL_CLOCK="OC-UV"
 		KERNEL_CLK_STR="Overclock + Undervolt"
+		KERNEL_DEVICE="CPU"
 else
 	KERNEL_CLOCK=""
 	KERNEL_CLK_STR="Default"
+	KERNEL_DEVICE=""
 fi
 CODENAME="mido"
 KERNEL_CODE="Mido"
@@ -425,7 +429,7 @@ function bot_first_compile() {
 			"" \
 			" =========== Kernel Information ================" \
 			"<b>Kernel Scheduler : </b><code> ${KERNEL_SCHED} </code>" \
-			"<b>Kernel Clock : </b><code> ${KERNEL_CLK_STR} </code>" \
+			"<b>Kernel Clock : </b><code> ${KERNEL_CLK_STR} ${KERNEL_DEVICE} </code>" \
 			"<b>Kernel Tag : </b><code> ${KERNEL_CAF_TAG} </code>" \
 			"<b>Kernel Branch : </b><code> ${KERNEL_BRANCH} </code>" \
 			"<b>Kernel Commit : </b><code> $(git --no-pager log --pretty=format:'"%h - %s (%an)"' -1) </code>"
@@ -446,7 +450,7 @@ function bot_complete_compile() {
 			"" \
 			"=========== Kernel Information ================" \
 			"<b>Kernel Scheduler : </b><code> ${KERNEL_SCHED} </code>" \
-			"<b>Kernel Clock : </b><code> ${KERNEL_CLK_STR} </code>" \
+			"<b>Kernel Clock : </b><code> ${KERNEL_CLK_STR} ${KERNEL_DEVICE} </code>" \
 			"<b>Kernel Tag : </b><code> ${KERNEL_CAF_TAG} </code>" \
 			"<b>Kernel Branch : </b><code> ${KERNEL_BRANCH} </code>" \
 			"<b>Kernel Linux Version:</b><code> Linux ${TELEGRAM_KERNEL_VER}</code>" \
@@ -518,7 +522,7 @@ elif [ "$KERNEL_OVERCLOCK" == "1" ] && [ "$KERNEL_UNDERVOLT" == "0" ];
 		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_DEFAULT=y/# CONFIG_MACH_XIAOMI_C6_DEFAULT is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_UNDERVOLT=y/# CONFIG_MACH_XIAOMI_C6_UNDERVOLT is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_OC_UV=y/# CONFIG_MACH_XIAOMI_C6_OC_UV is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
-		sed -i -e 's/# CONFIG_MACH_XIAOMI_C6_GPU_OVERCLOCKED is not set/CONFIG_MACH_XIAOMI_C6_GPU_OVERCLOCKED=y/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
+		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_GPU_OVERCLOCKED=y/# CONFIG_MACH_XIAOMI_C6_GPU_OVERCLOCKED is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 elif [ "$KERNEL_OVERCLOCK" == "0" ] && [ "$KERNEL_UNDERVOLT" == "1" ];
 	then
 		sed -i -e 's/-キズナ/-キズナ-UV-r5/g' ${KERNEL}/localversion
@@ -526,6 +530,7 @@ elif [ "$KERNEL_OVERCLOCK" == "0" ] && [ "$KERNEL_UNDERVOLT" == "1" ];
 		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_DEFAULT=y/# CONFIG_MACH_XIAOMI_C6_DEFAULT is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 		sed -i -e 's/# CONFIG_MACH_XIAOMI_C6_UNDERVOLT is not set/CONFIG_MACH_XIAOMI_C6_UNDERVOLT=y/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_OC_UV=y/# CONFIG_MACH_XIAOMI_C6_OC_UV is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
+		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_GPU_OVERCLOCKED=y/# CONFIG_MACH_XIAOMI_C6_GPU_OVERCLOCKED is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 elif [ "$KERNEL_OVERCLOCK" == "0" ] && [ "$KERNEL_UNDERVOLT" == "0" ];
 	then
 		sed -i -e 's/-キズナ/-キズナ-r5/g' ${KERNEL}/localversion
@@ -533,6 +538,7 @@ elif [ "$KERNEL_OVERCLOCK" == "0" ] && [ "$KERNEL_UNDERVOLT" == "0" ];
 		sed -i -e 's/# CONFIG_MACH_XIAOMI_C6_DEFAULT is not set/CONFIG_MACH_XIAOMI_C6_DEFAULT=y/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_UNDERVOLT=y/# CONFIG_MACH_XIAOMI_C6_UNDERVOLT is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_OC_UV=y/# CONFIG_MACH_XIAOMI_C6_OC_UV is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
+		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_GPU_OVERCLOCKED=y/# CONFIG_MACH_XIAOMI_C6_GPU_OVERCLOCKED is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 fi
 	cat ${KERNEL}/localversion
 	START=$(date +"%s")

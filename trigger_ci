@@ -74,6 +74,8 @@ if [ "$kdev" == "1" ];
 				clock="false"
 				undervolt="0"
 				s_uv="false"
+				g_clock="0"
+				gpu_clock="false"
 		elif [ "$kname" == "2" ];
 			then
 				name="Kizuna Kernel"
@@ -89,6 +91,8 @@ if [ "$kdev" == "1" ];
 					then
 						overclock="1"
 						clock="true"
+						g_clock="1"
+						gpu_clock="true"
 
 						echo ""
 						echo "Undervolt Version ?"
@@ -102,15 +106,21 @@ if [ "$kdev" == "1" ];
 							then
 								undervolt="1"
 								s_uv="true"
+								g_clock="0"
+								gpu_clock="false"
 						elif [ "$uv" == "2" ];
 							then
 								undervolt="0"
 								s_uv="false"
+								g_clock="1"
+								gpu_clock="true"
 						fi
 				elif [ "$oc" == "2" ];
 					then
 						overclock="0"
 						clock="false"
+						g_clock="0"
+						gpu_clock="false"
 
 						echo ""
 						echo "Undervolt Version ?"
@@ -156,6 +166,8 @@ elif [ "$kdev" == "2" ];
 
 		undervolt="0"
 		s_uv="false"
+		g_clock="0"
+		gpu_clock="false"
 fi
 
 # Run next step
@@ -243,8 +255,9 @@ echo "| Kernel	: $name		|"
 echo "| Release	: $release			|"
 echo "| Android Ver	: $avr_str		|"
 echo "| Ext Clang	: $ext_clang	|"
-echo "| Overclock	: $clock			|"
-echo "| Undervolt	: $s_uv				|"
+echo "| CPU Overclock	: $clock			|"
+echo "| GPU Overclock	: $gpu_clock			|"
+echo "| Undervolt	: $s_uv			|"
 echo "|					|"
 echo "| is this right option ?		|"
 echo "|					|"
