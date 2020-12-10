@@ -158,7 +158,7 @@ elif [ "$KERNEL_NAME" == "1" ];
 			then
 				KERNEL_BRANCH="kizuna"
 		fi
-		KERNEL_RELEASE_NAME="明里"
+		KERNEL_RELEASE_NAME="~Horizontal Oath~"
 		KERNEL_REV="r5"
 		KERNEL_REL="Kizuna"
 fi
