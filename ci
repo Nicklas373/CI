@@ -599,12 +599,12 @@ if [ "$KERNEL_STATE" == "0" ];
 fi
 if [ "$KERNEL_OVERCLOCK" == "0" ];
 	then
-		sed -i -e 's/# CONFIG_KERNEL_CUSTOM_F7A_DEFAULT is not set/CONFIG_KERNEL_CUSTOM_F7A_DEFAULT=y/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig
-		sed -i -e 's/CONFIG_KERNEL_CUSTOM_F7A_OVERCLOCKED=y/# CONFIG_KERNEL_CUSTOM_F7A_OVERCLOCKED is not set/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig
+		sed -i -e 's/# CONFIG_MACH_XIAOMI_LAVENDER_DEFAULT is not set/CONFIG_MACH_XIAOMI_LAVENDER_DEFAULT=y/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig
+		sed -i -e 's/CONFIG_MACH_XIAOMI_LAVENDER_OVERCLOCKED=y/# CONFIG_MACH_XIAOMI_LAVENDER_OVERCLOCKED is not set/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig
 elif [ "$KERNEL_OVERCLOCK" == "1" ];
 	then
-		sed -i -e 's/CONFIG_KERNEL_CUSTOM_F7A_DEFAULT=y/# CONFIG_KERNEL_CUSTOM_F7A_DEFAULT is not set/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig
-		sed -i -e 's/# CONFIG_KERNEL_CUSTOM_F7A_OVERCLOCKED is not set/CONFIG_KERNEL_CUSTOM_F7A_OVERCLOCKED=y/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig
+		sed -i -e 's/CONFIG_MACH_XIAOMI_LAVENDER_DEFAULT=y/# CONFIG_MACH_XIAOMI_LAVENDER_DEFAULT is not set/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig
+		sed -i -e 's/# CONFIG_MACH_XIAOMI_LAVENDER_OVERCLOCKED is not set/CONFIG_MACH_XIAOMI_LAVENDER_OVERCLOCKED=y/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig
 fi
 	make vendor/${CODENAME}_defconfig O=out
 if [ "$KERNEL_COMPILER" == "0" ];
@@ -670,7 +670,7 @@ function init_patch() {
 
 cd ${KERNEL}
 
-sed -i -e 's/# CONFIG_KERNEL_CUSTOM_F7A_NEWCAM is not set/CONFIG_KERNEL_CUSTOM_F7A_NEWCAM=y/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig
+sed -i -e 's/# CONFIG_MACH_XIAOMI_LAVENDER_NEWCAM is not set/CONFIG_MACH_XIAOMI_LAVENDER_F7A_NEWCAM=y/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig
 
 # Declare specified kernel name for pie patch
 KVERSION="${FUSION_CODENAME}-New_CAM-$(git log --pretty=format:'%h' -1)-$(date "+%H%M")"
