@@ -318,15 +318,15 @@ fi
 if [ "$KERNEL_STATE" == "1" ];
 	then
 		KERNEL_RELEASE="Stable"
-		FUSION_CODENAME="Emerald_of_Alfheim"
-		KERNEL_VERSION="r8"
+		FUSION_CODENAME="Unknown"
+		KERNEL_VERSION="r9"
 		KVERSION="${FUSION_CODENAME}-${KERNEL_VERSION}"
 		ZIP_NAME="${KERNEL_REL}-${KVERSION}-${CODENAME}-$(date "+%H%M-%d%m%Y").zip"
 elif [ "$KERNEL_STATE" == "0" ];
 	then
 		KERNEL_RELEASE="BETA"
-		FUSION_CODENAME="Emerald_of_Alfheim"
-		KERNEL_VERSION="r8"
+		FUSION_CODENAME="Unknown"
+		KERNEL_VERSION="r9"
 		KVERSION="${FUSION_CODENAME}-${KERNEL_VERSION}"
 		ZIP_NAME="${KERNEL_REL}-${KVERSION}-${CODENAME}-$(date "+%H%M-%d%m%Y").zip"
 
