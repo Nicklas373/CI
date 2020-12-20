@@ -51,10 +51,10 @@ KERNEL_SCHED=1
 KERNEL_STATE=1
 KERNEL_AND_VER=1
 KERNEL_AVR=1
-KERNEL_CODENAME=0
+KERNEL_CODENAME=1
 KERNEL_COMPILER=0
 KERNEL_CI_SERVICE=0
-KERNEL_NEW_CAM=0
+KERNEL_NEW_CAM=1
 KERNEL_OVERCLOCK=0
 KERNEL_UNDERVOLT=0
 
@@ -318,14 +318,14 @@ fi
 if [ "$KERNEL_STATE" == "1" ];
 	then
 		KERNEL_RELEASE="Stable"
-		FUSION_CODENAME="Unknown"
+		FUSION_CODENAME="Lord_Paramount"
 		KERNEL_VERSION="r9"
 		KVERSION="${FUSION_CODENAME}-${KERNEL_VERSION}"
 		ZIP_NAME="${KERNEL_REL}-${KVERSION}-${CODENAME}-$(date "+%H%M-%d%m%Y").zip"
 elif [ "$KERNEL_STATE" == "0" ];
 	then
 		KERNEL_RELEASE="BETA"
-		FUSION_CODENAME="Unknown"
+		FUSION_CODENAME="Lord_Paramount"
 		KERNEL_VERSION="r9"
 		KVERSION="${FUSION_CODENAME}-${KERNEL_VERSION}"
 		ZIP_NAME="${KERNEL_REL}-${KVERSION}-${CODENAME}-$(date "+%H%M-%d%m%Y").zip"
@@ -593,10 +593,7 @@ fi
 function compile_lave() {
 	START=$(date +"%s")
 	cd ${KERNEL}
-if [ "$KERNEL_STATE" == "0" ];
-	then
-		sed -i -e 's/CONFIG_ANDROID_NLMK=y/# CONFIG_ANDROID_NLMK is not set/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig
-fi
+	sed -i -e 's/CONFIG_ANDROID_NLMK=y/# CONFIG_ANDROID_NLMK is not set/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig
 if [ "$KERNEL_OVERCLOCK" == "0" ];
 	then
 		sed -i -e 's/# CONFIG_MACH_XIAOMI_LAVENDER_DEFAULT is not set/CONFIG_MACH_XIAOMI_LAVENDER_DEFAULT=y/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig
