@@ -51,7 +51,7 @@ KERNEL_SCHED=1
 KERNEL_STATE=0
 KERNEL_AND_VER=1
 KERNEL_AVR=1
-KERNEL_CODENAME=0
+KERNEL_CODENAME=1
 KERNEL_COMPILER=0
 KERNEL_CI_SERVICE=0
 KERNEL_NEW_CAM=0
@@ -596,15 +596,15 @@ function compile_lave() {
 	START=$(date +"%s")
 	cd ${KERNEL}
 	sed -i -e 's/CONFIG_ANDROID_NLMK=y/# CONFIG_ANDROID_NLMK is not set/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig
-if [ "$FIRST_INIT" == "true" ];
-	then
-		echo "Run first init for old cam !"
-		sed -i -e 's/CONFIG_MACH_XIAOMI_LAVENDER_NEWCAM=y/# CONFIG_MACH_XIAOMI_LAVENDER_F7A_NEWCAM is not set/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig
-		sed -i -e 's/CONFIG_TOUCHSCREEN_COMMON=y/# CONFIG_TOUCHSCREEN_COMMON is not set/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig
-elif [ "$FIRST_INIT" == "false" ];
-	then
-		echo "Leave it for new cam !"
-fi
+#if [ "$FIRST_INIT" == "true" ];
+#	then
+#		echo "Run first init for old cam !"
+#		sed -i -e 's/CONFIG_MACH_XIAOMI_LAVENDER_NEWCAM=y/# CONFIG_MACH_XIAOMI_LAVENDER_F7A_NEWCAM is not set/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig
+#		sed -i -e 's/CONFIG_TOUCHSCREEN_COMMON=y/# CONFIG_TOUCHSCREEN_COMMON is not set/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig
+#elif [ "$FIRST_INIT" == "false" ];
+#	then
+#		echo "Leave it for new cam !"
+#fi
 if [ "$KERNEL_OVERCLOCK" == "0" ];
 	then
 		sed -i -e 's/# CONFIG_MACH_XIAOMI_LAVENDER_DEFAULT is not set/CONFIG_MACH_XIAOMI_LAVENDER_DEFAULT=y/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig
