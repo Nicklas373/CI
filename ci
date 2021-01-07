@@ -54,7 +54,7 @@ KERNEL_SCHED=1
 KERNEL_STATE=0
 KERNEL_AND_VER=1
 KERNEL_AVR=1
-KERNEL_CODENAME=1
+KERNEL_CODENAME=0
 KERNEL_COMPILER=0
 KERNEL_CI_SERVICE=0
 KERNEL_NEW_CAM=0
@@ -609,12 +609,12 @@ elif [ "$KERNEL_LAVENDER_TS_COMMON" == "1" ];
 fi
 if [ "$KERNEL_OVERCLOCK" == "0" ];
 	then
-		echo "Enable CPU Overclock"
+		echo "Disable CPU Overclock"
 		sed -i -e 's/# CONFIG_MACH_XIAOMI_LAVENDER_DEFAULT is not set/CONFIG_MACH_XIAOMI_LAVENDER_DEFAULT=y/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig
 		sed -i -e 's/CONFIG_MACH_XIAOMI_LAVENDER_OVERCLOCKED=y/# CONFIG_MACH_XIAOMI_LAVENDER_OVERCLOCKED is not set/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig
 elif [ "$KERNEL_OVERCLOCK" == "1" ];
 	then
-		echo "Disable CPU Overclock"
+		echo "Enable CPU Overclock"
 		sed -i -e 's/CONFIG_MACH_XIAOMI_LAVENDER_DEFAULT=y/# CONFIG_MACH_XIAOMI_LAVENDER_DEFAULT is not set/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig
 		sed -i -e 's/# CONFIG_MACH_XIAOMI_LAVENDER_OVERCLOCKED is not set/CONFIG_MACH_XIAOMI_LAVENDER_OVERCLOCKED=y/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig
 fi
