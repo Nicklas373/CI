@@ -168,6 +168,23 @@ elif [ "$kdev" == "2" ];
 		s_uv="false"
 		g_clock="0"
 		gpu_clock="false"
+
+		echo ""
+		echo "Use Common Touchscreen nodes ?"
+		echo ""
+		echo "1. Yes"
+		echo "2. No"
+		echo ""
+		echo "NOTE: Write Number only!"
+		read -s ts_node
+
+		if [ "$ts_node" == "1" ];
+			then
+				ts_common="1"
+		elif [ "$ts_node" == "2" ];
+			then
+				ts_common="2"
+		fi
 fi
 
 # Run next step
@@ -382,6 +399,14 @@ elif [ "$user" == "1" ];
 				fi
 
 				sed -i -e 's/KERNEL_UNDERVOLT=0/KERNEL_UNDERVOLT=0/g'   ~/CI/ci
+
+				if [ "$ts_common" == "0" ];
+					then
+						sed -i -e 's/KERNEL_LAVENDER_TS_COMMON=1/KERNEL_LAVENDER_TS_COMMON=0/g'		~/CI/ci
+				elif [ "$ts_common" == "1" ];
+					then
+						sed -i -e 's/KERNEL_LAVENDER_TS_COMMON=0/KERNEL_LAVENDER_TS_COMMON=1/g'		~/CI/ci
+				fi
 		fi
 
 		echo "Triggering CI"

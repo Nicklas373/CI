@@ -45,6 +45,9 @@
 # Lavender NLMK Patch Disabler
 # 0 = Disable || 1 = Enable
 #
+# Lavender Touchscreen Common
+# 0 = Disable || 1 = Enable
+#
 # Declare Kernel Details
 KERNEL_NAME=1
 KERNEL_SCHED=1
@@ -57,6 +60,7 @@ KERNEL_CI_SERVICE=0
 KERNEL_NEW_CAM=0
 KERNEL_OVERCLOCK=0
 KERNEL_UNDERVOLT=1
+KERNEL_LAVENDER_TS_COMMON=1
 
 # Environment init
 function env_init() {
@@ -371,8 +375,6 @@ elif [ "$KERNEL_AND_VER" == "2" ];
 		KERNEL_TAG="P-Q"
 fi
 
-FIRST_INIT="true"
-
 # Declare Telegram File Environment
 TELEGRAM_FILENAME="${KERNEL_REL}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip"
 export TELEGRAM_SUCCESS="CAACAgEAAx0CSp9MtQABBEjFX9VtGvPTMhgokFvqQLFDvYDqbgIAAqkAAyQIgUVzkLgBnPXQ4h4E"
@@ -596,14 +598,12 @@ function compile_lave() {
 	START=$(date +"%s")
 	cd ${KERNEL}
 	sed -i -e 's/CONFIG_ANDROID_NLMK=y/# CONFIG_ANDROID_NLMK is not set/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig
-if [ "$FIRST_INIT" == "true" ];
+if [ "$KERNEL_LAVENDER_TS_COMMON" == "0" ];
 	then
-		echo "Run first init for old cam !"
-		sed -i -e 's/CONFIG_MACH_XIAOMI_LAVENDER_NEWCAM=y/# CONFIG_MACH_XIAOMI_LAVENDER_F7A_NEWCAM is not set/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig
-		# sed -i -e 's/CONFIG_TOUCHSCREEN_COMMON=y/# CONFIG_TOUCHSCREEN_COMMON is not set/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig
-elif [ "$FIRST_INIT" == "false" ];
+		sed -i -e 's/CONFIG_TOUCHSCREEN_COMMON=y/# CONFIG_TOUCHSCREEN_COMMON is not set/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig
+elif [ "$KERNEL_LAVENDER_TS_COMMON" == "1" ];
 	then
-		echo "Leave it for new cam !"
+		sed -i -e 's/# CONFIG_TOUCHSCREEN_COMMON is not set/CONFIG_TOUCHSCREEN_COMMON=y/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig
 fi
 if [ "$KERNEL_OVERCLOCK" == "0" ];
 	then
@@ -678,9 +678,7 @@ function init_patch() {
 
 cd ${KERNEL}
 
-FIRST_INIT="false"
-sed -i -e 's/# CONFIG_MACH_XIAOMI_LAVENDER_NEWCAM is not set/CONFIG_MACH_XIAOMI_LAVENDER_F7A_NEWCAM=y/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig
-sed -i -e 's/# CONFIG_TOUCHSCREEN_COMMON is not set/CONFIG_TOUCHSCREEN_COMMON=y/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig
+sed -i -e 's/# CONFIG_MACH_XIAOMI_LAVENDER_NEW_CAM is not set/CONFIG_MACH_XIAOMI_LAVENDER_NEW_CAM=y/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig_
 
 # Declare specified kernel name for pie patch
 KVERSION="${FUSION_CODENAME}-New_CAM-$(git log --pretty=format:'%h' -1)-$(date "+%H%M")"
