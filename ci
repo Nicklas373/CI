@@ -49,12 +49,12 @@
 # 0 = Disable || 1 = Enable
 #
 # Declare Kernel Details
-KERNEL_NAME=0
+KERNEL_NAME=1
 KERNEL_SCHED=1
 KERNEL_STATE=0
 KERNEL_AND_VER=1
 KERNEL_AVR=1
-KERNEL_CODENAME=1
+KERNEL_CODENAME=0
 KERNEL_COMPILER=0
 KERNEL_CI_SERVICE=0
 KERNEL_NEW_CAM=0
@@ -136,7 +136,7 @@ elif [ "$KERNEL_NAME" == "1" ];
 		if [ "$KERNEL_STATE" == "0" ];
 			then
 				# Clone kernel repositories earlier
-				git clone --depth=1 -b staging/kizuna https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/msm-4.9 kernel
+				git clone --depth=1 -b staging/qpnp-3 https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/msm-4.9 kernel
 
 				# Define Kernel Specific Tag
 				KERNEL_CAF_TAG="LA.UM.9.6.2.r1-03600-89xx.0"
@@ -157,7 +157,7 @@ elif [ "$KERNEL_NAME" == "1" ];
 		KERNEL_SCHED="EAS"
 		if [ "$KERNEL_STATE" == "0" ];
 			then
-				KERNEL_BRANCH="staging/kizuna"
+				KERNEL_BRANCH="staging/qpnp-3"
 		elif [ "$KERNEL_STATE" == "1" ];
 			then
 				KERNEL_BRANCH="kizuna"
