@@ -228,7 +228,7 @@ elif [ "$KERNEL_CI_SERVICE" == "1" ] || [ "$KERNEL_CI_SERVICE" == "2" ];
 		elif [ "$KERNEL_STATE" == "0" ];
 			then
 				TELEGRAM_GROUP_ID=${telegram_group_dev_id}
-		#fi
+		fi
 fi
 }
 
