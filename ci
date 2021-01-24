@@ -58,8 +58,8 @@ KERNEL_CODENAME=0
 KERNEL_COMPILER=0
 KERNEL_CI_SERVICE=0
 KERNEL_NEW_CAM=0
-KERNEL_OVERCLOCK=0
-KERNEL_UNDERVOLT=1
+KERNEL_OVERCLOCK=1
+KERNEL_UNDERVOLT=0
 KERNEL_LAVENDER_TS_COMMON=1
 
 # Environment init
@@ -559,6 +559,7 @@ fi
 					CC=clang \
 					AR=llvm-ar \
 					NM=llvm-nm \
+					LD=ld.lld \
 					STRIP=llvm-strip \
 					OBJCOPY=llvm-objcopy \
 					OBJDUMP=llvm-objdump \
@@ -567,6 +568,7 @@ fi
 					HOSTCC=clang \
 					HOSTCXX=clang++ \
 					HOSTAR=llvm-ar \
+					HOSTLD=ld.lld \
 					CLANG_TRIPLE=aarch64-linux-gnu- \
 					CROSS_COMPILE=aarch64-linux-gnu- \
 					CROSS_COMPILE_ARM32=arm-linux-gnueabi-
