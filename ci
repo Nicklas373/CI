@@ -56,10 +56,10 @@ KERNEL_AND_VER=1
 KERNEL_AVR=1
 KERNEL_CODENAME=0
 KERNEL_COMPILER=0
-KERNEL_CI_SERVICE=1
+KERNEL_CI_SERVICE=0
 KERNEL_NEW_CAM=0
 KERNEL_OVERCLOCK=0
-KERNEL_UNDERVOLT=1
+KERNEL_UNDERVOLT=0
 KERNEL_LAVENDER_TS_COMMON=1
 
 # Environment init
@@ -107,7 +107,7 @@ if [ "$KERNEL_NAME" == "0" ];
 		git clone --depth=1 -b lineage-17.1 https://github.com/Nicklas373/kernel_xiaomi_msm8953-4.9 kernel
 
 		# Define Kernel Specific Tag
-		KERNEL_CAF_TAG="LA.UM.9.6.2.r1-03600-89xx.0"
+		KERNEL_CAF_TAG="LA.UM.9.6.2.r1-03800-89xx.0"
 
 		# Cloning AnyKernel Repository
 		git clone --depth=1 -b caf/mido-4.9 https://github.com/Nicklas373/AnyKernel3
@@ -139,7 +139,7 @@ elif [ "$KERNEL_NAME" == "1" ];
 				git clone --depth=1 -b staging/kizuna-rework https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/msm-4.9 kernel
 
 				# Define Kernel Specific Tag
-				KERNEL_CAF_TAG="LA.UM.9.6.2.r1-03600-89xx.0"
+				KERNEL_CAF_TAG="LA.UM.9.6.2.r1-03800-89xx.0"
 
 		elif [ "$KERNEL_STATE" == "1" ];
 			then
@@ -147,7 +147,7 @@ elif [ "$KERNEL_NAME" == "1" ];
                                 git clone --depth=1 -b kizuna https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/msm-4.9 kernel
 
 				# Define Kernel Specific Tag
-                                KERNEL_CAF_TAG="LA.UM.9.6.2.r1-03600-89xx.0"
+                                KERNEL_CAF_TAG="LA.UM.9.6.2.r1-03800-89xx.0"
 		fi
 
 		# Cloning AnyKernel Repository
