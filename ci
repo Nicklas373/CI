@@ -56,9 +56,9 @@ KERNEL_AND_VER=1
 KERNEL_AVR=1
 KERNEL_CODENAME=0
 KERNEL_COMPILER=0
-KERNEL_CI_SERVICE=1
+KERNEL_CI_SERVICE=0
 KERNEL_NEW_CAM=0
-KERNEL_OVERCLOCK=0
+KERNEL_OVERCLOCK=1
 KERNEL_UNDERVOLT=0
 KERNEL_LAVENDER_TS_COMMON=1
 
@@ -392,10 +392,13 @@ if [ "$KERNEL_COMPILER" == "0" ];
 		export LD_LIBRARY_PATH="/root/proton/bin/../lib:$PATH"
 elif [ "$KERNEL_COMPILER" == "1" ];
 	then
+		# TEMP Use sdclang-8.0
+		git clone --depth=1 -b master https://git.rip/rama982/sdclang-8.0 sdclang
+
 		# Clang environment
-		export CLANG_PATH=/root/aosp-clang/bin
+		export CLANG_PATH=$(pwd)/sdclang/bin
 		export PATH=${CLANG_PATH}:${PATH}
-		export LD_LIBRARY_PATH="/root/aosp-clang/bin/../lib:$PATH"
+		# export LD_LIBRARY_PATH="$(pwd)/sdclang/bin/../lib:$PATH"
 		export CROSS_COMPILE=/root/gcc-4.9_64/arm64/bin/aarch64-linux-android-
 		export CROSS_COMPILE_ARM32=/root/gcc-4.9/arm/bin/arm-linux-androideabi-
 fi
