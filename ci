@@ -49,7 +49,7 @@
 # 0 = Disable || 1 = Enable
 #
 # Declare Kernel Details
-KERNEL_NAME=0
+KERNEL_NAME=1
 KERNEL_SCHED=1
 KERNEL_STATE=0
 KERNEL_AND_VER=1
@@ -136,7 +136,7 @@ elif [ "$KERNEL_NAME" == "1" ];
 		if [ "$KERNEL_STATE" == "0" ];
 			then
 				# Clone kernel repositories earlier
-				git clone --depth=1 -b staging/kizuna-rework https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/msm-4.9 kernel
+				git clone --depth=1 -b staging/another https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/msm-4.9 kernel
 
 				# Define Kernel Specific Tag
 				KERNEL_CAF_TAG="LA.UM.9.6.2.r1-03800-89xx.0"
@@ -157,7 +157,7 @@ elif [ "$KERNEL_NAME" == "1" ];
 		KERNEL_SCHED="EAS"
 		if [ "$KERNEL_STATE" == "0" ];
 			then
-				KERNEL_BRANCH="staging/kizuna-rework"
+				KERNEL_BRANCH="staging/another"
 		elif [ "$KERNEL_STATE" == "1" ];
 			then
 				KERNEL_BRANCH="kizuna"
@@ -559,7 +559,7 @@ fi
 					CC=clang \
 					AR=llvm-ar \
 					NM=llvm-nm \
-					LD=ld.lld \
+					#LD=ld.lld \
 					STRIP=llvm-strip \
 					OBJCOPY=llvm-objcopy \
 					OBJDUMP=llvm-objdump \
@@ -568,7 +568,7 @@ fi
 					HOSTCC=clang \
 					HOSTCXX=clang++ \
 					HOSTAR=llvm-ar \
-					HOSTLD=ld.lld \
+					#HOSTLD=ld.lld \
 					CLANG_TRIPLE=aarch64-linux-gnu- \
 					CROSS_COMPILE=aarch64-linux-gnu- \
 					CROSS_COMPILE_ARM32=arm-linux-gnueabi-
