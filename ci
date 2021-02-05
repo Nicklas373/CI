@@ -56,7 +56,7 @@ KERNEL_AND_VER=1
 KERNEL_AVR=1
 KERNEL_CODENAME=0
 KERNEL_COMPILER=1
-KERNEL_CI_SERVICE=0
+KERNEL_CI_SERVICE=1
 KERNEL_NEW_CAM=0
 KERNEL_OVERCLOCK=1
 KERNEL_UNDERVOLT=0
@@ -394,6 +394,7 @@ elif [ "$KERNEL_COMPILER" == "1" ];
 	then
 		# TEMP Workaround
 		apt-get update && apt-get install -y libtinfo5
+		ln -s /lib/x86_64-linux-gnu/libtinfo.so.6 /lib/x86_64-linux-gnu/libtinfo.so.5
 
 		# TEMP Use sdclang-8.0
 		git clone --depth=1 -b master https://git.rip/rama982/sdclang-8.0 sdclang
