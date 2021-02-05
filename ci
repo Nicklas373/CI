@@ -56,7 +56,7 @@ KERNEL_AND_VER=1
 KERNEL_AVR=1
 KERNEL_CODENAME=0
 KERNEL_COMPILER=1
-KERNEL_CI_SERVICE=1
+KERNEL_CI_SERVICE=0
 KERNEL_NEW_CAM=0
 KERNEL_OVERCLOCK=1
 KERNEL_UNDERVOLT=0
@@ -555,7 +555,7 @@ if [ "$KERNEL_COMPILER" == "0" ];
 		CLANG_PATH="/root/proton/bin/:${PATH}"
 elif [ "$KERNEL_COMPILER" == "1" ];
 	then
-		CLANG_PATH="/root/aosp-clang/bin/:/root/gcc-4.9/arm64/bin/:/root/gcc-4.9/arm/bin/:${PATH}"
+		CLANG_PATH="$(pwd)/sdclang/bin/:/root/gcc-4.9/arm64/bin/:/root/gcc-4.9/arm/bin/:${PATH}"
 fi
 		PATH="$CLANG_PATH" \
 		make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
