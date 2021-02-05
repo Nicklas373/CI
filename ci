@@ -392,6 +392,10 @@ if [ "$KERNEL_COMPILER" == "0" ];
 		export LD_LIBRARY_PATH="/root/proton/bin/../lib:$PATH"
 elif [ "$KERNEL_COMPILER" == "1" ];
 	then
+		# TEMP Workaround
+		sudo apt update && sudo apt install -y libtinfo5
+		sudo ln -s /lib/x86_64-linux-gnu/libtinfo.so.6 /lib/x86_64-linux-gnu/libtinfo.so.5
+
 		# TEMP Use sdclang-8.0
 		git clone --depth=1 -b master https://git.rip/rama982/sdclang-8.0 sdclang
 
