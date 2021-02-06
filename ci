@@ -8,7 +8,7 @@
 # Copyright 2016-2020, HANA-CI Build Project
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-# CI Script Revision = 20201206
+# CI Script Revision = 20210206
 
 # Build Information
 #
@@ -28,7 +28,7 @@
 # 0 = Mido || 1 = Lavender
 #
 # Kernel Compiler
-# 0 = Proton Clang 12 || 1 = AOSP Clang + GCC 4.9 (Non-elf)
+# 0 = Proton Clang 12 || 1 = AOSP Clang + GCC 4.9 (Non-elf) || 2 = SDCLANG 8.0 + GCC 4.9 (Non-elf)
 #
 # CI Service
 # 0 = Drone CI || 1 = Circle CI || 2 = Semaphore CI
@@ -56,7 +56,7 @@ KERNEL_AND_VER=1
 KERNEL_AVR=1
 KERNEL_CODENAME=0
 KERNEL_COMPILER=1
-KERNEL_CI_SERVICE=1
+KERNEL_CI_SERVICE=0
 KERNEL_NEW_CAM=0
 KERNEL_OVERCLOCK=1
 KERNEL_UNDERVOLT=0
