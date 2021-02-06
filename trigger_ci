@@ -242,7 +242,7 @@ echo "Select your compiler :3"
 echo ""
 echo "1. Proton Clang 12"
 echo "2. AOSP Clang + GCC 4.9 (Non-elf)"
-echo "3. SDCLANG 8.0.2 + GCC 4.9 (Non-elf)"
+echo "3. SDCLANG 10.0.9 + GCC 4.9 (Non-elf)"
 echo ""
 echo "NOTE: Write number only !"
 read -s clang

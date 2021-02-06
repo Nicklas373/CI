@@ -28,7 +28,7 @@
 # 0 = Mido || 1 = Lavender
 #
 # Kernel Compiler
-# 0 = Proton Clang 12 || 1 = AOSP Clang + GCC 4.9 (Non-elf) || 2 = SDCLANG 8.0 + GCC 4.9 (Non-elf)
+# 0 = Proton Clang 12 || 1 = AOSP Clang + GCC 4.9 (Non-elf) || 2 = SDCLANG 10.0 + GCC 4.9 (Non-elf)
 #
 # CI Service
 # 0 = Drone CI || 1 = Circle CI || 2 = Semaphore CI
@@ -56,10 +56,10 @@ KERNEL_AND_VER=1
 KERNEL_AVR=1
 KERNEL_CODENAME=0
 KERNEL_COMPILER=2
-KERNEL_CI_SERVICE=1
+KERNEL_CI_SERVICE=0
 KERNEL_NEW_CAM=0
 KERNEL_OVERCLOCK=0
-KERNEL_UNDERVOLT=1
+KERNEL_UNDERVOLT=0
 KERNEL_LAVENDER_TS_COMMON=1
 
 # Environment init
