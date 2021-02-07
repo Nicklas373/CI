@@ -260,6 +260,10 @@ elif [ "$clang" == "3" ];
 	then
 		comp="3"
 		ext_clang="SDCLANG 10.0.9 + GCC 4.9 (Non-elf)"
+elif [ "$clang" == "4" ];
+	then
+		comp="4"
+		ext_clang="SDCLANG 8.0.12 + GCC 4.9 (Non-elf)"
 fi
 
 # Run next step
