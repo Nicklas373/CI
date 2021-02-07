@@ -243,6 +243,7 @@ echo ""
 echo "1. Proton Clang 12"
 echo "2. AOSP Clang + GCC 4.9 (Non-elf)"
 echo "3. SDCLANG 10.0.9 + GCC 4.9 (Non-elf)"
+echo "4. SDCLANG 8.0.12 + GCC 4.9 (Non-elf)"
 echo ""
 echo "NOTE: Write number only !"
 read -s clang
@@ -369,16 +370,28 @@ elif [ "$user" == "1" ];
 		fi
 		if [ "$comp" == "1" ];
 			then
-				sed -i -e 's/KERNEL_COMPILER=1/KERNEL_COMPILER=0/g'  ~/CI/ci
-				sed -i -e 's/KERNEL_COMPILER=2/KERNEL_COMPILER=0/g'  ~/CI/ci
+				sed -i -e 's/KERNEL_GCC=1/KERNEL_GCC=0/g'  ~/CI/ci
+				sed -i -e 's/KERNEL_CLANG=1/KERNEL_CLANG=0/g'  ~/CI/ci
+				sed -i -e 's/KERNEL_CLANG=2/KERNEL_CLANG=0/g'  ~/CI/ci
+				sed -i -e 's/KERNEL_CLANG=3/KERNEL_CLANG=0/g'  ~/CI/ci
 		elif [ "$comp" == "2" ];
 			then
-				sed -i -e 's/KERNEL_COMPILER=0/KERNEL_COMPILER=1/g'  ~/CI/ci
-				sed -i -e 's/KERNEL_COMPILER=2/KERNEL_COMPILER=1/g'  ~/CI/ci
+				sed -i -e 's/KERNEL_GCC=0/KERNEL_GCC=1/g'  ~/CI/ci
+				sed -i -e 's/KERNEL_CLANG=0/KERNEL_CLANG=1/g'  ~/CI/ci
+				sed -i -e 's/KERNEL_CLANG=2/KERNEL_CLANG=1/g'  ~/CI/ci
+				sed -i -e 's/KERNEL_CLANG=3/KERNEL_CLANG=1/g'  ~/CI/ci
 		elif [ "$comp" == "3" ];
 			then
-				sed -i -e 's/KERNEL_COMPILER=1/KERNEL_COMPILER=2/g'  ~/CI/ci
-				sed -i -e 's/KERNEL_COMPILER=0/KERNEL_COMPILER=2/g'  ~/CI/ci
+				sed -i -e 's/KERNEL_GCC=0/KERNEL_GCC=1/g'  ~/CI/ci
+				sed -i -e 's/KERNEL_CLANG=0/KERNEL_CLANG=2/g'  ~/CI/ci
+				sed -i -e 's/KERNEL_CLANG=1/KERNEL_CLANG=2/g'  ~/CI/ci
+				sed -i -e 's/KERNEL_CLANG=3/KERNEL_CLANG=2/g'  ~/CI/ci
+		elif [ "$comp" == "4" ];
+			then
+				sed -i -e 's/KERNEL_GCC=0/KERNEL_GCC=1/g'  ~/CI/ci
+				sed -i -e 's/KERNEL_CLANG=0/KERNEL_CLANG=3/g'  ~/CI/ci
+				sed -i -e 's/KERNEL_CLANG=1/KERNEL_CLANG=3/g'  ~/CI/ci
+				sed -i -e 's/KERNEL_CLANG=2/KERNEL_CLANG=3/g'  ~/CI/ci
 		fi
 		if [ "$kdev" == "1" ];
 			then

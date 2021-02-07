@@ -8,7 +8,7 @@
 # Copyright 2016-2020, HANA-CI Build Project
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-# CI Script Revision = 20210206
+# CI Script Revision = 20210207
 
 # Build Information
 #
@@ -27,8 +27,11 @@
 # Kernel Codename
 # 0 = Mido || 1 = Lavender
 #
-# Kernel Compiler
-# 0 = Proton Clang 12 || 1 = AOSP Clang + GCC 4.9 (Non-elf) || 2 = SDCLANG 10.0 + GCC 4.9 (Non-elf)
+# Kernel Clang Compiler
+# 0 = Proton Clang 12 || 1 = AOSP Clang || 2 = SDCLANG 10.0 || 3 = SDCLANG 8.0.2
+#
+# Kernel GCC Compiler (Compat VDSO (Extend with Clang)
+# 0 = GCC 4.9 (Non-Elf)
 #
 # CI Service
 # 0 = Drone CI || 1 = Circle CI || 2 = Semaphore CI
@@ -55,7 +58,8 @@ KERNEL_STATE=0
 KERNEL_AND_VER=1
 KERNEL_AVR=1
 KERNEL_CODENAME=1
-KERNEL_COMPILER=2
+KERNEL_CLANG=2
+KERNEL_GCC=1
 KERNEL_CI_SERVICE=0
 KERNEL_NEW_CAM=0
 KERNEL_OVERCLOCK=1
@@ -384,26 +388,38 @@ export TELEGRAM_FAIL="CAACAgEAAx0CSp9MtQABBEjCX9Vs9JSeG9aAsei2MzYTIfWdOMMAAsYAA9
 # Cloning Clang
 function clang_init() {
 
-if [ "$KERNEL_COMPILER" == "0" ];
+if [ "$KERNEL_GCC" == "0" ];
 	then
-		# Clang environment
-		export CLANG_PATH=/root/proton/bin
-		export PATH=${CLANG_PATH}:${PATH}
-		export LD_LIBRARY_PATH="/root/proton/bin/../lib:$PATH"
-elif [ "$KERNEL_COMPILER" == "1" ];
+		if [ "$KERNEL_CLANG" == "0" ];
+			then
+				# Clang environment
+				export CLANG_PATH=/root/proton/bin
+				export PATH=${CLANG_PATH}:${PATH}
+				export LD_LIBRARY_PATH="/root/proton/bin/../lib:$PATH"
+		fi
+elif [ "$KERNEL_GCC" == "1" ];
 	then
-		# Clang environment
-		export CLANG_PATH=/root/aosp-clang/bin
-		export PATH=${CLANG_PATH}:${PATH}
-		export LD_LIBRARY_PATH="/root/aosp-clang/bin/../lib:$PATH"
-		export CROSS_COMPILE=/root/gcc-4.9_64/arm64/bin/aarch64-linux-android-
-		export CROSS_COMPILE_ARM32=/root/gcc-4.9/arm/bin/arm-linux-androideabi-
-elif [ "$KERNEL_COMPILER" == "2" ];
-	then
-		# Clang environment
-		export CLANG_PATH=/root/sdclang/bin
-		export PATH=${CLANG_PATH}:${PATH}
-		export LD_LIBRARY_PATH="/root/sdclang/bin/../lib:$PATH"
+		if [ "$KERNEL_CLANG" == "1" ];
+			then
+				# Clang environment
+				export CLANG_PATH=/root/aosp-clang/bin
+				export PATH=${CLANG_PATH}:${PATH}
+				export LD_LIBRARY_PATH="/root/aosp-clang/bin/../lib:$PATH"
+		elif [ "$KERNEL_CLANG" == "2" ];
+			then
+				# Clang environment
+				export CLANG_PATH=/root/sdclang-10/bin
+				export PATH=${CLANG_PATH}:${PATH}
+				export LD_LIBRARY_PATH="/root/sdclang-10/bin/../lib:$PATH"
+		elif [ "$KERNEL_CLANG" == "3" ];
+			then
+				# Clang environment
+				export CLANG_PATH=/root/sdclang-8/bin
+				export PATH=${CLANG_PATH}:${PATH}
+				export LD_LIBRARY_PATH="/root/sdclang-8/bin/../lib:$PATH"
+		fi
+
+		# GCC environment
 		export CROSS_COMPILE=/root/gcc-4.9_64/arm64/bin/aarch64-linux-android-
 		export CROSS_COMPILE_ARM32=/root/gcc-4.9/arm/bin/arm-linux-androideabi-
 fi
@@ -555,17 +571,20 @@ fi
 	cat ${KERNEL}/localversion
 	START=$(date +"%s")
 	make -s -C ${KERNEL} vendor/${CODENAME}_defconfig O=out
-if [ "$KERNEL_COMPILER" == "0" ];
+if [ "$KERNEL_CLANG" == "0" ];
 	then
 		CLANG_PATH="/root/proton/bin/:${PATH}"
-elif [ "$KERNEL_COMPILER" == "1" ];
+elif [ "$KERNEL_CLANG" == "1" ];
 	then
 		CLANG_PATH="/root/aosp-clang/bin/:/root/gcc-4.9/arm64/bin/:/root/gcc-4.9/arm/bin/:${PATH}"
-elif [ "$KERNEL_COMPILER" == "2" ];
+elif [ "$KERNEL_CLANG" == "2" ];
 	then
-		CLANG_PATH="/root/sdclang/bin/:/root/gcc-4.9/arm64/bin/:/root/gcc-4.9/arm/bin/:${PATH}"
+		CLANG_PATH="/root/sdclang-10/bin/:/root/gcc-4.9/arm64/bin/:/root/gcc-4.9/arm/bin/:${PATH}"
+elif [ "$KERNEL_CLANG" == "3" ];
+	then
+		CLANG_PATH="/root/sdclang-8/bin/:/root/gcc-4.9/arm64/bin/:/root/gcc-4.9/arm/bin/:${PATH}"
 fi
-if [ "$KERNEL_COMPILER" == "0" ] || [ "$KERNEL_COMPILER" == "1" ];
+if [ "$KERNEL_CLANG" == "0" ] || [ "$KERNEL_CLANG" == "1" ];
 	then
 		PATH="$CLANG_PATH" \
 		make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
@@ -583,7 +602,7 @@ if [ "$KERNEL_COMPILER" == "0" ] || [ "$KERNEL_COMPILER" == "1" ];
 				CLANG_TRIPLE=aarch64-linux-gnu- \
 				CROSS_COMPILE=aarch64-linux-gnu- \
 				CROSS_COMPILE_ARM32=arm-linux-gnueabi-
-elif [ "$KERNEL_COMPILER" == "2" ];
+elif [ "$KERNEL_CLANG" == "2" ] || [ "$KERNEL_CLANG" == "3" ];
 	then
 		PATH="$CLANG_PATH" \
 		make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
@@ -640,15 +659,21 @@ elif [ "$KERNEL_OVERCLOCK" == "1" ];
 		sed -i -e 's/# CONFIG_MACH_XIAOMI_LAVENDER_OVERCLOCKED is not set/CONFIG_MACH_XIAOMI_LAVENDER_OVERCLOCKED=y/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig
 fi
 	make vendor/${CODENAME}_defconfig O=out
-if [ "$KERNEL_COMPILER" == "0" ];
+if [ "$KERNEL_CLANG" == "0" ];
 	then
 		CLANG_PATH="/root/proton/bin/:${PATH}"
-elif [ "$KERNEL_COMPILER" == "1" ];
+elif [ "$KERNEL_CLANG" == "1" ];
 	then
 		CLANG_PATH="/root/aosp-clang/bin/:/root/gcc-4.9/arm64/bin/:/root/gcc-4.9/arm/bin/:${PATH}"
+elif [ "$KERNEL_CLANG" == "2" ];
+	then
+		CLANG_PATH="/root/sdclang-10/bin/:/root/gcc-4.9/arm64/bin/:/root/gcc-4.9/arm/bin/:${PATH}"
+elif [ "$KERNEL_CLANG" == "3" ];
+	then
+		CLANG_PATH="/root/sdclang-8/bin/:/root/gcc-4.9/arm64/bin/:/root/gcc-4.9/arm/bin/:${PATH}"
 fi
 	PATH="$CLANG_PATH"
-if [ "$KERNEL_COMPILER" == "0" ] || [ "$KERNEL_COMPILER" == "1" ];
+if [ "$KERNEL_CLANG" == "0" ] || [ "$KERNEL_CLANG" == "1" ];
 	then
 		make -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
 					CC=clang \
@@ -665,9 +690,9 @@ if [ "$KERNEL_COMPILER" == "0" ] || [ "$KERNEL_COMPILER" == "1" ];
 					CLANG_TRIPLE=aarch64-linux-gnu- \
 					CROSS_COMPILE=aarch64-linux-gnu- \
 					CROSS_COMPILE_ARM32=arm-linux-gnueabi-
-elif [ "$KERNEL_COMPILER" == "2" ];
+elif [ "$KERNEL_CLANG" == "2" ] || [ "$KERNEL_CLANG" == "3" ];
 	then
-		make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
+		make -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
 					CC=clang \
 					CROSS_COMPILE=aarch64-linux-gnu- \
 					CROSS_COMPILE_ARM32=arm-linux-gnueabi-
