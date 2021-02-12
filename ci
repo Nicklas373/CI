@@ -8,7 +8,7 @@
 # Copyright 2016-2020, HANA-CI Build Project
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-# CI Script Revision = 20210207
+# CI Script Revision = 20210213
 
 # Build Information
 #
@@ -62,7 +62,7 @@ KERNEL_CLANG=2
 KERNEL_GCC=1
 KERNEL_CI_SERVICE=0
 KERNEL_NEW_CAM=0
-KERNEL_OVERCLOCK=1
+KERNEL_OVERCLOCK=0
 KERNEL_UNDERVOLT=0
 KERNEL_LAVENDER_TS_COMMON=1
 
@@ -140,7 +140,7 @@ elif [ "$KERNEL_NAME" == "1" ];
 		if [ "$KERNEL_STATE" == "0" ];
 			then
 				# Clone kernel repositories earlier
-				git clone --depth=1 -b r6 https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/msm-4.9 kernel
+				git clone --depth=1 -b staging/tenka https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/msm-4.9 kernel
 
 				# Define Kernel Specific Tag
 				KERNEL_CAF_TAG="LA.UM.9.6.2.r1-03800-89xx.0"
@@ -161,12 +161,12 @@ elif [ "$KERNEL_NAME" == "1" ];
 		KERNEL_SCHED="EAS"
 		if [ "$KERNEL_STATE" == "0" ];
 			then
-				KERNEL_BRANCH="r6"
+				KERNEL_BRANCH="staging/tenka"
 		elif [ "$KERNEL_STATE" == "1" ];
 			then
 				KERNEL_BRANCH="kizuna"
 		fi
-		KERNEL_RELEASE_NAME="~ Plenilune Gaze ~"
+		KERNEL_RELEASE_NAME=" ~	大崎甜花~ "
 		KERNEL_REV="r7"
 		KERNEL_REL="Kizuna"
 fi
