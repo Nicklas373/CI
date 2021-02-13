@@ -52,7 +52,7 @@
 # 0 = Disable || 1 = Enable
 #
 # Declare Kernel Details
-KERNEL_NAME=1
+KERNEL_NAME=0
 KERNEL_SCHED=1
 KERNEL_STATE=0
 KERNEL_AND_VER=1
@@ -63,7 +63,7 @@ KERNEL_GCC=1
 KERNEL_CI_SERVICE=0
 KERNEL_NEW_CAM=0
 KERNEL_OVERCLOCK=0
-KERNEL_UNDERVOLT=1
+KERNEL_UNDERVOLT=0
 KERNEL_LAVENDER_TS_COMMON=1
 
 # Environment init
@@ -119,9 +119,9 @@ if [ "$KERNEL_NAME" == "0" ];
 		# Define Kernel Specific Environment
 		KERNEL_SCHED="EAS"
 		KERNEL_BRANCH="lineage-17.1"
-		KERNEL_REV="r8"
+		KERNEL_REV="r9"
 		KERNEL_REL="CAF"
-		KERNEL_RELEASE_NAME="キズナ～"
+		KERNEL_RELEASE_NAME="~ 大崎甘奈 ~"
 elif [ "$KERNEL_NAME" == "1" ];
 	then
 
@@ -166,7 +166,7 @@ elif [ "$KERNEL_NAME" == "1" ];
 			then
 				KERNEL_BRANCH="kizuna"
 		fi
-		KERNEL_RELEASE_NAME=" ~	大崎甜花~ "
+		KERNEL_RELEASE_NAME=" ~	大崎甜花 ~ "
 		KERNEL_REV="r7"
 		KERNEL_REL="Kizuna"
 fi
