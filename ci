@@ -58,11 +58,11 @@ KERNEL_STATE=0
 KERNEL_AND_VER=1
 KERNEL_AVR=1
 KERNEL_CODENAME=0
-KERNEL_CLANG=1
+KERNEL_CLANG=2
 KERNEL_GCC=1
 KERNEL_CI_SERVICE=0
 KERNEL_NEW_CAM=0
-KERNEL_OVERCLOCK=0
+KERNEL_OVERCLOCK=1
 KERNEL_UNDERVOLT=0
 KERNEL_LAVENDER_TS_COMMON=1
 
@@ -140,11 +140,10 @@ elif [ "$KERNEL_NAME" == "1" ];
 		if [ "$KERNEL_STATE" == "0" ];
 			then
 				# Clone kernel repositories earlier
-				git clone --depth=1 -b master https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/msm-4.19 kernel
-				# git clone --depth=1 -b staging/tenka https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/msm-4.9 kernel
+				git clone --depth=1 -b staging/tenka https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/msm-4.9 kernel
 
 				# Define Kernel Specific Tag
-				KERNEL_CAF_TAG="Unknown"
+				KERNEL_CAF_TAG="LA.UM.9.6.2.r1-03800-89xx.0"
 
 		elif [ "$KERNEL_STATE" == "1" ];
 			then
@@ -162,7 +161,7 @@ elif [ "$KERNEL_NAME" == "1" ];
 		KERNEL_SCHED="EAS"
 		if [ "$KERNEL_STATE" == "0" ];
 			then
-				KERNEL_BRANCH="master"
+				KERNEL_BRANCH="staging/tenka"
 		elif [ "$KERNEL_STATE" == "1" ];
 			then
 				KERNEL_BRANCH="kizuna"
@@ -571,7 +570,7 @@ elif [ "$KERNEL_OVERCLOCK" == "0" ] && [ "$KERNEL_UNDERVOLT" == "0" ];
 fi
 	cat ${KERNEL}/localversion
 	START=$(date +"%s")
-	make -s -C ${KERNEL} ${CODENAME}_defconfig O=out
+	make -s -C ${KERNEL} vendor/${CODENAME}_defconfig O=out
 if [ "$KERNEL_CLANG" == "0" ];
 	then
 		CLANG_PATH="/root/proton/bin/:${PATH}"
