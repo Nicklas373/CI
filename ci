@@ -8,7 +8,7 @@
 # Copyright 2016-2020, HANA-CI Build Project
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-# CI Script Revision = 20210213
+# CI Script Revision = 20210223
 
 # Build Information
 #
@@ -62,8 +62,8 @@ KERNEL_CLANG=2
 KERNEL_GCC=1
 KERNEL_CI_SERVICE=0
 KERNEL_NEW_CAM=0
-KERNEL_OVERCLOCK=0
-KERNEL_UNDERVOLT=1
+KERNEL_OVERCLOCK=1
+KERNEL_UNDERVOLT=0
 KERNEL_LAVENDER_TS_COMMON=1
 
 # Environment init
@@ -167,7 +167,7 @@ elif [ "$KERNEL_NAME" == "1" ];
 				KERNEL_BRANCH="kizuna"
 		fi
 		KERNEL_RELEASE_NAME=" ~	大崎甜花 ~ "
-		KERNEL_REV="r7"
+		KERNEL_REV="r8"
 		KERNEL_REL="Kizuna"
 fi
 
