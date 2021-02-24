@@ -166,7 +166,7 @@ elif [ "$KERNEL_NAME" == "1" ];
 			then
 				KERNEL_BRANCH="kizuna"
 		fi
-		KERNEL_RELEASE_NAME=" ~	大崎甜花 ~ "
+		KERNEL_RELEASE_NAME=" ~	LUNA ~ "
 		KERNEL_REV="r8"
 		KERNEL_REL="Kizuna"
 fi
