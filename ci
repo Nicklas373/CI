@@ -8,12 +8,12 @@
 # Copyright 2016-2020, HANA-CI Build Project
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-# CI Script Revision = 20210223
+# CI Script Revision = 20210224
 
 # Build Information
 #
 # Kernel Name
-# 0 = CAF (Stock Based Kernel) || 1 = Kizuna (Clarity Next-Gen) || 2 Fusion (Co-operate with @alanndz)
+# 0 = CAF (Stock Based Kernel) || 1 = Kizuna || 2 Fusion (Co-operate with @alanndz)
 #
 # Kernel Scheduler
 # 0 = HMP || 1 = EAS
@@ -62,8 +62,8 @@ KERNEL_CLANG=2
 KERNEL_GCC=1
 KERNEL_CI_SERVICE=0
 KERNEL_NEW_CAM=0
-KERNEL_OVERCLOCK=0
-KERNEL_UNDERVOLT=1
+KERNEL_OVERCLOCK=1
+KERNEL_UNDERVOLT=0
 KERNEL_LAVENDER_TS_COMMON=1
 
 # Environment init
@@ -143,7 +143,7 @@ elif [ "$KERNEL_NAME" == "1" ];
 				git clone --depth=1 -b staging/tenka https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/msm-4.9 kernel
 
 				# Define Kernel Specific Tag
-				KERNEL_CAF_TAG="LA.UM.9.6.2.r1-03800-89xx.0"
+				KERNEL_CAF_TAG="LA.UM.9.6.2.r1-04100-89xx.0"
 
 		elif [ "$KERNEL_STATE" == "1" ];
 			then
@@ -151,7 +151,7 @@ elif [ "$KERNEL_NAME" == "1" ];
                                 git clone --depth=1 -b kizuna https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/msm-4.9 kernel
 
 				# Define Kernel Specific Tag
-                                KERNEL_CAF_TAG="LA.UM.9.6.2.r1-03800-89xx.0"
+                                KERNEL_CAF_TAG="LA.UM.9.6.2.r1-04100-89xx.0"
 		fi
 
 		# Cloning AnyKernel Repository
@@ -166,7 +166,7 @@ elif [ "$KERNEL_NAME" == "1" ];
 			then
 				KERNEL_BRANCH="kizuna"
 		fi
-		KERNEL_RELEASE_NAME=" ~	LUNA ~ "
+		KERNEL_RELEASE_NAME=" ~	Team.Luna ~ "
 		KERNEL_REV="r8"
 		KERNEL_REL="Kizuna"
 fi
@@ -188,11 +188,6 @@ elif [ "$KERNEL_OVERCLOCK" == "0" ] && [ "$KERNEL_UNDERVOLT" == "1" ];
 	then
 		KERNEL_CLOCK="UV"
 		KERNEL_CLK_STR="Undervolt"
-		KERNEL_DEVICE="CPU"
-elif [ "$KERNEL_OVERCLOCK" == "1" ] && [ "$KERNEL_UNDERVOLT" == "1" ];
-	then
-		KERNEL_CLOCK="OC-UV"
-		KERNEL_CLK_STR="Overclock & Undervolt"
 		KERNEL_DEVICE="CPU"
 else
 	KERNEL_CLOCK=""
@@ -535,15 +530,7 @@ function compile_mido() {
 	cd ${KERNEL}
 	bot_first_compile
 	cd ..
-if [ "$KERNEL_OVERCLOCK" == "1" ] && [ "$KERNEL_UNDERVOLT" == "1" ];
-	then
-		sed -i -e 's/-キズナ/-キズナ-OC-UV-r8/g' ${KERNEL}/localversion
-		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_OVERCLOCKED=y/# CONFIG_MACH_XIAOMI_C6_OVERCLOCKED is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
-		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_DEFAULT=y/# CONFIG_MACH_XIAOMI_C6_DEFAULT is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
-		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_UNDERVOLT=y/# CONFIG_MACH_XIAOMI_C6_UNDERVOLT is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
-		sed -i -e 's/# CONFIG_MACH_XIAOMI_C6_OC_UV is not set/CONFIG_MACH_XIAOMI_C6_OC_UV=y/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
-		sed -i -e 's/# CONFIG_MACH_XIAOMI_C6_GPU_OVERCLOCKED is not set/CONFIG_MACH_XIAOMI_C6_GPU_OVERCLOCKED=y/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
-elif [ "$KERNEL_OVERCLOCK" == "1" ] && [ "$KERNEL_UNDERVOLT" == "0" ];
+if [ "$KERNEL_OVERCLOCK" == "1" ] && [ "$KERNEL_UNDERVOLT" == "0" ];
 	then
 		sed -i -e 's/-キズナ/-キズナ-OC-r8/g' ${KERNEL}/localversion
 		sed -i -e 's/# CONFIG_MACH_XIAOMI_C6_OVERCLOCKED is not set/CONFIG_MACH_XIAOMI_C6_OVERCLOCKED=y/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
@@ -553,7 +540,7 @@ elif [ "$KERNEL_OVERCLOCK" == "1" ] && [ "$KERNEL_UNDERVOLT" == "0" ];
 		sed -i -e 's/# CONFIG_MACH_XIAOMI_C6_GPU_OVERCLOCKED is not set/CONFIG_MACH_XIAOMI_C6_GPU_OVERCLOCKED=y/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 elif [ "$KERNEL_OVERCLOCK" == "0" ] && [ "$KERNEL_UNDERVOLT" == "1" ];
 	then
-		sed -i -e 's/-キズナ/-キズナ-UV-r7/g' ${KERNEL}/localversion
+		sed -i -e 's/-キズナ/-キズナ-UV-r8/g' ${KERNEL}/localversion
 		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_OVERCLOCKED=y/# CONFIG_MACH_XIAOMI_C6_OVERCLOCKED is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_DEFAULT=y/# CONFIG_MACH_XIAOMI_C6_DEFAULT is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 		sed -i -e 's/# CONFIG_MACH_XIAOMI_C6_UNDERVOLT is not set/CONFIG_MACH_XIAOMI_C6_UNDERVOLT=y/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
