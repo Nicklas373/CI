@@ -57,12 +57,12 @@ KERNEL_SCHED=1
 KERNEL_STATE=0
 KERNEL_AND_VER=1
 KERNEL_AVR=1
-KERNEL_CODENAME=0
+KERNEL_CODENAME=1
 KERNEL_CLANG=2
 KERNEL_GCC=1
 KERNEL_CI_SERVICE=0
 KERNEL_NEW_CAM=0
-KERNEL_OVERCLOCK=0
+KERNEL_OVERCLOCK=1
 KERNEL_UNDERVOLT=0
 KERNEL_LAVENDER_TS_COMMON=1
 
@@ -240,7 +240,7 @@ if [ "$KERNEL_CI_SERVICE" == "0" ];
 		echo $TOKEN
 
 		# Downloading kernel source
-		git clone --depth=1 -b bak https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_lavender-4.4 kernel
+		git clone --depth=1 -b staging/rebase https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_lavender-4.4 kernel
 
 elif [ "$KERNEL_CI_SERVICE" == "2" ];
 	then
@@ -249,7 +249,7 @@ elif [ "$KERNEL_CI_SERVICE" == "2" ];
 		echo $TOKEN
 
 		# Downloading kernel source
-		git clone --depth=1 -b bak https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_lavender-4.4 kernel
+		git clone --depth=1 -b staging/rebase https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_lavender-4.4 kernel
 fi
 
 # Cloning AnyKernel Repository
@@ -260,7 +260,7 @@ mkdir TEMP
 
 # Define Kernel Scheduler
 KERNEL_SCHED="EAS"
-KERNEL_BRANCH="bak"
+KERNEL_BRANCH="staging/rebase"
 
 # Define CI Specific Environment
 export KBUILD_BUILD_USER=alanndz-nicklas373
@@ -285,7 +285,7 @@ if [ "$KERNEL_OVERCLOCK" == "1" ];
 		KERNEL_CLOCK="OC"
 fi
 TELEGRAM_DEVICE="Xiaomi Redmi Note 7"
-KERNEL_REV="r7"
+KERNEL_REV="r11"
 if [ "$KERNEL_OVERCLOCK" == "0" ];
 	then
 		KERNEL_REL="Fusion"
@@ -321,15 +321,15 @@ fi
 if [ "$KERNEL_STATE" == "1" ];
 	then
 		KERNEL_RELEASE="Stable"
-		FUSION_CODENAME="Plenilune_Gaze"
-		KERNEL_VERSION="r10"
+		FUSION_CODENAME="UNKNOWN"
+		KERNEL_VERSION="r11"
 		KVERSION="${FUSION_CODENAME}-${KERNEL_VERSION}"
 		ZIP_NAME="${KERNEL_REL}-${KVERSION}-${CODENAME}-$(date "+%H%M-%d%m%Y").zip"
 elif [ "$KERNEL_STATE" == "0" ];
 	then
 		KERNEL_RELEASE="BETA"
-		FUSION_CODENAME="Plenilune_Gaze"
-		KERNEL_VERSION="r10"
+		FUSION_CODENAME="UNKNOWN"
+		KERNEL_VERSION="r11"
 		KVERSION="${FUSION_CODENAME}-${KERNEL_VERSION}"
 		ZIP_NAME="${KERNEL_REL}-${KVERSION}-${CODENAME}-$(date "+%H%M-%d%m%Y").zip"
 

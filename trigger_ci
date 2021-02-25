@@ -399,11 +399,7 @@ elif [ "$user" == "1" ];
 		fi
 		if [ "$kdev" == "1" ];
 			then
-				if [ "$overclock" == "1" ] && [ "$undervolt" == "1" ];
-					then
-						sed -i -e 's/KERNEL_OVERCLOCK=0/KERNEL_OVERCLOCK=1/g'	~/CI/ci
-						sed -i -e 's/KERNEL_UNDERVOLT=0/KERNEL_UNDERVOLT=1/g'   ~/CI/ci
-				elif [ "$overclock" == "0" ] && [ "$undervolt" == "0" ];
+				if [ "$overclock" == "0" ] && [ "$undervolt" == "0" ];
 					then
 						sed -i -e 's/KERNEL_OVERCLOCK=1/KERNEL_OVERCLOCK=0/g'   ~/CI/ci
 						sed -i -e 's/KERNEL_UNDERVOLT=1/KERNEL_UNDERVOLT=0/g'   ~/CI/ci
@@ -428,12 +424,12 @@ elif [ "$user" == "1" ];
 
 				sed -i -e 's/KERNEL_UNDERVOLT=0/KERNEL_UNDERVOLT=0/g'   ~/CI/ci
 
-				if [ "$ts_common" == "0" ];
+				if [ "$ts_common" == "1" ];
 					then
-						sed -i -e 's/KERNEL_LAVENDER_TS_COMMON=1/KERNEL_LAVENDER_TS_COMMON=0/g'		~/CI/ci
-				elif [ "$ts_common" == "1" ];
+						sed -i -e 's/KERNEL_LAVENDER_TS_COMMON=1/KERNEL_LAVENDER_TS_COMMON=0/g'	~/CI/ci
+				elif [ "$ts_common" == "2" ];
 					then
-						sed -i -e 's/KERNEL_LAVENDER_TS_COMMON=0/KERNEL_LAVENDER_TS_COMMON=1/g'		~/CI/ci
+						sed -i -e 's/KERNEL_LAVENDER_TS_COMMON=0/KERNEL_LAVENDER_TS_COMMON=1/g'	~/CI/ci
 				fi
 		fi
 
