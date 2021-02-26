@@ -240,7 +240,7 @@ if [ "$KERNEL_CI_SERVICE" == "0" ];
 		echo $TOKEN
 
 		# Downloading kernel source
-		git clone --depth=1 -b staging/rebase-2 https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_lavender-4.4 kernel
+		git clone --depth=1 -b staging/rebase https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_lavender-4.4 kernel
 
 elif [ "$KERNEL_CI_SERVICE" == "2" ];
 	then
@@ -249,7 +249,7 @@ elif [ "$KERNEL_CI_SERVICE" == "2" ];
 		echo $TOKEN
 
 		# Downloading kernel source
-		git clone --depth=1 -b staging/rebase-2 https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_lavender-4.4 kernel
+		git clone --depth=1 -b staging/rebase https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/kernel_xiaomi_lavender-4.4 kernel
 fi
 
 # Cloning AnyKernel Repository
@@ -260,7 +260,7 @@ mkdir TEMP
 
 # Define Kernel Scheduler
 KERNEL_SCHED="EAS"
-KERNEL_BRANCH="staging/rebase-2"
+KERNEL_BRANCH="staging/rebase"
 
 # Define CI Specific Environment
 export KBUILD_BUILD_USER=alanndz-nicklas373
