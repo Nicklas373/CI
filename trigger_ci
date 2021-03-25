@@ -375,10 +375,10 @@ elif [ "$user" == "1" ];
 				fi
 				if [ "$ts_common" == "1" ];
 					then
-						sed -i -e 's/KERNEL_LAVENDER_TS_COMMON=1/KERNEL_LAVENDER_TS_COMMON=0/g'	~/CI/ci
+						sed -i -e 's/KERNEL_LAVENDER_TS_COMMON=0/KERNEL_LAVENDER_TS_COMMON=1/g'	~/CI/ci
 				elif [ "$ts_common" == "2" ];
 					then
-						sed -i -e 's/KERNEL_LAVENDER_TS_COMMON=0/KERNEL_LAVENDER_TS_COMMON=1/g'	~/CI/ci
+						sed -i -e 's/KERNEL_LAVENDER_TS_COMMON=1/KERNEL_LAVENDER_TS_COMMON=0/g'	~/CI/ci
 				fi
 		fi
 
