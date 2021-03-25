@@ -72,8 +72,6 @@ if [ "$kdev" == "1" ];
 				name="CAF Kernel"
 				overclock="0"
 				clock="false"
-				undervolt="0"
-				s_uv="false"
 				g_clock="0"
 				gpu_clock="false"
 		elif [ "$kname" == "2" ];
@@ -93,52 +91,12 @@ if [ "$kdev" == "1" ];
 						clock="true"
 						g_clock="1"
 						gpu_clock="true"
-
-						echo ""
-						echo "Undervolt Version ?"
-						echo "1. Yes"
-						echo "2. No"
-						echo ""
-						echo "NOTE: Write number only!"
-						read -s uv
-
-						if [ "$uv" == "1" ];
-							then
-								undervolt="1"
-								s_uv="true"
-								g_clock="0"
-								gpu_clock="false"
-						elif [ "$uv" == "2" ];
-							then
-								undervolt="0"
-								s_uv="false"
-								g_clock="1"
-								gpu_clock="true"
-						fi
 				elif [ "$oc" == "2" ];
 					then
 						overclock="0"
 						clock="false"
 						g_clock="0"
 						gpu_clock="false"
-
-						echo ""
-						echo "Undervolt Version ?"
-						echo "1. Yes"
-						echo "2. No"
-						echo ""
-						echo "NOTE: Write number only!"
-						read -s uv
-
-						if [ "$uv" == "1" ];
-							then
-								undervolt="1"
-								s_uv="true"
-						elif [ "$uv" == "2" ];
-							then
-								undervolt="0"
-								s_uv="false"
-						fi
 				fi
 		fi
 elif [ "$kdev" == "2" ];
@@ -164,8 +122,6 @@ elif [ "$kdev" == "2" ];
 				clock="false"
 		fi
 
-		undervolt="0"
-		s_uv="false"
 		g_clock="0"
 		gpu_clock="false"
 
@@ -284,7 +240,6 @@ echo "| Android Ver	: $avr_str		|"
 echo "| Ext Clang	: $ext_clang	|"
 echo "| CPU Overclock	: $clock			|"
 echo "| GPU Overclock	: $gpu_clock			|"
-echo "| Undervolt	: $s_uv			|"
 echo "|					|"
 echo "| is this right option ?		|"
 echo "|					|"
@@ -399,18 +354,15 @@ elif [ "$user" == "1" ];
 		fi
 		if [ "$kdev" == "1" ];
 			then
-				if [ "$overclock" == "0" ] && [ "$undervolt" == "0" ];
+				if [ "$overclock" == "0" ];
 					then
 						sed -i -e 's/KERNEL_OVERCLOCK=1/KERNEL_OVERCLOCK=0/g'   ~/CI/ci
-						sed -i -e 's/KERNEL_UNDERVOLT=1/KERNEL_UNDERVOLT=0/g'   ~/CI/ci
-				elif [ "$overclock" == "0" ] && [ "$undervolt" == "1" ];
+				elif [ "$overclock" == "0" ];
 					then
 						sed -i -e 's/KERNEL_OVERCLOCK=1/KERNEL_OVERCLOCK=0/g'	~/CI/ci
-						sed -i -e 's/KERNEL_UNDERVOLT=0/KERNEL_UNDERVOLT=1/g'   ~/CI/ci
-				elif [ "$overclock" == "1" ] && [ "$undervolt" == "0" ];
+				elif [ "$overclock" == "1" ];
 					then
 						sed -i -e 's/KERNEL_OVERCLOCK=0/KERNEL_OVERCLOCK=1/g'   ~/CI/ci
-						sed -i -e 's/KERNEL_UNDERVOLT=1/KERNEL_UNDERVOLT=0/g'	~/CI/ci
 				fi
 		elif [ "$kdev" == "2" ];
 			then
@@ -421,9 +373,6 @@ elif [ "$user" == "1" ];
 					then
 						sed -i -e 's/KERNEL_OVERCLOCK=0/KERNEL_OVERCLOCK=1/g'   ~/CI/ci
 				fi
-
-				sed -i -e 's/KERNEL_UNDERVOLT=0/KERNEL_UNDERVOLT=0/g'   ~/CI/ci
-
 				if [ "$ts_common" == "1" ];
 					then
 						sed -i -e 's/KERNEL_LAVENDER_TS_COMMON=1/KERNEL_LAVENDER_TS_COMMON=0/g'	~/CI/ci

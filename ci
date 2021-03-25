@@ -8,7 +8,7 @@
 # Copyright 2016-2020, HANA-CI Build Project
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-# CI Script Revision = 20210224
+# CI Script Revision = 20210325
 
 # Build Information
 #
@@ -39,9 +39,6 @@
 # Kernel Overclock
 # 0 = Non-OC || 1 = OC
 #
-# Kernel Undervolt
-# 0 = Non-UV || 1 = UV
-#
 # Lavender Cam Patch
 # 0 = Old cam || 1 = New cam
 #
@@ -63,7 +60,6 @@ KERNEL_GCC=1
 KERNEL_CI_SERVICE=0
 KERNEL_NEW_CAM=0
 KERNEL_OVERCLOCK=1
-KERNEL_UNDERVOLT=0
 KERNEL_LAVENDER_TS_COMMON=0
 
 # Environment init
@@ -111,7 +107,7 @@ if [ "$KERNEL_NAME" == "0" ];
 		git clone --depth=1 -b lineage-17.1 https://github.com/Nicklas373/kernel_xiaomi_msm8953-4.9 kernel
 
 		# Define Kernel Specific Tag
-		KERNEL_CAF_TAG="LA.UM.9.6.2.r1-04100-89xx.0"
+		KERNEL_CAF_TAG="LA.UM.9.6.2.r1-04200-89xx.0"
 
 		# Cloning AnyKernel Repository
 		git clone --depth=1 -b caf/mido-4.9 https://github.com/Nicklas373/AnyKernel3
@@ -143,7 +139,7 @@ elif [ "$KERNEL_NAME" == "1" ];
 				git clone --depth=1 -b staging/luna https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/msm-4.9 kernel
 
 				# Define Kernel Specific Tag
-				KERNEL_CAF_TAG="LA.UM.9.6.2.r1-04100-89xx.0"
+				KERNEL_CAF_TAG="LA.UM.9.6.2.r1-04200-89xx.0"
 
 		elif [ "$KERNEL_STATE" == "1" ];
 			then
@@ -151,7 +147,7 @@ elif [ "$KERNEL_NAME" == "1" ];
                                 git clone --depth=1 -b kizuna https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/msm-4.9 kernel
 
 				# Define Kernel Specific Tag
-                                KERNEL_CAF_TAG="LA.UM.9.6.2.r1-04100-89xx.0"
+                                KERNEL_CAF_TAG="LA.UM.9.6.2.r1-04200-89xx.0"
 		fi
 
 		# Cloning AnyKernel Repository
@@ -179,16 +175,11 @@ export KBUILD_BUILD_HOST=${KERNEL_BOT}
 IMAGE="$(pwd)/kernel/out/arch/arm64/boot/Image.gz-dtb"
 KERNEL="$(pwd)/kernel"
 KERNEL_TEMP="$(pwd)/TEMP"
-if [ "$KERNEL_OVERCLOCK" == "1" ] && [ "$KERNEL_UNDERVOLT" == "0" ];
+if [ "$KERNEL_OVERCLOCK" == "1" ];
 	then
 		KERNEL_CLOCK="OC"
 		KERNEL_CLK_STR="Overclock"
 		KERNEL_DEVICE="CPU | GPU"
-elif [ "$KERNEL_OVERCLOCK" == "0" ] && [ "$KERNEL_UNDERVOLT" == "1" ];
-	then
-		KERNEL_CLOCK="UV"
-		KERNEL_CLK_STR="Undervolt"
-		KERNEL_DEVICE="CPU"
 else
 	KERNEL_CLOCK=""
 	KERNEL_CLK_STR="Default"
@@ -260,7 +251,7 @@ mkdir TEMP
 
 # Define Kernel Scheduler
 KERNEL_SCHED="EAS"
-KERNEL_BRANCH="staging/wlan-q"
+KERNEL_BRANCH="fusion-nodebug"
 
 # Define CI Specific Environment
 export KBUILD_BUILD_USER=alanndz-nicklas373
@@ -321,14 +312,14 @@ fi
 if [ "$KERNEL_STATE" == "1" ];
 	then
 		KERNEL_RELEASE="Stable"
-		FUSION_CODENAME="UNKNOWN"
+		FUSION_CODENAME="Water_Edge"
 		KERNEL_VERSION="r11"
 		KVERSION="${FUSION_CODENAME}-${KERNEL_VERSION}"
 		ZIP_NAME="${KERNEL_REL}-${KVERSION}-${CODENAME}-$(date "+%H%M-%d%m%Y").zip"
 elif [ "$KERNEL_STATE" == "0" ];
 	then
 		KERNEL_RELEASE="BETA"
-		FUSION_CODENAME="UNKNOWN"
+		FUSION_CODENAME="Water_Edge"
 		KERNEL_VERSION="r11"
 		KVERSION="${FUSION_CODENAME}-${KERNEL_VERSION}"
 		ZIP_NAME="${KERNEL_REL}-${KVERSION}-${CODENAME}-$(date "+%H%M-%d%m%Y").zip"
@@ -530,29 +521,17 @@ function compile_mido() {
 	cd ${KERNEL}
 	bot_first_compile
 	cd ..
-if [ "$KERNEL_OVERCLOCK" == "1" ] && [ "$KERNEL_UNDERVOLT" == "0" ];
+if [ "$KERNEL_OVERCLOCK" == "1" ];
 	then
 		sed -i -e 's/-キズナ/-キズナ-OC-r8/g' ${KERNEL}/localversion
 		sed -i -e 's/# CONFIG_MACH_XIAOMI_C6_OVERCLOCKED is not set/CONFIG_MACH_XIAOMI_C6_OVERCLOCKED=y/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_DEFAULT=y/# CONFIG_MACH_XIAOMI_C6_DEFAULT is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
-		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_UNDERVOLT=y/# CONFIG_MACH_XIAOMI_C6_UNDERVOLT is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
-		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_OC_UV=y/# CONFIG_MACH_XIAOMI_C6_OC_UV is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 		sed -i -e 's/# CONFIG_MACH_XIAOMI_C6_GPU_OVERCLOCKED is not set/CONFIG_MACH_XIAOMI_C6_GPU_OVERCLOCKED=y/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
-elif [ "$KERNEL_OVERCLOCK" == "0" ] && [ "$KERNEL_UNDERVOLT" == "1" ];
-	then
-		sed -i -e 's/-キズナ/-キズナ-UV-r8/g' ${KERNEL}/localversion
-		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_OVERCLOCKED=y/# CONFIG_MACH_XIAOMI_C6_OVERCLOCKED is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
-		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_DEFAULT=y/# CONFIG_MACH_XIAOMI_C6_DEFAULT is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
-		sed -i -e 's/# CONFIG_MACH_XIAOMI_C6_UNDERVOLT is not set/CONFIG_MACH_XIAOMI_C6_UNDERVOLT=y/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
-		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_OC_UV=y/# CONFIG_MACH_XIAOMI_C6_OC_UV is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
-		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_GPU_OVERCLOCKED=y/# CONFIG_MACH_XIAOMI_C6_GPU_OVERCLOCKED is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
-elif [ "$KERNEL_OVERCLOCK" == "0" ] && [ "$KERNEL_UNDERVOLT" == "0" ];
+elif [ "$KERNEL_OVERCLOCK" == "0" ];
 	then
 		sed -i -e 's/-キズナ/-キズナ-r8/g' ${KERNEL}/localversion
-		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_UNDERVOLT=y/# CONFIG_MACH_XIAOMI_C6_UNDERVOLT is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
+		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_OVERCLOCKED=y/# CONFIG_MACH_XIAOMI_C6_OVERCLOCKED is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 		sed -i -e 's/# CONFIG_MACH_XIAOMI_C6_DEFAULT is not set/CONFIG_MACH_XIAOMI_C6_DEFAULT=y/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
-		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_UNDERVOLT=y/# CONFIG_MACH_XIAOMI_C6_UNDERVOLT is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
-		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_OC_UV=y/# CONFIG_MACH_XIAOMI_C6_OC_UV is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_GPU_OVERCLOCKED=y/# CONFIG_MACH_XIAOMI_C6_GPU_OVERCLOCKED is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 fi
 	cat ${KERNEL}/localversion
@@ -754,7 +733,7 @@ function anykernel() {
 					mv CAF-Kernel-${KERNEL_CODE}-signed.zip ${KERNEL_TEMP}/${KERNEL_REL}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip
 			elif [ "$KERNEL_NAME" == "1" ];
 				then
-					if [ "$KERNEL_OVERCLOCK" == "0" ] && [ "$KERNEL_UNDERVOLT" == "0" ];
+					if [ "$KERNEL_OVERCLOCK" == "0" ];
 						then
 							mv Kizuna-Kernel-4.9-${KERNEL_CODE}-signed.zip ${KERNEL_TEMP}/${KERNEL_REL}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip
 					else
@@ -778,7 +757,7 @@ function kernel_upload() {
 					# Upload kernel file
 					echo "Upload kernel..."
 
-					if [ "$KERNEL_OVERCLOCK" == "0" ] && [ "$KERNEL_UNDERVOLT" == "0" ];
+					if [ "$KERNEL_OVERCLOCK" == "0" ];
 						then
 							curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/${KERNEL_REL}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip"  https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
 					else
@@ -795,7 +774,7 @@ function kernel_upload() {
 					# Upload kernel file
 					echo "Upload kernel file..."
 
-					if [ "$KERNEL_OVERCLOCK" == "0" ] && [ "$KERNEL_UNDERVOLT" == "0" ];
+					if [ "$KERNEL_OVERCLOCK" == "0" ];
 						then
 							curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/${KERNEL_REL}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip"  https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
 					else
