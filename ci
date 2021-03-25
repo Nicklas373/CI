@@ -59,7 +59,7 @@ KERNEL_CLANG=2
 KERNEL_GCC=1
 KERNEL_CI_SERVICE=0
 KERNEL_NEW_CAM=0
-KERNEL_OVERCLOCK=1
+KERNEL_OVERCLOCK=0
 KERNEL_LAVENDER_TS_COMMON=0
 
 # Environment init
@@ -168,8 +168,8 @@ elif [ "$KERNEL_NAME" == "1" ];
 fi
 
 # Define CI Specific Environment
-export KBUILD_BUILD_USER=Kasumi
-export KBUILD_BUILD_HOST=${KERNEL_BOT}
+export KBUILD_BUILD_USER=Amana
+export KBUILD_BUILD_HOST=Team.Luna
 
 # Define Global Environment for Mido
 IMAGE="$(pwd)/kernel/out/arch/arm64/boot/Image.gz-dtb"
@@ -553,7 +553,7 @@ fi
 if [ "$KERNEL_CLANG" == "0" ] || [ "$KERNEL_CLANG" == "1" ];
 	then
 		PATH="$CLANG_PATH" \
-		make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
+		make -C ${KERNEL} -j$(nproc --all) O=out \
 				CC=clang \
 				AR=llvm-ar \
 				NM=llvm-nm \
@@ -567,14 +567,14 @@ if [ "$KERNEL_CLANG" == "0" ] || [ "$KERNEL_CLANG" == "1" ];
 				HOSTAR=llvm-ar \
 				CLANG_TRIPLE=aarch64-linux-gnu- \
 				CROSS_COMPILE=aarch64-linux-gnu- \
-				CROSS_COMPILE_ARM32=arm-linux-gnueabi-
+				CROSS_COMPILE_ARM32=arm-linux-gnueabi- 2>&1 | tee ${KERNEL_TEMP}/compile.log
 elif [ "$KERNEL_CLANG" == "2" ] || [ "$KERNEL_CLANG" == "3" ];
 	then
 		PATH="$CLANG_PATH" \
-		make -C ${KERNEL} -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
+		make -C ${KERNEL} -j$(nproc --all) O=out \
 				CC=clang \
 				CROSS_COMPILE=aarch64-linux-gnu- \
-				CROSS_COMPILE_ARM32=arm-linux-gnueabi-
+				CROSS_COMPILE_ARM32=arm-linux-gnueabi- 2>&1 | tee ${KERNEL_TEMP}/compile.log
 fi
 	if ! [ -a $IMAGE ];
 		then
@@ -641,7 +641,7 @@ fi
 	PATH="$CLANG_PATH"
 if [ "$KERNEL_CLANG" == "0" ] || [ "$KERNEL_CLANG" == "1" ];
 	then
-		make -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
+		make -j$(nproc --all) O=out \
 					CC=clang \
 					AR=llvm-ar \
 					NM=llvm-nm \
@@ -655,13 +655,13 @@ if [ "$KERNEL_CLANG" == "0" ] || [ "$KERNEL_CLANG" == "1" ];
 					HOSTAR=llvm-ar \
 					CLANG_TRIPLE=aarch64-linux-gnu- \
 					CROSS_COMPILE=aarch64-linux-gnu- \
-					CROSS_COMPILE_ARM32=arm-linux-gnueabi-
+					CROSS_COMPILE_ARM32=arm-linux-gnueabi- 2>&1 | tee ${KERNEL_TEMP}/compile.log
 elif [ "$KERNEL_CLANG" == "2" ] || [ "$KERNEL_CLANG" == "3" ];
 	then
-		make -j$(nproc --all) -> ${KERNEL_TEMP}/compile.log O=out \
+		make -j$(nproc --all) O=out \
 					CC=clang \
 					CROSS_COMPILE=aarch64-linux-gnu- \
-					CROSS_COMPILE_ARM32=arm-linux-gnueabi-
+					CROSS_COMPILE_ARM32=arm-linux-gnueabi- 2>&1 | tee ${KERNEL_TEMP}/compile.log
 fi
 	if ! [ -a $IMAGE ];
 		then
