@@ -4,11 +4,11 @@
 #
 # Copyright 2019, Ahmad Thoriq Najahi "Najahiii" <najahiii@outlook.co.id>
 # Copyright 2019, alanndz <alanmahmud0@gmail.com>
-# Copyright 2020, Dicky Herlambang "Nicklas373" <herlambangdicky5@gmail.com>
-# Copyright 2016-2020, HANA-CI Build Project
+# Copyright 2021, Dicky Herlambang "Nicklas373" <herlambangdicky5@gmail.com>
+# Copyright 2016-2021, HANA-CI Build Project
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-# CI Script Revision = 20210325
+# CI Script Revision = 20210402
 
 # Build Information
 #
@@ -115,7 +115,7 @@ if [ "$KERNEL_NAME" == "0" ];
 		# Define Kernel Specific Environment
 		KERNEL_SCHED="EAS"
 		KERNEL_BRANCH="lineage-17.1"
-		KERNEL_REV="r9"
+		KERNEL_REV="r10"
 		KERNEL_REL="CAF"
 		KERNEL_RELEASE_NAME="~ 大崎甘奈 ~"
 elif [ "$KERNEL_NAME" == "1" ];
@@ -277,6 +277,7 @@ if [ "$KERNEL_OVERCLOCK" == "1" ];
 fi
 TELEGRAM_DEVICE="Xiaomi Redmi Note 7"
 KERNEL_REV="r11"
+KERNEL_CAF_TAG="LA.UM.8.2.r2-04000-sdm660.0"
 if [ "$KERNEL_OVERCLOCK" == "0" ];
 	then
 		KERNEL_REL="Fusion"
@@ -312,17 +313,13 @@ fi
 if [ "$KERNEL_STATE" == "1" ];
 	then
 		KERNEL_RELEASE="Stable"
-		FUSION_CODENAME="Water_Edge"
+		KERNEL_RELEASE_NAME="Water Edge"
 		KERNEL_VERSION="r11"
-		KVERSION="${FUSION_CODENAME}-${KERNEL_VERSION}"
-		ZIP_NAME="${KERNEL_REL}-${KVERSION}-${CODENAME}-$(date "+%H%M-%d%m%Y").zip"
 elif [ "$KERNEL_STATE" == "0" ];
 	then
 		KERNEL_RELEASE="BETA"
-		FUSION_CODENAME="Water_Edge"
+		KERNEL_RELEASE_NAME="Water Edge"
 		KERNEL_VERSION="r11"
-		KVERSION="${FUSION_CODENAME}-${KERNEL_VERSION}"
-		ZIP_NAME="${KERNEL_REL}-${KVERSION}-${CODENAME}-$(date "+%H%M-%d%m%Y").zip"
 
 		if [ "$KERNEL_CI_SERVICE" == "2" ];
 			then
@@ -437,7 +434,8 @@ function bot_first_compile() {
 			"<b>${KERNEL_REL} ${KERNEL_CLOCK} Kernel build Start!</b>" \
 			"" \
 			"============= Build Information ================" \
-			"<b>Build Status :</b><code> ${KERNEL_RELEASE} </code>" \
+			"<b>Release Status :</b><code> ${KERNEL_RELEASE} </code>" \
+			"<b>Build Status :</b><code> ${clean} </code>" \
 			"<b>Device :</b><code> ${TELEGRAM_DEVICE} </code>" \
 			"<b>Android Version :</b><code> ${KERNEL_ANDROID_VER} </code>" \
 			"" \
@@ -480,19 +478,6 @@ function bot_complete_compile() {
 			"<b>Compile Time :</b><code> $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) second(s)</code>" \
 			"" \
 			"<b>                         HANA-CI Build Project | 2016-2020                            </b>"
-}
-
-function bot_lave_compile() {
-		telegram_init
-		bot_template	"<b>---- ${KERNEL_REL} New Kernel ----</b>" \
-				"<b>Device:</b> ${CODENAME} or ${TELEGRAM_DEVICE}" \
-				"<b>Name:</b> <code>${KERNEL_REL}-${KVERSION}</code>" \
-				"<b>Kernel Version:</b> <code>${TELEGRAM_KERNEL_VER}</code>" \
-				"<b>Type:</b> <code>${KERNEL_SCHED}</code>" \
-				"<b>Commit:</b> <code>$(git log --pretty=format:'%h : %s' -1)</code>" \
-				"<b>Started on:</b> <code>$(hostname)</code>" \
-				"<b>Compiler:</b> <code>${TELEGRAM_TOOLCHAIN_VER}</code>" \
-				"<b>Started at</b> <code>${KERNEL_DATE}</code>"
 }
 
 # Telegram bot message || success notification
@@ -624,6 +609,7 @@ elif [ "$KERNEL_OVERCLOCK" == "1" ];
 		sed -i -e 's/CONFIG_MACH_XIAOMI_LAVENDER_DEFAULT=y/# CONFIG_MACH_XIAOMI_LAVENDER_DEFAULT is not set/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig
 		sed -i -e 's/# CONFIG_MACH_XIAOMI_LAVENDER_OVERCLOCKED is not set/CONFIG_MACH_XIAOMI_LAVENDER_OVERCLOCKED=y/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig
 fi
+	bot_first_compile
 	make vendor/${CODENAME}_defconfig O=out
 if [ "$KERNEL_CLANG" == "0" ];
 	then
@@ -676,7 +662,6 @@ fi
 	END=$(date +"%s")
 	DIFF=$(($END - $START))
 	cd ${KERNEL}
-	bot_lave_compile
 	bot_build_success
 	sendStick "${TELEGRAM_SUCCESS}"
 	cd ..
@@ -707,8 +692,7 @@ echo "Enable New Cam Drivers"
 sed -i -e 's/# CONFIG_MACH_XIAOMI_LAVENDER_NEW_CAM is not set/CONFIG_MACH_XIAOMI_LAVENDER_NEW_CAM=y/g' ${KERNEL}/arch/arm64/configs/lavender_defconfig
 
 # Declare specified kernel name for pie patch
-KVERSION="${FUSION_CODENAME}-New_CAM-$(git log --pretty=format:'%h' -1)-$(date "+%H%M")"
-ZIP_NAME="${KERNEL_REL}-${FUSION_CODENAME}-${CODENAME}-New_CAM-$(git log --pretty=format:'%h' -1)-$(date "+%H%M").zip"
+TELEGRAM_FILENAME="${KERNEL_REL}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}-New_CAM.zip"
 
 # Tell if new cam patch already executed
 NEW_PATCH_STATS="1"
@@ -768,6 +752,9 @@ function kernel_upload() {
 					curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/compile.log"  https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
 			elif [ "$KERNEL_STATE" == "1" ];
 				then
+					# Notifications
+					bot_complete_compile
+
 					# Switch to root directory
 					cd ..
 
@@ -787,14 +774,19 @@ function kernel_upload() {
 				then
 					# Upload kernel file
 					echo "Upload kernel file..."
-					curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/$ZIP_NAME" https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
+					if [ "$KERNEL_OVERCLOCK" == "0" ];
+						then
+							curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/${KERNEL_REL}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip"  https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
+					else
+							curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/${KERNEL_REL}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_CLOCK}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip"  https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
+					fi
 
 					echo "Upload log file..."
 					curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/compile.log"  https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
 			else
 				# Upload kernel file
 				echo "Upload kernel file..."
-				curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/$ZIP_NAME" https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
+				url -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/${KERNEL_REL}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip"  https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
 			fi
 	fi
 }

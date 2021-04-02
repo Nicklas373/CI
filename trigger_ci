@@ -3,8 +3,8 @@
 # Kizuna Kernel Build Automated Trigger Script || For Continous Integration
 #
 # Copyright 2019, alanndz <alanmahmud0@gmail.com>
-# Copyright 2020, Dicky Herlambang "Nicklas373" <herlambangdicky5@gmail.com>
-# Copyright 2016-2020, HANA-CI Build Project
+# Copyright 2021, Dicky Herlambang "Nicklas373" <herlambangdicky5@gmail.com>
+# Copyright 2016-2021, HANA-CI Build Project
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 function init() {
@@ -357,9 +357,6 @@ elif [ "$user" == "1" ];
 				if [ "$overclock" == "0" ];
 					then
 						sed -i -e 's/KERNEL_OVERCLOCK=1/KERNEL_OVERCLOCK=0/g'   ~/CI/ci
-				elif [ "$overclock" == "0" ];
-					then
-						sed -i -e 's/KERNEL_OVERCLOCK=1/KERNEL_OVERCLOCK=0/g'	~/CI/ci
 				elif [ "$overclock" == "1" ];
 					then
 						sed -i -e 's/KERNEL_OVERCLOCK=0/KERNEL_OVERCLOCK=1/g'   ~/CI/ci
