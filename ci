@@ -274,6 +274,12 @@ KERNEL_CODE="Lavender"
 if [ "$KERNEL_OVERCLOCK" == "1" ];
 	then
 		KERNEL_CLOCK="OC"
+		KERNEL_CLK_STR="Overclock"
+		KERNEL_DEVICE="CPU"
+else
+	KERNEL_CLOCK=""
+	KERNEL_CLK_STR="Default"
+	KERNEL_DEVICE=""
 fi
 TELEGRAM_DEVICE="Xiaomi Redmi Note 7"
 KERNEL_REV="r11"
@@ -435,7 +441,6 @@ function bot_first_compile() {
 			"" \
 			"============= Build Information ================" \
 			"<b>Release Status :</b><code> ${KERNEL_RELEASE} </code>" \
-			"<b>Build Status :</b><code> ${clean} </code>" \
 			"<b>Device :</b><code> ${TELEGRAM_DEVICE} </code>" \
 			"<b>Android Version :</b><code> ${KERNEL_ANDROID_VER} </code>" \
 			"" \
@@ -707,7 +712,12 @@ function anykernel() {
 		then
 			cd ${ANYKERNEL}
 			make -j4
-			mv *.zip ${KERNEL_TEMP}/$ZIP_NAME
+			if [ "$KERNEL_OVERCLOCK" == "0" ];
+				then
+					mv *.zip ${KERNEL_TEMP}/${KERNEL_REL}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip
+				else
+					mv *.zip ${KERNEL_TEMP}/${KERNEL_REL}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_CLOCK}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip
+			fi
 	elif [ "$KERNEL_CODENAME" == "0" ];
 		then
 			cd AnyKernel3
@@ -752,11 +762,11 @@ function kernel_upload() {
 					curl -F chat_id=${TELEGRAM_GROUP_ID} -F document="@${KERNEL_TEMP}/compile.log"  https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendDocument
 			elif [ "$KERNEL_STATE" == "1" ];
 				then
-					# Notifications
-					bot_complete_compile
-
 					# Switch to root directory
 					cd ..
+
+					# Notifications
+					bot_complete_compile
 
 					# Upload kernel file
 					echo "Upload kernel file..."
