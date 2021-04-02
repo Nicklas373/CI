@@ -765,9 +765,6 @@ function kernel_upload() {
 					# Switch to root directory
 					cd ..
 
-					# Notifications
-					bot_complete_compile
-
 					# Upload kernel file
 					echo "Upload kernel file..."
 
@@ -780,6 +777,9 @@ function kernel_upload() {
 			fi
 	elif [ "$KERNEL_CODENAME" == "1" ];
 		then
+			# Notifications
+			bot_complete_compile
+
 			if [ "$KERNEL_STATE" == "0" ];
 				then
 					# Upload kernel file
