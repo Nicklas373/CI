@@ -54,7 +54,7 @@ KERNEL_SCHED=1
 KERNEL_STATE=0
 KERNEL_AND_VER=1
 KERNEL_AVR=1
-KERNEL_CODENAME=1
+KERNEL_CODENAME=0
 KERNEL_CLANG=2
 KERNEL_GCC=1
 KERNEL_CI_SERVICE=0
@@ -162,8 +162,8 @@ elif [ "$KERNEL_NAME" == "1" ];
 			then
 				KERNEL_BRANCH="kizuna"
 		fi
-		KERNEL_RELEASE_NAME=" ~	Team.Luna ~ "
-		KERNEL_REV="r8"
+		KERNEL_RELEASE_NAME="UNKNOWN "
+		KERNEL_REV="r9"
 		KERNEL_REL="Kizuna"
 fi
 
@@ -476,7 +476,7 @@ function bot_complete_compile() {
 			"<b>CI Service :</b><code> ${KERNEL_BOT} </code>" \
 			"<b>Compile Time :</b><code> $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) second(s)</code>" \
 			"" \
-			"<b>                         HANA-CI Build Project | 2016-2020                            </b>"
+			"<b>                         HANA-CI Build Project | 2016-2021                            </b>"
 }
 
 # Telegram bot message || success notification
@@ -507,13 +507,13 @@ function compile_mido() {
 	cd ..
 if [ "$KERNEL_OVERCLOCK" == "1" ];
 	then
-		sed -i -e 's/-キズナ/-キズナ-OC-r8/g' ${KERNEL}/localversion
+		sed -i -e 's/-キズナ/-キズナ-OC-r9/g' ${KERNEL}/localversion
 		sed -i -e 's/# CONFIG_MACH_XIAOMI_C6_OVERCLOCKED is not set/CONFIG_MACH_XIAOMI_C6_OVERCLOCKED=y/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_DEFAULT=y/# CONFIG_MACH_XIAOMI_C6_DEFAULT is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 		sed -i -e 's/# CONFIG_MACH_XIAOMI_C6_GPU_OVERCLOCKED is not set/CONFIG_MACH_XIAOMI_C6_GPU_OVERCLOCKED=y/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 elif [ "$KERNEL_OVERCLOCK" == "0" ];
 	then
-		sed -i -e 's/-キズナ/-キズナ-r8/g' ${KERNEL}/localversion
+		sed -i -e 's/-キズナ/-キズナ-r9/g' ${KERNEL}/localversion
 		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_OVERCLOCKED=y/# CONFIG_MACH_XIAOMI_C6_OVERCLOCKED is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 		sed -i -e 's/# CONFIG_MACH_XIAOMI_C6_DEFAULT is not set/CONFIG_MACH_XIAOMI_C6_DEFAULT=y/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_GPU_OVERCLOCKED=y/# CONFIG_MACH_XIAOMI_C6_GPU_OVERCLOCKED is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
