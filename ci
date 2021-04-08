@@ -8,7 +8,7 @@
 # Copyright 2016-2021, HANA-CI Build Project
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-# CI Script Revision = 20210402
+# CI Script Revision = 20210408
 
 # Build Information
 #
@@ -162,7 +162,7 @@ elif [ "$KERNEL_NAME" == "1" ];
 			then
 				KERNEL_BRANCH="kizuna"
 		fi
-		KERNEL_RELEASE_NAME="UNKNOWN "
+		KERNEL_RELEASE_NAME="シャイニーカラーズ || シャイノグラフィ"
 		KERNEL_REV="r9"
 		KERNEL_REL="Kizuna"
 fi
@@ -283,7 +283,7 @@ else
 fi
 TELEGRAM_DEVICE="Xiaomi Redmi Note 7"
 KERNEL_REV="r11"
-KERNEL_CAF_TAG="LA.UM.8.2.r2-04000-sdm660.0"
+KERNEL_CAF_TAG="LA.UM.8.2.r2-04400-sdm660.0"
 KERNEL_REL="Fusion"
 
 # Define Telegram Channel Release Environment
