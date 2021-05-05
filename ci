@@ -49,9 +49,9 @@
 # 0 = Disable || 1 = Enable
 #
 # Declare Kernel Details
-KERNEL_NAME=1
+KERNEL_NAME=0
 KERNEL_SCHED=1
-KERNEL_STATE=0
+KERNEL_STATE=1
 KERNEL_AND_VER=1
 KERNEL_AVR=1
 KERNEL_CODENAME=0
@@ -115,7 +115,7 @@ if [ "$KERNEL_NAME" == "0" ];
 		# Define Kernel Specific Environment
 		KERNEL_SCHED="EAS"
 		KERNEL_BRANCH="lineage-17.1"
-		KERNEL_REV="r10"
+		KERNEL_REV="r11"
 		KERNEL_REL="CAF"
 		KERNEL_RELEASE_NAME="~ 大崎甘奈 ~"
 elif [ "$KERNEL_NAME" == "1" ];
