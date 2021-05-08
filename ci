@@ -54,7 +54,7 @@ KERNEL_SCHED=1
 KERNEL_STATE=0
 KERNEL_AND_VER=1
 KERNEL_AVR=1
-KERNEL_CODENAME=0
+KERNEL_CODENAME=1
 KERNEL_CLANG=2
 KERNEL_GCC=1
 KERNEL_CI_SERVICE=0
@@ -508,13 +508,13 @@ function compile_mido() {
 	cd ..
 if [ "$KERNEL_OVERCLOCK" == "1" ];
 	then
-		sed -i -e 's/-キズナ/-キズナ-OC-r9/g' ${KERNEL}/localversion
+		sed -i -e 's/-キズナ/-キズナ-OC-r10/g' ${KERNEL}/localversion
 		sed -i -e 's/# CONFIG_MACH_XIAOMI_C6_OVERCLOCKED is not set/CONFIG_MACH_XIAOMI_C6_OVERCLOCKED=y/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_DEFAULT=y/# CONFIG_MACH_XIAOMI_C6_DEFAULT is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 		sed -i -e 's/# CONFIG_MACH_XIAOMI_C6_GPU_OVERCLOCKED is not set/CONFIG_MACH_XIAOMI_C6_GPU_OVERCLOCKED=y/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 elif [ "$KERNEL_OVERCLOCK" == "0" ];
 	then
-		sed -i -e 's/-キズナ/-キズナ-r9/g' ${KERNEL}/localversion
+		sed -i -e 's/-キズナ/-キズナ-r10/g' ${KERNEL}/localversion
 		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_OVERCLOCKED=y/# CONFIG_MACH_XIAOMI_C6_OVERCLOCKED is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 		sed -i -e 's/# CONFIG_MACH_XIAOMI_C6_DEFAULT is not set/CONFIG_MACH_XIAOMI_C6_DEFAULT=y/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
 		sed -i -e 's/CONFIG_MACH_XIAOMI_C6_GPU_OVERCLOCKED=y/# CONFIG_MACH_XIAOMI_C6_GPU_OVERCLOCKED is not set/g' ${KERNEL}/arch/arm64/configs/mido_defconfig
