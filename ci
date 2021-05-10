@@ -283,7 +283,7 @@ else
 	KERNEL_DEVICE=""
 fi
 TELEGRAM_DEVICE="Xiaomi Redmi Note 7"
-KERNEL_REV="r11"
+KERNEL_REV="r12"
 KERNEL_CAF_TAG="LA.UM.8.2.r2-04400-sdm660.0"
 KERNEL_REL="Fusion"
 
@@ -314,12 +314,12 @@ fi
 if [ "$KERNEL_STATE" == "1" ];
 	then
 		KERNEL_RELEASE="Stable"
-		KERNEL_RELEASE_NAME="Water Edge"
-		KERNEL_VERSION="r11"
+		KERNEL_RELEASE_NAME="Unknown"
+		KERNEL_VERSION="r12"
 elif [ "$KERNEL_STATE" == "0" ];
 	then
 		KERNEL_RELEASE="BETA"
-		KERNEL_RELEASE_NAME="Water Edge"
+		KERNEL_RELEASE_NAME="Unknown"
 		KERNEL_VERSION="r12"
 
 		if [ "$KERNEL_CI_SERVICE" == "2" ];

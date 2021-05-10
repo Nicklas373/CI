@@ -199,7 +199,6 @@ echo ""
 echo "1. Proton Clang 12"
 echo "2. AOSP Clang + GCC 4.9 (Non-elf)"
 echo "3. SDCLANG 10.0.9 + GCC 4.9 (Non-elf)"
-echo "4. SDCLANG 8.0.12 + GCC 4.9 (Non-elf)"
 echo ""
 echo "NOTE: Write number only !"
 read -s clang
@@ -216,10 +215,6 @@ elif [ "$clang" == "3" ];
 	then
 		comp="3"
 		ext_clang="SDCLANG 10.0.9 + GCC 4.9 (Non-elf)"
-elif [ "$clang" == "4" ];
-	then
-		comp="4"
-		ext_clang="SDCLANG 8.0.12 + GCC 4.9 (Non-elf)"
 fi
 
 # Run next step
@@ -345,12 +340,6 @@ elif [ "$user" == "1" ];
 				sed -i -e 's/KERNEL_CLANG=0/KERNEL_CLANG=2/g'  ~/CI/ci
 				sed -i -e 's/KERNEL_CLANG=1/KERNEL_CLANG=2/g'  ~/CI/ci
 				sed -i -e 's/KERNEL_CLANG=3/KERNEL_CLANG=2/g'  ~/CI/ci
-		elif [ "$comp" == "4" ];
-			then
-				sed -i -e 's/KERNEL_GCC=0/KERNEL_GCC=1/g'  ~/CI/ci
-				sed -i -e 's/KERNEL_CLANG=0/KERNEL_CLANG=3/g'  ~/CI/ci
-				sed -i -e 's/KERNEL_CLANG=1/KERNEL_CLANG=3/g'  ~/CI/ci
-				sed -i -e 's/KERNEL_CLANG=2/KERNEL_CLANG=3/g'  ~/CI/ci
 		fi
 		if [ "$kdev" == "1" ];
 			then
