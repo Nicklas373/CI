@@ -8,7 +8,7 @@
 # Copyright 2016-2021, HANA-CI Build Project
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-# CI Script Revision = 20210510
+# CI Script Revision = 20210620
 
 # Build Information
 #
@@ -28,7 +28,7 @@
 # 0 = Mido || 1 = Lavender
 #
 # Kernel Clang Compiler
-# 0 = Proton Clang 12 || 1 = AOSP Clang || 2 = SDCLANG 10.0
+# 0 = Proton Clang 13 || 1 = AOSP Clang || 2 = SDCLANG 12.1 || 3 = SDCLANG 10.0
 #
 # Kernel GCC Compiler (Compat VDSO (Extend with Clang)
 # 0 = GCC 4.9 (Non-Elf)
@@ -136,10 +136,10 @@ elif [ "$KERNEL_NAME" == "1" ];
 		if [ "$KERNEL_STATE" == "0" ];
 			then
 				# Clone kernel repositories earlier
-				git clone --depth=1 -b staging/luna https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/msm-4.9 kernel
+				git clone --depth=1 -b staging/takafuji-2 https://HANA-CI-Build-Project:$TOKEN@github.com/HANA-CI-Build-Project/msm-4.9 kernel
 
 				# Define Kernel Specific Tag
-				KERNEL_CAF_TAG="LA.UM.9.6.2.r1-04600-89xx.0"
+				KERNEL_CAF_TAG="LA.UM.9.6.2.r1-04700-89xx.0"
 
 		elif [ "$KERNEL_STATE" == "1" ];
 			then
@@ -162,7 +162,7 @@ elif [ "$KERNEL_NAME" == "1" ];
 			then
 				KERNEL_BRANCH="kizuna"
 		fi
-		KERNEL_RELEASE_NAME="シャイノグラフィ || LTS"
+		KERNEL_RELEASE_NAME="スタートリップ || LTS"
 		KERNEL_REV="r10"
 		KERNEL_REL="Kizuna"
 fi
@@ -314,12 +314,12 @@ fi
 if [ "$KERNEL_STATE" == "1" ];
 	then
 		KERNEL_RELEASE="Stable"
-		KERNEL_RELEASE_NAME="Unknown"
+		KERNEL_RELEASE_NAME="Prinzessin der Verurteilung"
 		KERNEL_VERSION="r12"
 elif [ "$KERNEL_STATE" == "0" ];
 	then
 		KERNEL_RELEASE="BETA"
-		KERNEL_RELEASE_NAME="Unknown"
+		KERNEL_RELEASE_NAME="Prinzessin der Verurteilung"
 		KERNEL_VERSION="r12"
 
 		if [ "$KERNEL_CI_SERVICE" == "2" ];
@@ -524,6 +524,9 @@ elif [ "$KERNEL_CLANG" == "1" ];
 		CLANG_PATH="/root/aosp-clang/bin/:/root/gcc-4.9/arm64/bin/:/root/gcc-4.9/arm/bin/:${PATH}"
 elif [ "$KERNEL_CLANG" == "2" ];
 	then
+		CLANG_PATH="/root/sdclang-12/bin/:/root/gcc-4.9/arm64/bin/:/root/gcc-4.9/arm/bin/:${PATH}"
+elif [ "$KERNEL_CLANG" == "3" ];
+	then
 		CLANG_PATH="/root/sdclang-10/bin/:/root/gcc-4.9/arm64/bin/:/root/gcc-4.9/arm/bin/:${PATH}"
 fi
 if [ "$KERNEL_CLANG" == "0" ] || [ "$KERNEL_CLANG" == "1" ];
@@ -544,7 +547,7 @@ if [ "$KERNEL_CLANG" == "0" ] || [ "$KERNEL_CLANG" == "1" ];
 				CLANG_TRIPLE=aarch64-linux-gnu- \
 				CROSS_COMPILE=aarch64-linux-gnu- \
 				CROSS_COMPILE_ARM32=arm-linux-gnueabi- 2>&1 | tee ${KERNEL_TEMP}/compile.log
-elif [ "$KERNEL_CLANG" == "2" ];
+elif [ "$KERNEL_CLANG" == "2" ] || [ "$KERNEL_CLANG" == "3" ];
 	then
 		PATH="$CLANG_PATH" \
 		make -C ${KERNEL} -j$(nproc --all) O=out \
@@ -609,6 +612,9 @@ elif [ "$KERNEL_CLANG" == "1" ];
 	then
 		CLANG_PATH="/root/aosp-clang/bin/:/root/gcc-4.9/arm64/bin/:/root/gcc-4.9/arm/bin/:${PATH}"
 elif [ "$KERNEL_CLANG" == "2" ];
+	then
+		CLANG_PATH="/root/sdclang-12/bin/:/root/gcc-4.9/arm64/bin/:/root/gcc-4.9/arm/bin/:${PATH}"
+elif [ "$KERNEL_CLANG" == "3" ];
 	then
 		CLANG_PATH="/root/sdclang-10/bin/:/root/gcc-4.9/arm64/bin/:/root/gcc-4.9/arm/bin/:${PATH}"
 fi
