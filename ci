@@ -711,18 +711,7 @@ function anykernel() {
 		then
 			cd AnyKernel3
 			make -j4
-			if  [ "$KERNEL_NAME" == "0" ];
-				then
-					mv CAF-Kernel-${KERNEL_CODE}-signed.zip ${KERNEL_TEMP}/${KERNEL_REL}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip
-			elif [ "$KERNEL_NAME" == "1" ];
-				then
-					if [ "$KERNEL_OVERCLOCK" == "0" ];
-						then
-							mv Kizuna-Kernel-4.9-${KERNEL_CODE}-signed.zip ${KERNEL_TEMP}/${KERNEL_REL}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip
-					else
-							mv Kizuna-Kernel-4.9-${KERNEL_CODE}-signed.zip ${KERNEL_TEMP}/${KERNEL_REL}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_CLOCK}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip
-					fi
-			fi
+			mv *.zip ${KERNEL_TEMP}/${KERNEL_REL}-${KERNEL_SUFFIX}-${KERNEL_CODE}-${KERNEL_REV}-${KERNEL_SCHED}-${KERNEL_TAG}-${KERNEL_DATE}.zip
 	fi
 }
 
